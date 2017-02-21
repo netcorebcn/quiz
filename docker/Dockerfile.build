@@ -1,0 +1,10 @@
+FROM microsoft/aspnetcore-build
+WORKDIR /app/Quiz.Voting
+
+COPY src/Quiz.Messages /app/Quiz.Messages
+COPY src/Quiz.Voting/Quiz.Voting.csproj .
+RUN dotnet restore
+
+COPY src/Quiz.Voting .
+
+RUN dotnet publish  --output /out/ --configuration Release
