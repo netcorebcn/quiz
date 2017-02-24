@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Quiz.Messages
 {
@@ -16,11 +15,14 @@ namespace Quiz.Messages
 
     public class Question
     {
+        public Guid Id { get; }
+        
         public string Description { get; }
         public IEnumerable<QuestionOption> Options { get; }
 
         public Question(string description, IEnumerable<QuestionOption> options)
         {
+            Id = Guid.NewGuid();
             Description = description;
             Options = options;
         }
@@ -30,9 +32,28 @@ namespace Quiz.Messages
     {
         public string Description { get; }
 
-        public QuestionOption(string description)
+        public bool IsCorrect { get; }
+
+        public Guid Id { get; }
+
+        public QuestionOption(string description, bool isCorrect = false)
         {
+            Id = Guid.NewGuid();
             Description = description;
+            IsCorrect = isCorrect;
         }
+    }
+
+    public static class QuizModelFactory
+    {
+        public static QuizModel Create(int quizId) =>
+            new QuizModel(new List<Question>{
+                new Question("What .NET Standard implements net461", 
+                    new List<QuestionOption> {
+                        new QuestionOption(".NET Standard 1.8"),
+                        new QuestionOption(".NET Standard 1.6"),
+                        new QuestionOption(".NET Standard 2.0", true),
+                    })
+            });
     }
 }

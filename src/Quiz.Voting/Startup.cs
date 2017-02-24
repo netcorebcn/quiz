@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Quiz.EventSourcing;
+using Quiz.EventSourcing.Domain;
+using Quiz.Messages;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Quiz.Voting
@@ -27,6 +24,15 @@ namespace Quiz.Voting
             services.AddSwaggerGen(c => 
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
             );
+            
+            AddEventStore(services);
+        }
+
+        private void AddEventStore(IServiceCollection services)
+        {
+            services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
+            services.AddSingleton(EventStoreConnectionFactory.Create());            
+            services.AddTransient<IRepository, EventStoreRepository>();          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
