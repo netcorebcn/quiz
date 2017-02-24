@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  vote:
+    image: quiz-voting
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+      - back-tier
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+
+  eventstore:
+    image: eventstore/eventstore
+    container_name: eventstore-node
+    ports:
+      - "2113:2113"
+      - "1113:1113"
+    networks:
+      - back-tier
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+#   result:
+#     build: ./result
+#     command: nodemon --debug server.js
+#     volumes:
+#       - ./result:/app
+#     ports:
+#       - "5001:80"
+#       - "5858:5858"
+#     networks:
+#       - back-tier
+
+
+networks:
+  front-tier:
+  back-tier:
