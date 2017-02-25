@@ -1,5 +1,5 @@
 ./.git
 **/bin/
 **/obj/
-./build
+build
 ./.vscode

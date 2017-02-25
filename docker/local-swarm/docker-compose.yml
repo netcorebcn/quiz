@@ -8,9 +8,11 @@ services:
     networks:
       - front-tier
       - back-tier
-    deploy:
-      placement:
-        constraints: [node.role == worker]
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+    # deploy:
+    #   placement:
+    #     constraints: [node.role == worker]
 
   eventstore:
     image: eventstore/eventstore

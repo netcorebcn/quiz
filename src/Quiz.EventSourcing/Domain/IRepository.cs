@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Quiz.EventSourcing.Domain
@@ -8,6 +7,6 @@ namespace Quiz.EventSourcing.Domain
     {
         Task<TAggregate> GetById<TAggregate>(Guid id) where TAggregate : IAggregate, new();
 
-        Task<int> Save(IAggregate aggregate, params KeyValuePair<string, string>[] extraHeaders);
+        Task<int> Save(IAggregate aggregate);
     }
 }

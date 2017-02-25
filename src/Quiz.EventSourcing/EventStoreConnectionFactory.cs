@@ -1,29 +1,17 @@
 using EventStore.ClientAPI;
-using System.Net;
 
 namespace Quiz.EventSourcing
 {
     public static class EventStoreConnectionFactory
     {
-        public static IEventStoreConnection Create()
+        public static IEventStoreConnection Create(string connectionString)
         {
-            var connection = EventStoreConnection.Create(IPEndPointFactory.DefaultTcp());
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = "tcp://user:password@localhost:1113";
+
+            var connection = EventStoreConnection.Create(new System.Uri(connectionString));
             connection.ConnectAsync().Wait();
             return connection;
-        }
-    }
-
-    internal class IPEndPointFactory
-    {
-        public static IPEndPoint DefaultTcp()
-        {
-            return CreateIPEndPoint(1113);
-        }
-
-        private static IPEndPoint CreateIPEndPoint(int port)
-        {
-            var address = IPAddress.Parse("127.0.0.1");
-            return new IPEndPoint(address, port);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quiz.EventSourcing;
@@ -11,8 +12,12 @@ namespace Quiz.Voting
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+
         public Startup(ILoggerFactory loggerFactory)
         {
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            Configuration = builder.Build();
             loggerFactory.AddConsole();
         }
 
@@ -27,14 +32,6 @@ namespace Quiz.Voting
             
             AddEventStore(services);
         }
-
-        private void AddEventStore(IServiceCollection services)
-        {
-            services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
-            services.AddSingleton(EventStoreConnectionFactory.Create());            
-            services.AddTransient<IRepository, EventStoreRepository>();          
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -43,6 +40,13 @@ namespace Quiz.Voting
             app.UseSwaggerUi(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
+        }
+        
+        private void AddEventStore(IServiceCollection services)
+        {
+            services.AddSingleton(EventStoreConnectionFactory.Create(Configuration["EVENT_STORE"]));
+            services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
+            services.AddTransient<IRepository, EventStoreRepository>();          
         }
     }
 }

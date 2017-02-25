@@ -59,7 +59,7 @@ namespace Quiz.EventSourcing
             return aggregate;
         }
 
-        public async Task<int> Save(IAggregate aggregate, params KeyValuePair<string, string>[] extraHeaders)
+        public async Task<int> Save(IAggregate aggregate)
         {
             var streamName = aggregate.Id.ToString();
 
@@ -68,7 +68,7 @@ namespace Quiz.EventSourcing
 
             WriteResult result;
 
-            var commitHeaders = CreateCommitHeaders(aggregate, extraHeaders);
+            var commitHeaders = CreateCommitHeaders(aggregate);
             var eventsToSave = pendingEvents.Select(x => ToEventData(Guid.NewGuid(), x, commitHeaders));
 
             var eventBatches = GetEventBatches(eventsToSave);
@@ -106,13 +106,13 @@ namespace Quiz.EventSourcing
         private IList<IList<EventData>> GetEventBatches(IEnumerable<EventData> events) =>
             events.Batch(WritePageSize).Select(x => (IList<EventData>) x.ToList()).ToList();
 
-        private static IDictionary<string, string> CreateCommitHeaders(IAggregate aggregate, KeyValuePair<string, string>[] extraHeaders) =>
-            (IDictionary<string,string>)new Dictionary<string, string>
+        private static IDictionary<string, string> CreateCommitHeaders(IAggregate aggregate) =>
+            new Dictionary<string, string>
             {
                 {CommitIdHeader, Guid.NewGuid().ToString()},
                 {AggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName},
                 {ServerClockHeader, DateTime.UtcNow.ToString("o")}
-            }.ToArray().Concat(extraHeaders);            
+            };
 
         private static EventData ToEventData(Guid eventId, object evnt, IDictionary<string, string> headers)
         {

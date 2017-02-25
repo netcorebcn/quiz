@@ -7,7 +7,7 @@ namespace Quiz.Voting.Domain
 {
     public class QuizAggregate : AggregateRoot
     {
-        public QuizModel QuizModel { get; set; }
+        public QuizModel QuizModel { get; private set; }
 
         public int CorrectAnswers { get; private set; }
 
@@ -29,6 +29,7 @@ namespace Quiz.Voting.Domain
             else
                 this.RaiseEvent(new QuestionWrongAnsweredEvent(questionId, optionId));
         }
+        
         public void Apply(QuizStartedEvent @event) => 
             QuizModel = @event.QuizModel;
 
