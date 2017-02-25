@@ -31,7 +31,7 @@ namespace Quiz.EventSourcing
         public async Task<TAggregate> GetById<TAggregate>(Guid id) where TAggregate : IAggregate, new()
         {
             var aggregate = new TAggregate();
-            var streamName = $"{aggregate.Id}{id}";
+            var streamName = id.ToString();
 
             var eventNumber = 0;
             StreamEventsSlice currentSlice;

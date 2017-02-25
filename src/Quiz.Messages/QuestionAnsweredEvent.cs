@@ -4,8 +4,8 @@ namespace Quiz.Messages
 {
     public class QuestionWrongAnsweredEvent
     {
-        public Guid QuestionId { get; set; }
-        public Guid OptionId { get; set; }
+        public Guid QuestionId { get; }
+        public Guid OptionId { get; }
 
         public QuestionWrongAnsweredEvent(Guid questionId, Guid optionId)
         {

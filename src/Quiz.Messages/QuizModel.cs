@@ -20,9 +20,9 @@ namespace Quiz.Messages
         public string Description { get; }
         public IEnumerable<QuestionOption> Options { get; }
 
-        public Question(string description, IEnumerable<QuestionOption> options)
+        public Question(Guid id, string description, IEnumerable<QuestionOption> options)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Description = description;
             Options = options;
         }
@@ -36,9 +36,9 @@ namespace Quiz.Messages
 
         public Guid Id { get; }
 
-        public QuestionOption(string description, bool isCorrect = false)
+        public QuestionOption(Guid id, string description, bool isCorrect = false)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Description = description;
             IsCorrect = isCorrect;
         }
@@ -48,11 +48,11 @@ namespace Quiz.Messages
     {
         public static QuizModel Create(int quizId) =>
             new QuizModel(new List<Question>{
-                new Question("What .NET Standard implements net461", 
+                new Question(Guid.NewGuid(), "What .NET Standard implements net461", 
                     new List<QuestionOption> {
-                        new QuestionOption(".NET Standard 1.8"),
-                        new QuestionOption(".NET Standard 1.6"),
-                        new QuestionOption(".NET Standard 2.0", true),
+                        new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
+                        new QuestionOption(Guid.NewGuid(), ".NET Standard 1.6"),
+                        new QuestionOption(Guid.NewGuid(), ".NET Standard 2.0", true),
                     })
             });
     }

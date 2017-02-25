@@ -1,11 +1,16 @@
+using System;
+
 namespace Quiz.Messages
 {
     public class QuizStartedEvent
     {
-        public QuizModel QuizModel { get; set; }
+        public Guid QuizId { get; }
 
-        public QuizStartedEvent(QuizModel quizModel)
+        public QuizModel QuizModel { get; }
+
+        public QuizStartedEvent(Guid quizId, QuizModel quizModel)
         {
+            QuizId = quizId;
             QuizModel = quizModel;
         }
     }
