@@ -31,7 +31,7 @@ namespace Quiz.EventSourcing
         public async Task<TAggregate> GetById<TAggregate>(Guid id) where TAggregate : IAggregate, new()
         {
             var aggregate = new TAggregate();
-            var streamName = id.ToString();
+            var streamName = StreamName($"{typeof(TAggregate).Name }-{id}");
 
             var eventNumber = 0;
             StreamEventsSlice currentSlice;
@@ -61,7 +61,7 @@ namespace Quiz.EventSourcing
 
         public async Task<int> Save(IAggregate aggregate)
         {
-            var streamName = aggregate.Id.ToString();
+            var streamName = StreamName($"{aggregate.GetType().Name }-{aggregate.Id}");
 
             var pendingEvents = aggregate.GetPendingEvents();
             var originalVersion = aggregate.Version - pendingEvents.Count;
@@ -126,6 +126,12 @@ namespace Quiz.EventSourcing
             var typeName = evnt.GetType().Name;
 
             return new EventData(eventId, typeName, true, data, metadata);
+        }
+
+        private string StreamName(string streamName)
+        {
+            var sp = streamName.Split(new [] {'-'}, 2);
+            return $"{sp[0]}-{sp[1].Replace("-", "")}";
         }
     }
 }
