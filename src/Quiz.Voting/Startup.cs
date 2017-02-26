@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using EventStore.ClientAPI;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Quiz.EventSourcing;
 using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
 using Swashbuckle.AspNetCore.Swagger;
+using Quiz.Voting.EventStore;
 
 namespace Quiz.Voting
 {
@@ -33,13 +35,15 @@ namespace Quiz.Voting
             AddEventStore(services);
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IEventStoreConnection conn, ILoggerFactory loggerFactory)
         {
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUi(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
+
+            EventStoreSetup.Create(conn);
         }
         
         private void AddEventStore(IServiceCollection services)

@@ -1,8 +1,9 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": ".NET Core Launch (web)",
+            "name": "QuizVoting",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -31,6 +32,18 @@
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
             }
+        },
+        {
+            "name": "QuizResults",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceRoot}/src/Quiz.Results/bin/Debug/netcoreapp1.1/Quiz.Results.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "externalConsole": false,
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "name": ".NET Core Attach",
