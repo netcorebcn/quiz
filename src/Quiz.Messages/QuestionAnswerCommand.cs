@@ -4,7 +4,13 @@ namespace Quiz.Messages
 {
     public class QuestionAnswerCommand
     {
-        public int QuestionId { get; set; }
-        public int OptionId { get; set; }
+        public Guid QuestionId { get; }
+        public Guid OptionId { get; }
+
+        public QuestionAnswerCommand(Guid questionId, Guid optionId)
+        {
+            QuestionId = questionId;
+            OptionId = optionId;
+        }
     }
 }

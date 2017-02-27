@@ -1,0 +1,9 @@
+FROM microsoft/dotnet
+WORKDIR /app/Quiz.Results
+
+COPY src/Quiz.Results/Quiz.Results.csproj .
+RUN dotnet restore
+
+COPY src/Quiz.Results .
+
+RUN dotnet publish  --output /out/ --configuration Release

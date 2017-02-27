@@ -1,8 +1,9 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": ".NET Core Launch (web)",
+            "name": "QuizVoting",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -13,10 +14,10 @@
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
                 "enabled": true,
-                "args": "${auto-detect-url}",
+                "args": "${auto-detect-url}/swagger",
                 "windows": {
                     "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
+                    "args": "/C start ${auto-detect-url}/swagger"
                 },
                 "osx": {
                     "command": "open"
@@ -31,6 +32,18 @@
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
             }
+        },
+        {
+            "name": "QuizResults",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceRoot}/src/Quiz.Results/bin/Debug/netcoreapp1.1/Quiz.Results.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "externalConsole": false,
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "name": ".NET Core Attach",

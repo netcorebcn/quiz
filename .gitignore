@@ -1,5 +1,6 @@
 ./.git
 **/bin/
 **/obj/
-./build
+build-results
+build-voting
 ./.vscode

@@ -1,37 +1,48 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
+using Quiz.Voting.Domain;
 
 namespace Quiz.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/{id}")]
     public class QuizController
     {
-        public QuizController()
+        private readonly IRepository _quizRepository;
+
+        public QuizController(IRepository quizRepository)
         {
+            _quizRepository = quizRepository;
         }
 
         [HttpGet]
-        public QuizModel Get()
+        public QuizModel Get(int id) => QuizModelFactory.Create(id);
+
+        [HttpPost]
+        public async Task Vote(Guid id, [FromBody]QuestionAnswerCommand answer)
         {
-            return new QuizModel(new List<Question>{
-                    new Question("What .NET Standard implements net461", new List<QuestionOption> {
-                        new QuestionOption(".NET Standard 1.8"),
-                        new QuestionOption(".NET Standard 1.6"),
-                        new QuestionOption(".NET Standard 2.0"),
-                    })
-            });
+            var quiz = await _quizRepository.GetById<QuizAggregate>(id);
+            quiz.Vote(answer.QuestionId, answer.OptionId);
+            await _quizRepository.Save(quiz);
         }
 
-        [HttpPost("answer")]
-        public async Task Answer([FromBody]Messages.QuestionAnswerCommand answer)
+        [HttpPut]
+        public async Task Start(int id)
         {
-            await Task.FromResult(true);
-            // distributed transaction
-            // eventStore.Save(event);
-            // bus.Publish(event);
+            var quizModel = QuizModelFactory.Create(id);
+            var quiz = new QuizAggregate();
+            quiz.Start(quizModel);
+            await _quizRepository.Save(quiz);
+        }
+
+        [HttpDelete]
+        public async Task Close(Guid id)
+        {
+            var quiz = await _quizRepository.GetById<QuizAggregate>(id);
+            quiz.Close();
+            await _quizRepository.Save(quiz);
         }
     }
 }

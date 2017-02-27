@@ -8,9 +8,13 @@ services:
     networks:
       - front-tier
       - back-tier
-    deploy:
-      placement:
-        constraints: [node.role == worker]
+    depends_on: 
+      - eventstore
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+    # deploy:
+    #   placement:
+    #     constraints: [node.role == worker]
 
   eventstore:
     image: eventstore/eventstore
@@ -24,17 +28,15 @@ services:
       placement:
         constraints: [node.role == manager]
 
-#   result:
-#     build: ./result
-#     command: nodemon --debug server.js
-#     volumes:
-#       - ./result:/app
-#     ports:
-#       - "5001:80"
-#       - "5858:5858"
-#     networks:
-#       - back-tier
-
+  result:
+    image: quiz-results
+    networks:
+      - back-tier
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+      - STREAM_NAME=QuestionAnswers
+    depends_on: 
+      - eventstore
 
 networks:
   front-tier:

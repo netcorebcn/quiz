@@ -1,4 +1,4 @@
 FROM microsoft/aspnetcore
 WORKDIR /app
-COPY build .
+COPY build-voting .
 ENTRYPOINT ["dotnet", "Quiz.Voting.dll"]
