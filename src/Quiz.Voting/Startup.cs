@@ -43,7 +43,7 @@ namespace Quiz.Voting
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
 
-            EventStoreSetup.Create(conn);
+            EventStoreSetup.CreateWithRetry(conn, Configuration);
         }
         
         private void AddEventStore(IServiceCollection services)

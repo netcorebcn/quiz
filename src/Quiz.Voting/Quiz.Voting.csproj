@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0-rc1"/>
+    <PackageReference Include="Polly" Version="5.0.6"/>
 
     <ProjectReference Include="../Quiz.EventSourcing/Quiz.EventSourcing.csproj"/>
     <ProjectReference Include="../Quiz.Messages/Quiz.Messages.csproj"/>

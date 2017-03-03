@@ -1,41 +1,47 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Projections;
 using EventStore.ClientAPI.SystemData;
-using EventStore.ClientAPI.Common.Log;
+using Microsoft.Extensions.Configuration;
+using Polly;
 
 namespace Quiz.Voting.EventStore
 {
     public class EventStoreSetup
     {
-        public static void Create(IEventStoreConnection conn)
+        public static void CreateWithRetry(IEventStoreConnection conn, IConfigurationRoot configuration)
         {
-            const string STREAM = "QuestionAnswers";
-            const string GROUP = "Default";
-            var credentials = new UserCredentials("admin", "changeit");
+            var retry = Policy
+                .Handle<Exception>()
+                .WaitAndRetry(3, retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) 
+                );
 
-            var projections = new ProjectionsManager(new FakeLogger(), new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2113), TimeSpan.FromSeconds(30));
-            projections.EnableAsync("$by_category", credentials ).Wait();
-            projections.CreateContinuousAsync(
-                STREAM, 
-                Projections.QuestionAnswers,
-                credentials
-                ).Wait();
-
-            CreateSubscription(conn, credentials, STREAM, GROUP);
+            retry.Execute(() => Create(conn, configuration));
         }
 
-        private static void CreateSubscription(IEventStoreConnection conn, 
-            UserCredentials credentials, string stream, string group)
+        public static void Create(IEventStoreConnection conn, IConfigurationRoot configuration)
         {
-            var settings = PersistentSubscriptionSettings.Create()
-                .DoNotResolveLinkTos()
-                .StartFromCurrent();
+            var hostName = configuration["EVENT_STORE_MANAGER_HOST"] ?? "localhost:2113";
+            var stream = configuration["STREAM_NAME"] ?? "QuestionAnswers";
+            var group = configuration["GROUP_NAME"] ?? "Default";
+            var credentials = new UserCredentials("admin", "changeit");
+
+            var address = GetIPEndPointFromHostName(hostName).Result;
+
+            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
+            projections.EnableAsync("$by_category", credentials ).Wait();
 
             try
             {
-                conn.CreatePersistentSubscriptionAsync(stream, group, settings, credentials).Wait();
+                projections.CreateContinuousAsync(
+                    stream, 
+                    Projections.QuestionAnswers,
+                    credentials).Wait();
+                CreateSubscription(conn, credentials, stream, group);
+
             }
             catch (AggregateException ex)
             {
@@ -46,6 +52,34 @@ namespace Quiz.Voting.EventStore
                 }
             }
         }
+
+        private static void CreateSubscription(IEventStoreConnection conn, 
+            UserCredentials credentials, string stream, string group)
+        {
+            var settings = PersistentSubscriptionSettings.Create()
+                .DoNotResolveLinkTos()
+                .StartFromCurrent();
+
+            conn.CreatePersistentSubscriptionAsync(stream, group, settings, credentials).Wait();
+        }
+
+       public static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
+        {
+            var hostParts = hostName.Split(':');
+
+            if (hostParts[0] == "localhost")
+                return new IPEndPoint(IPAddress.Parse("127.0.0.1"), int.Parse(hostParts[1]));
+            
+            var addresses = await System.Net.Dns.GetHostAddressesAsync(hostParts[0]);
+            if (addresses.Length == 0)
+            {
+                throw new ArgumentException(
+                    "Unable to retrieve address from specified host name.", 
+                    "hostName"
+                );
+            }
+            return new IPEndPoint(addresses[0], int.Parse(hostParts[1])); // Port gets validated here.
+        } 
 
         public class FakeLogger : ILogger
         {
@@ -73,6 +107,5 @@ namespace Quiz.Voting.EventStore
             {
             }
         }
-
     }
 }

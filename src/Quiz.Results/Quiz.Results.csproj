@@ -9,5 +9,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.0"/>
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.0"/>
     <PackageReference Include="EventStore.ClientAPI.NetCore" Version="0.0.1-alpha"/>
+    <PackageReference Include="Polly" Version="5.0.6"/>
 </ItemGroup>
 </Project>

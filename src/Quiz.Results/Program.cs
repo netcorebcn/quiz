@@ -1,37 +1,55 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
 using Microsoft.Extensions.Configuration;
+using Polly;
 
 namespace Quiz.Results
 {
     public class Program
     {
+        static ManualResetEvent _quitEvent = new ManualResetEvent(false);
+
         public static void Main(string[] args)
         {
+            Console.CancelKeyPress += (sender, eArgs) => {
+                _quitEvent.Set();
+                eArgs.Cancel = true;
+                Console.WriteLine("Application is shutting down...");
+            };
+
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             var configuration = builder.Build();
             var connectionString = configuration["EVENT_STORE"] ?? "tcp://admin:changeit@localhost:1113";
             var stream = configuration["STREAM_NAME"] ?? "QuestionAnswers";
-            const string group = "default_group";
+            var group = configuration["GROUP_NAME"] ?? "Default";
 
-            //uncommet to enable verbose logging in client.
+            var retry = Policy
+                .Handle<Exception>()
+                .WaitAndRetry(3, retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) 
+                );
+
             var settings = ConnectionSettings.Create();//.EnableVerboseLogging().UseConsoleLogger();
             using (var conn = EventStoreConnection.Create(settings, new System.Uri(connectionString)))
             {
                 conn.ConnectAsync().Wait();
 
-                conn.ConnectToPersistentSubscription(stream, group, (_, x) =>
+                Console.Write("Application started. Press Ctrl+C to shut down.");
+                retry.Execute(() =>
                 {
-                    var data = Encoding.ASCII.GetString(x.Event.Data);
-                    Console.WriteLine("Received: " + x.Event.EventStreamId + ":" + x.Event.EventNumber);
-                    Console.WriteLine(data);
+                    conn.ConnectToPersistentSubscription(stream, group, (_, x) =>
+                    {
+                        var data = Encoding.ASCII.GetString(x.Event.Data);
+                        Console.WriteLine("Received: " + x.Event.EventStreamId + ":" + x.Event.EventNumber);
+                        Console.WriteLine(data);
+                    });
                 });
-
-                Console.WriteLine("waiting for events. press enter to exit");
-                Console.ReadLine();
-            }
+                
+                _quitEvent.WaitOne();
+            }      
         }
     }
 }
