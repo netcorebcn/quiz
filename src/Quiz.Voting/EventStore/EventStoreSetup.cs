@@ -57,7 +57,7 @@ namespace Quiz.Voting.EventStore
             UserCredentials credentials, string stream, string group)
         {
             var settings = PersistentSubscriptionSettings.Create()
-                .DoNotResolveLinkTos()
+                .ResolveLinkTos()
                 .StartFromCurrent();
 
             conn.CreatePersistentSubscriptionAsync(stream, group, settings, credentials).Wait();

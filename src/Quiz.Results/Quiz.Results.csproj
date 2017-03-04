@@ -10,5 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.0"/>
     <PackageReference Include="EventStore.ClientAPI.NetCore" Version="0.0.1-alpha"/>
     <PackageReference Include="Polly" Version="5.0.6"/>
+
+    <ProjectReference Include="../Quiz.EventSourcing/Quiz.EventSourcing.csproj"/>
+    <ProjectReference Include="../Quiz.Messages/Quiz.Messages.csproj"/>
 </ItemGroup>
 </Project>

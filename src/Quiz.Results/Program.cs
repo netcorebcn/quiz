@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Polly;
+using Quiz.EventSourcing;
+using Quiz.Messages;
 
 namespace Quiz.Results
 {
@@ -42,6 +44,7 @@ namespace Quiz.Results
                 {
                     conn.ConnectToPersistentSubscription(stream, group, (_, x) =>
                     {
+                        var myEvent = DeserializeEvent(x.Event);
                         var data = Encoding.ASCII.GetString(x.Event.Data);
                         Console.WriteLine("Received: " + x.Event.EventStreamId + ":" + x.Event.EventNumber);
                         Console.WriteLine(data);
@@ -50,6 +53,14 @@ namespace Quiz.Results
                 
                 _quitEvent.WaitOne();
             }      
+        }
+
+        private static object DeserializeEvent(RecordedEvent evt)
+        {
+            var eventTypeResolver = new EventTypeResolver(ReflectionHelper.MessagesAssembly);
+            var targetType = eventTypeResolver.GetTypeForEventName(evt.EventType);
+            var json = Encoding.UTF8.GetString(evt.Data);
+            return JsonConvert.DeserializeObject(json, targetType);
         }
     }
 }
