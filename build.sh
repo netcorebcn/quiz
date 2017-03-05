@@ -4,6 +4,9 @@ rimraf build-voting
 docker rm -f quiz-voting-build
 docker rm -f quiz-results-build
 
+#run unit tests 
+docker build -t quiz-tests-ci -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
+
 #build ci image
 docker build -t quiz-voting-ci -f ./docker/voting/Dockerfile.build .
 docker build -t quiz-results-ci -f ./docker/results/Dockerfile.build .

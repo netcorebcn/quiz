@@ -77,6 +77,7 @@ namespace Quiz.Voting.Tests
             // Assert
             var startedEvent = quiz.GetPendingEvents().FirstOrDefault();
             var answeredEvent = quiz.GetPendingEvents().LastOrDefault();
+
             Assert.NotNull(startedEvent);
             Assert.IsAssignableFrom(typeof(QuizStartedEvent), startedEvent);
             Assert.NotNull(answeredEvent);

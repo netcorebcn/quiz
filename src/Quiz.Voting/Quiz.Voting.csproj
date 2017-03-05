@@ -12,6 +12,8 @@
 
     <ProjectReference Include="../Quiz.EventSourcing/Quiz.EventSourcing.csproj"/>
     <ProjectReference Include="../Quiz.Messages/Quiz.Messages.csproj"/>
+
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0-msbuild3-final" />
   </ItemGroup>
 
 </Project>
