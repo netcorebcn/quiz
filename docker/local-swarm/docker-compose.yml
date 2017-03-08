@@ -9,6 +9,7 @@ services:
       - front-tier
       - back-tier
     depends_on: 
+      - setup
       - eventstore
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
@@ -32,6 +33,17 @@ services:
       placement:
         constraints: [node.role == manager]
 
+  setup:
+    image: quiz-setup
+    networks:
+      - back-tier
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+      - STREAM_NAME=QuestionAnswers
+      - GROUP_NAME=Default
+    depends_on: 
+      - eventstore
+
   result:
     image: quiz-results
     networks:
@@ -41,6 +53,7 @@ services:
       - STREAM_NAME=QuestionAnswers
       - GROUP_NAME=Default
     depends_on: 
+      - setup
       - eventstore
 
 networks:
