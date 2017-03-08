@@ -1,4 +1,4 @@
-namespace Quiz.Voting.EventStore
+namespace Quiz.EventSourcing.Setup
 {
     public static class Projections
     {

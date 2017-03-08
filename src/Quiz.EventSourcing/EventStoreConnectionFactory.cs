@@ -9,6 +9,8 @@ namespace Quiz.EventSourcing
             if (string.IsNullOrEmpty(connectionString))
                 connectionString = "tcp://admin:changeit@localhost:1113";
 
+            var settings = ConnectionSettings.Create().KeepReconnecting().KeepRetrying();
+
             var connection = EventStoreConnection.Create(new System.Uri(connectionString));
             connection.ConnectAsync().Wait();
             return connection;

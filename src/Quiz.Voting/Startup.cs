@@ -8,12 +8,12 @@ using Quiz.EventSourcing;
 using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
 using Swashbuckle.AspNetCore.Swagger;
-using Quiz.Voting.EventStore;
 
 namespace Quiz.Voting
 {
     public class Startup
     {
+        
         public IConfigurationRoot Configuration { get; }
 
         public Startup(ILoggerFactory loggerFactory)
@@ -42,8 +42,6 @@ namespace Quiz.Voting
             app.UseSwaggerUi(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
-
-            EventStoreSetup.CreateWithRetry(conn, Configuration);
         }
         
         private void AddEventStore(IServiceCollection services)

@@ -7,7 +7,7 @@ using EventStore.ClientAPI.SystemData;
 using Microsoft.Extensions.Configuration;
 using Polly;
 
-namespace Quiz.Voting.EventStore
+namespace Quiz.EventSourcing.Setup
 {
     public class EventStoreSetup
     {
@@ -15,7 +15,7 @@ namespace Quiz.Voting.EventStore
         {
             var retry = Policy
                 .Handle<Exception>()
-                .WaitAndRetry(3, retryAttempt => 
+                .WaitAndRetry(5, retryAttempt => 
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) 
                 );
 
@@ -29,13 +29,12 @@ namespace Quiz.Voting.EventStore
             var group = configuration["GROUP_NAME"] ?? "Default";
             var credentials = new UserCredentials("admin", "changeit");
 
-            var address = GetIPEndPointFromHostName(hostName).Result;
-
-            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
-            projections.EnableAsync("$by_category", credentials ).Wait();
-
             try
             {
+                var address = GetIPEndPointFromHostName(hostName).Result;
+                var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
+                projections.EnableAsync("$by_category", credentials ).Wait();
+
                 projections.CreateContinuousAsync(
                     stream, 
                     Projections.QuestionAnswers,
