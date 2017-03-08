@@ -1,26 +1,25 @@
 #clean up
-rimraf build-results
-rimraf build-voting
-docker rm -f quiz-voting-build
-docker rm -f quiz-results-build
+rimraf build
+mkdir build
 
 #run unit tests 
 docker build -t quiz-tests-ci -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
 
-#build ci image
-docker build -t quiz-voting-ci -f ./docker/voting/Dockerfile.build .
-docker build -t quiz-results-ci -f ./docker/results/Dockerfile.build .
+for container in voting results setup
+do
+    #clean up
+    docker rm -f quiz-"$container"-build
 
-#publish build
-docker create --name quiz-voting-build quiz-voting-ci
-docker cp quiz-voting-build:/out build-voting
+    #build ci image
+    docker build -t quiz-"$container"-ci -f ./docker/"$container"/Dockerfile.build .
 
-docker create --name quiz-results-build quiz-results-ci
-docker cp quiz-results-build:/out build-results
+    #publish build
+    docker create --name quiz-"$container"-build quiz-"$container"-ci
+    docker cp quiz-"$container"-build:/out build/"$container"
 
-#build runtime image
-docker build -t quiz-voting -f ./docker/voting/Dockerfile .
-docker build -t quiz-results -f ./docker/results/Dockerfile .
+    #build runtime image
+    docker build -t quiz-"$container" -f ./docker/"$container"/Dockerfile .
+done
 
 #clean up
 docker system prune --force
