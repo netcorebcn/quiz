@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/src/Quiz.Voting/Quiz.Voting.csproj"
+                "${workspaceRoot}/quiz.sln"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
