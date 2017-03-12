@@ -30,10 +30,10 @@ namespace Quiz.Results
                 msg => 
                 {
                     if (msg is QuestionRightAnsweredEvent rightEvent)
-                        Console.Write($"{rightEvent.GetType().Name}-{rightEvent.OptionId}-{rightEvent.QuestionId}");
+                        Console.WriteLine($"Type:{rightEvent.GetType().Name}, OptionId:{rightEvent.OptionId}, QuestionId: {rightEvent.QuestionId}");
                     
                     if (msg is QuestionWrongAnsweredEvent wrongEvent)
-                        Console.Write($"{wrongEvent.GetType().Name}-{wrongEvent.OptionId}-{wrongEvent.QuestionId}");
+                        Console.WriteLine($"Type:{wrongEvent.GetType().Name}, OptionId:{wrongEvent.OptionId}, QuestionId: {wrongEvent.QuestionId}");
                 })
             .Wait();
 
