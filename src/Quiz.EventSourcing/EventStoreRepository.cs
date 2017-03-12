@@ -50,7 +50,7 @@ namespace Quiz.EventSourcing
 
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
-                    var payload = DeserializeEvent(resolvedEvent.Event);
+                    var payload = resolvedEvent.Event.Deserialize(_eventTypeResolver);
                     aggregate.ApplyEvent(payload);
                 }
 
@@ -94,13 +94,6 @@ namespace Quiz.EventSourcing
 
             aggregate.ClearPendingEvents();
             return result.NextExpectedVersion;
-        }
-
-        private object DeserializeEvent(RecordedEvent evt)
-        {
-            var targetType = _eventTypeResolver.GetTypeForEventName(evt.EventType);
-            var json = Encoding.UTF8.GetString(evt.Data);
-            return JsonConvert.DeserializeObject(json, targetType);
         }
         
         private IList<IList<EventData>> GetEventBatches(IEnumerable<EventData> events) =>

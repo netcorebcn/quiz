@@ -26,10 +26,10 @@ namespace Quiz.EventSourcing
             await @this.ConnectToPersistentSubscriptionAsync(
                 subscription.streamName, 
                 subscription.groupName, 
-                (_, x) => action(DeserializeEvent(typeResolver, x.Event)))
+                (_, x) => action(x.Event.Deserialize(typeResolver)))
             .DefaultRetry();
 
-        private static object DeserializeEvent(EventTypeResolver eventTypeResolver, RecordedEvent evt)
+        public static object Deserialize(this RecordedEvent evt, EventTypeResolver eventTypeResolver)
         {
             var targetType = eventTypeResolver.GetTypeForEventName(evt.EventType);
             var json = Encoding.UTF8.GetString(evt.Data);
