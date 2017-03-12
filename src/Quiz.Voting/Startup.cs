@@ -13,7 +13,6 @@ namespace Quiz.Voting
 {
     public class Startup
     {
-        
         public IConfigurationRoot Configuration { get; }
 
         public Startup(ILoggerFactory loggerFactory)
@@ -46,7 +45,8 @@ namespace Quiz.Voting
         
         private void AddEventStore(IServiceCollection services)
         {
-            services.AddSingleton(EventStoreConnectionFactory.Create(Configuration["EVENT_STORE"]));
+            var options = EventStoreOptions.Create(Configuration);
+            services.AddSingleton(EventStoreConnectionFactory.Create(options.ConnectionString));
             services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
             services.AddTransient<IRepository, EventStoreRepository>();          
         }

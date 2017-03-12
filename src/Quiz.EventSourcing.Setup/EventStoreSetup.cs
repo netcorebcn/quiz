@@ -4,66 +4,47 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Projections;
 using EventStore.ClientAPI.SystemData;
-using Microsoft.Extensions.Configuration;
-using Polly;
 
 namespace Quiz.EventSourcing.Setup
 {
     public class EventStoreSetup
     {
-        public static void CreateWithRetry(IEventStoreConnection conn, IConfigurationRoot configuration)
+        public static async Task Create(IEventStoreConnection conn, EventStoreOptions options)
         {
-            var retry = Policy
-                .Handle<Exception>()
-                .WaitAndRetry(5, retryAttempt => 
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) 
-                );
-
-            retry.Execute(() => Create(conn, configuration));
+            await CreateProjections(options).DefaultRetry();
+            await CreateSubscription(conn, options).DefaultRetry();
         }
 
-        public static void Create(IEventStoreConnection conn, IConfigurationRoot configuration)
+        private static async Task CreateProjections(EventStoreOptions options)
         {
-            var hostName = configuration["EVENT_STORE_MANAGER_HOST"] ?? "localhost:2113";
-            var stream = configuration["STREAM_NAME"] ?? "QuestionAnswers";
-            var group = configuration["GROUP_NAME"] ?? "Default";
-            var credentials = new UserCredentials("admin", "changeit");
+            var address = GetIPEndPointFromHostName(options.ManagerHost).Result;
+            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
+            await projections.EnableAsync("$by_category", options.Credentials );
+            await projections.CreateContinuousAsync(options.Subscription.stream, Projections.QuestionAnswers, options.Credentials);
+        }
 
+        private static async Task CreateSubscription(IEventStoreConnection conn, EventStoreOptions options)
+        {
             try
             {
-                var address = GetIPEndPointFromHostName(hostName).Result;
-                var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
-                projections.EnableAsync("$by_category", credentials ).Wait();
+                var settings = PersistentSubscriptionSettings.Create()
+                    .ResolveLinkTos()
+                    .StartFromCurrent();
 
-                projections.CreateContinuousAsync(
-                    stream, 
-                    Projections.QuestionAnswers,
-                    credentials).Wait();
-                CreateSubscription(conn, credentials, stream, group);
-
+                await conn.CreatePersistentSubscriptionAsync(options.Subscription.stream, options.Subscription.group, settings, options.Credentials);
             }
             catch (AggregateException ex)
             {
                 if (ex.InnerException.GetType() != typeof(InvalidOperationException)
-                    && ex.InnerException?.Message != $"Subscription group {group} on stream {stream} already exists")
+                    && ex.InnerException?.Message != $"Subscription group {options.Subscription.group} on stream {options.Subscription.stream} already exists")
                 {
                     throw;
                 }
             }
         }
 
-        private static void CreateSubscription(IEventStoreConnection conn, 
-            UserCredentials credentials, string stream, string group)
-        {
-            var settings = PersistentSubscriptionSettings.Create()
-                .ResolveLinkTos()
-                .StartFromCurrent();
-
-            conn.CreatePersistentSubscriptionAsync(stream, group, settings, credentials).Wait();
-        }
-
-       public static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
-        {
+       private static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
+       {
             var hostParts = hostName.Split(':');
 
             if (hostParts[0] == "localhost")
@@ -80,7 +61,7 @@ namespace Quiz.EventSourcing.Setup
             return new IPEndPoint(addresses[0], int.Parse(hostParts[1])); // Port gets validated here.
         } 
 
-        public class FakeLogger : ILogger
+        private class FakeLogger : ILogger
         {
             public void Debug(string format, params object[] args)
             {

@@ -9,12 +9,12 @@ namespace Quiz.EventSourcing.Setup
         {
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             var configuration = builder.Build();
-            var connectionString = configuration["EVENT_STORE"] ?? "tcp://admin:changeit@localhost:1113";
 
             Console.WriteLine("Starting Event Store Quiz Setup.");
 
-            var conn = EventStoreConnectionFactory.Create(connectionString);
-            EventStoreSetup.CreateWithRetry(conn, configuration);
+            var options = EventStoreOptions.Create(configuration);
+            var conn = EventStoreConnectionFactory.Create(options.ConnectionString);
+            EventStoreSetup.Create(conn, options).Wait();
 
             Console.WriteLine("Event Store Quiz Setup Done!");
 
