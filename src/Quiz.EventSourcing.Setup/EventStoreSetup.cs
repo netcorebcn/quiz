@@ -3,24 +3,24 @@ using System.Net;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Projections;
-using EventStore.ClientAPI.SystemData;
 
 namespace Quiz.EventSourcing.Setup
 {
     public class EventStoreSetup
     {
-        public static async Task Create(IEventStoreConnection conn, EventStoreOptions options)
-        {
-            await CreateProjections(options).DefaultRetry();
-            await CreateSubscription(conn, options).DefaultRetry();
-        }
+        public static async Task Create(IEventStoreConnection conn, EventStoreOptions options) =>
+            await Task.WhenAll(
+                CreateProjections(options).DefaultRetry(),
+                CreateSubscription(conn, options).DefaultRetry());
 
         private static async Task CreateProjections(EventStoreOptions options)
         {
-            var address = GetIPEndPointFromHostName(options.ManagerHost).Result;
-            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(30));
-            await projections.EnableAsync("$by_category", options.Credentials );
-            await projections.CreateContinuousAsync(options.Subscription.stream, Projections.QuestionAnswers, options.Credentials);
+            var address = await GetIPEndPointFromHostName(options.ManagerHost);
+            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(90));
+            await Task.WhenAll(
+                projections.EnableAsync("$by_category", options.Credentials),
+                projections.CreateContinuousAsync(options.Subscription.stream, Projections.QuestionAnswers, options.Credentials)
+            );
         }
 
         private static async Task CreateSubscription(IEventStoreConnection conn, EventStoreOptions options)
