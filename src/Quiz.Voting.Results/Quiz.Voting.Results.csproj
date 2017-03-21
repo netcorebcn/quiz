@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="System.ValueTuple" Version="4.3"/>
+
+    <ProjectReference Include="../Quiz.EventSourcing/Quiz.EventSourcing.csproj"/>
+    <ProjectReference Include="../Quiz.Messages/Quiz.Messages.csproj"/>
+
+  </ItemGroup>
+
+</Project>

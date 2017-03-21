@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz Results</title>
+</head>
+
+<body>
+    <h1>Quiz Results</h1>
+    <ul id="messages"></ul>
+
+    <script language="javascript" type="text/javascript">
+        var list = document.getElementById("messages");
+        var webSocket = new WebSocket("ws://localhost:5001/ws");
+
+        webSocket.onopen = function (event) {
+            console.log(event);
+        };
+
+        webSocket.onmessage = function (event) {
+            console.log(event.data);
+            appendItem(list, event.data);
+        }
+
+        function appendItem(list, message) {
+            var item = document.createElement("li");
+            item.appendChild(document.createTextNode(message));
+            list.appendChild(item);
+        }
+    </script>
+</body>
+
+</html>
