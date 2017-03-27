@@ -9,8 +9,6 @@ PARAMETERS='{"adServicePrincipalAppID":{"value":"'$SERVICE_PRINCIPAL_ID'"},
 "enableSystemPrune":{"value":"yes"},
 "sshPublicKey":{"value":"'$SSH_PUBLIC_KEY'"}}'
 
-echo $PARAMETERS
-
 az group delete -n quiz-app -y
 az group create --name quiz-app --location "West Europe"
 az group deployment create \
