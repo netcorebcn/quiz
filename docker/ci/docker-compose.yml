@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  unit-tests:
+    build:
+      context: https://github.com/netcorebcn/quiz.git
+      dockerfile: ./docker/voting/Dockerfile.tests
