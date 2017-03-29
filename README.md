@@ -28,5 +28,6 @@ We are using ideas and code from other awesome repos.
 * EventStore repository thanks to [ReactiveTraderCloud](https://github.com/AdaptiveConsulting/ReactiveTraderCloud)
 * WebSockets helper classes thanks to 
   ``https://github.com/radu-matei/websocket-manager
+
 * Docker swarm local cluster thanks to   
   ``https://codefresh.io/blog/deploy-docker-compose-v3-swarm-mode-cluster/``
