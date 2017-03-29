@@ -25,6 +25,7 @@ We are using ideas and code from other awesome repos.
 
 * Example architecture thanks to the popular   
   ``https://github.com/docker/example-voting-app``
+  
 * EventStore repository thanks to [ReactiveTraderCloud](https://github.com/AdaptiveConsulting/ReactiveTraderCloud)
 * WebSockets helper classes thanks to 
   ``https://github.com/radu-matei/websocket-manager
