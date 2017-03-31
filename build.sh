@@ -1,5 +1,7 @@
+#!/bin/bash
+
 #clean up
-rimraf build
+rm -rf build
 mkdir build
 
 #run unit tests 
