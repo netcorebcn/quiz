@@ -32,15 +32,30 @@ app.post('/api/ci', function(req, res) {
 
       if (action === 'opened')
       {
-        // PROCESS PULL REQUEST
+        // CONTINUOUS INTEGRATION
         createStatus(pull_request)
-        .then(resp => setTimeout(
-          x => createStatus(pull_request, 'success'), 10000));
+            .then(resp => runCI(pull_request));
+      }
+
+      if (action === 'merged')
+      {
+        // CONTINUOUS DELIVERY
+        runCD(pull_request);
       }
     }
                 
     res.sendStatus(200);
 });
+
+const runCI = (pull_request) =>
+    runScript(`./run.sh ${pull_request.base.repo.full_name}.git ${pull_request.head.sha}`,
+        () => createStatus(pull_request, 'success'),
+        () => createStatus(pull_request, 'failure'));
+
+const runCD = (pull_request) =>
+    runScript(`./run.sh ${pull_request.base.repo.full_name}.git ${pull_request.head.sha}`,
+        () => console.log('deployment success'),
+        () => console.log("deployment failed"));
 
 const createStatus = (pull_request, state = 'pending') =>
   github.repos.createStatus({
@@ -49,6 +64,24 @@ const createStatus = (pull_request, state = 'pending') =>
     sha:pull_request.head.sha,
     state:state 
   });
+
+var util = require('util'),
+    exec = require('child_process').exec,
+    child;
+
+const runScript = (command, success, error) => {
+    child = exec(command, // command line argument directly in string
+    function (error, stdout, stderr) {      // one easy function to capture data/errors
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+            console.log('exec error: ' + error);
+            error();
+        } else {
+            success();
+        }
+    });
+};
 
 // start the server
 app.listen(port);
