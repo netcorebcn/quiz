@@ -16,6 +16,3 @@ az group deployment create \
 --resource-group quiz-app \
 --template-uri https://download.docker.com/azure/edge/Docker.tmpl \
 --parameters "$PARAMETERS"
-
-# ssh -p 50000 -fNL localhost:2374:/var/run/docker.sock docker@SSHLoadBalancerIP
-# export DOCKER_HOST=localhost:2374
