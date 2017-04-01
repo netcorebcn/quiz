@@ -14,7 +14,7 @@ do
     docker build -t quiz-$container-ci:$sha -f ./docker/$container/Dockerfile.build .
 
     #publish build
-    docker create --name quiz-$container-build quiz-$container-ci
+    docker create --name quiz-$container-build quiz-$container-ci:$sha
     docker cp quiz-$container-build:/out build/$container
 
     #build runtime image
