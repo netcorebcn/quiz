@@ -24,5 +24,5 @@ if [ ! -z "$TOKEN" ]; then
 fi
 
 popd
-
+docker rmi -f quiz-$SHA-ci
 rm -rf build-$SHA
