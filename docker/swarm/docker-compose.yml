@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vote:
-    image: quiz-voting
+    image: quiz-voting:${SHA_COMMIT}
     ports:
       - "5000:80"
     networks:
@@ -16,7 +16,6 @@ services:
 
   eventstore:
     image: eventstore/eventstore
-    container_name: eventstore-node
     ports:
       - "2113:2113"
       - "1113:1113"
@@ -27,7 +26,7 @@ services:
         constraints: [node.role == manager]
 
   setup:
-    image: quiz-setup
+    image: quiz-setup:${SHA_COMMIT}
     networks:
       - back-tier
     environment: 
@@ -37,7 +36,7 @@ services:
       - eventstore
 
   result:
-    image: quiz-results
+    image: quiz-results:${SHA_COMMIT}
     networks:
       - back-tier
     environment: 
@@ -45,6 +44,17 @@ services:
     depends_on: 
       - setup
       - eventstore
+  
+  ci:
+    image: awesome-ci:${SHA_COMMIT}
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - front-tier
+    environment: 
+      - CI_TOKEN=${CI_TOKEN}
 
 networks:
   front-tier:
