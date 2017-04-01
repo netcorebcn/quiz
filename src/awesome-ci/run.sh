@@ -9,7 +9,7 @@ echo $SHA
 
 # checkout sha commit from github repo
 docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/ci/Dockerfile.ci
-docker create --name quiz-$SHA-build quiz-$SHA-ci echo > null
+docker create --name quiz-$SHA-build quiz-$SHA-ci echo ""
 docker cp quiz-$SHA-build:/quizapp ./build-$SHA
 
 # build docker images from the git checkout
