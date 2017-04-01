@@ -20,8 +20,7 @@ Example application with .NET Core, Event Store and Docker
 The quiz voting api can be tested with swagger UI ``http://localhost:5000/swagger/`` and the [Event Store](https://geteventstore.com/) can be managed from ``http://localhost:2113``.
 
 
-**Notes**: We aren't started from the scratch and we don't reinvent wheels. 
-We are using ideas and code from other awesome repos.
+**Notes**: We aren't started from the scratch and we don't reinvent wheels. We are using ideas and code from other awesome repos.
 
 * Example architecture thanks to the popular   
   ``https://github.com/docker/example-voting-app``
