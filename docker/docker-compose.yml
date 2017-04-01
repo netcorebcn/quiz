@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  vote:
+    image: quiz-voting
+    ports:
+      - "5000:80"
+    networks:
+      - front-tier
+      - back-tier
+    depends_on: 
+      - setup
+      - eventstore
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+
+  eventstore:
+    image: eventstore/eventstore
+    ports:
+      - "2113:2113"
+      - "1113:1113"
+    networks:
+      - back-tier
+
+  setup:
+    image: quiz-setup
+    networks:
+      - back-tier
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+      - EVENT_STORE_MANAGER_HOST=eventstore:2113
+    depends_on: 
+      - eventstore
+
+  result:
+    image: quiz-results
+    networks:
+      - back-tier
+    environment: 
+      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+    depends_on: 
+      - setup
+      - eventstore
+
+networks:
+  front-tier:
+  back-tier:
