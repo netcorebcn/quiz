@@ -17,13 +17,7 @@ SWARM_TOKEN=$(docker swarm join-token -q worker)
 # get Swarm master IP (Docker for Mac xhyve VM IP)
 SWARM_MASTER=$(docker info --format "{{.Swarm.NodeAddr}}")
 echo "Swarm master IP: ${SWARM_MASTER}"
-sleep 10
-
-# start Docker registry mirror
-docker run -d --restart=always -p 4000:5000 --name v2_mirror \
-  -v $PWD/rdata:/var/lib/registry \
-  -e REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io \
-  registry:2.5
+sleep 5
 
 # run NUM_WORKERS workers with SWARM_TOKEN
 for i in $(seq "${NUM_WORKERS}"); do
@@ -35,7 +29,7 @@ for i in $(seq "${NUM_WORKERS}"); do
   docker run -d --privileged --name worker-${i} --hostname=worker-${i} \
     -p ${i}2375:2375 \
     -p ${i}5000:5000 \
-    docker:1.13-rc-dind --registry-mirror http://${SWARM_MASTER}:4000
+    docker:1.13-rc-dind
 
   # add worker container to the cluster
   docker --host=localhost:${i}2375 swarm join --token ${SWARM_TOKEN} ${SWARM_MASTER}:2377
