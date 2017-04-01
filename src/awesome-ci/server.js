@@ -55,7 +55,10 @@ const runCI = (pull_request) =>
         () => createStatus(pull_request, 'failure'));
 
 const runCD = (pull_request) =>
-    runScript(`./run.sh ${pull_request.base.repo.full_name}.git ${pull_request.head.sha}`,
+    runScript(`./run.sh \
+        ${pull_request.base.repo.full_name}.git \
+        ${pull_request.head.sha.slice(0, 6)} \
+        ${process.env.CI_TOKEN}`,
         () => console.log('deployment success'),
         () => console.log("deployment failed"));
 
