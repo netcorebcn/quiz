@@ -54,14 +54,14 @@ app.post('/api/ci', function(req, res) {
 const runCI = (pull_request) =>
     runScript(`./run.sh \
         ${pull_request.base.repo.full_name}.git \
-        ${pull_request.head.sha.slice(0, 6)}`,
+        ${pull_request.head.sha.slice(0, 7)}`,
         () => createStatus(pull_request, 'success'),
         () => createStatus(pull_request, 'failure'));
 
 const runCD = (pull_request) =>
     runScript(`./run.sh \
         ${pull_request.base.repo.full_name}.git \
-        ${pull_request.head.sha.slice(0, 6)} \
+        ${pull_request.head.sha.slice(0, 7)} \
         ${process.env.CI_TOKEN}`,
         () => console.log('deployment success'),
         () => console.log("deployment failed"));
