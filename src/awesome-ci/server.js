@@ -48,7 +48,9 @@ app.post('/api/ci', function(req, res) {
 });
 
 const runCI = (pull_request) =>
-    runScript(`./run.sh ${pull_request.base.repo.full_name}.git ${pull_request.head.sha}`,
+    runScript(`./run.sh \
+        ${pull_request.base.repo.full_name}.git \
+        ${pull_request.head.sha.slice(0, 6)}`,
         () => createStatus(pull_request, 'success'),
         () => createStatus(pull_request, 'failure'));
 
@@ -69,20 +71,22 @@ var util = require('util'),
     exec = require('child_process').exec,
     child;
 
-const runScript = (command, success, error) => {
+const runScript = (command, successHandler, errorHandler) => {
     child = exec(command, // command line argument directly in string
     function (error, stdout, stderr) {      // one easy function to capture data/errors
         console.log('stdout: ' + stdout);
         console.log('stderr: ' + stderr);
-        if (error !== null) {
-            console.log('exec error: ' + error);
-            error();
+
+        // hack because error variable does not work
+        if(stderr.indexOf('non-zero code: 1') > -1) {
+            errorHandler();
         } else {
-            success();
+            successHandler();
         }
     });
 };
 
 // start the server
 app.listen(port);
+
 console.log('Server started! At http://localhost:' + port);
