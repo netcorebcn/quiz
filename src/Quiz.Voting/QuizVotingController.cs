@@ -18,7 +18,8 @@ namespace Quiz.Api.Controllers
         }
 
         [HttpGet]
-        public QuizModel Get(int id) => QuizModelFactory.Create(id);
+        public QuizModel Get(int id) => 
+            QuizModelFactory.Create(id);
 
         [HttpPost]
         public async Task Vote(Guid id, [FromBody]QuestionAnswerCommand answer)
