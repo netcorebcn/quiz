@@ -1,4 +1,4 @@
-FROM node:onbuild
+FROM node
 
 #install docker client
 RUN apt-get update && \
@@ -15,5 +15,16 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install docker-ce -y
 
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+COPY package.json /usr/src/app/
+RUN npm install && npm cache clean
+COPY . /usr/src/app
 RUN chmod +x ./run.sh
+
+CMD [ "npm", "start" ]
+
 EXPOSE 8080
