@@ -24,11 +24,15 @@ github.authenticate({
 app.post('/api/ci', function(req, res) {
 
     var event = req.headers['x-github-event'];
+    console.log("Event:" + event);
     
     if (event === 'pull_request')
     {
       var pull_request = req.body.pull_request;
       var action = req.body.action;
+
+      console.log("Event:" + pull_request);
+      console.log("PR:" + pull_request);
 
       if (action === 'opened')
       {
@@ -37,7 +41,7 @@ app.post('/api/ci', function(req, res) {
             .then(resp => runCI(pull_request));
       }
 
-      if (action === 'merged')
+      if (action === 'closed' && pull_request.merged)
       {
         // CONTINUOUS DELIVERY
         runCD(pull_request);
