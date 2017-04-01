@@ -10,9 +10,6 @@ docker build -t quiz-tests-ci -f ./docker/voting/Dockerfile.tests . || { echo "u
 
 for container in voting results setup
 do
-    #clean up
-    docker rm -f quiz-$container-build
-
     #build ci image
     docker build -t quiz-$container-ci:$sha -f ./docker/$container/Dockerfile.build .
 
@@ -23,6 +20,9 @@ do
     #build runtime image
     docker build -t quiz-$container:$sha -f ./docker/$container/Dockerfile .
 done
+
+#build ci
+docker build -t awesome-ci:$sha -f ./docker/ci/Dockerfile .
 
 #clean up
 docker system prune --force
