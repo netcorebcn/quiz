@@ -11,7 +11,6 @@ mkdir build
 
 #run unit tests 
 docker build -t quiz-tests-ci:$sha -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
-# docker rmi -f quiz-tests-ci:$sha
 
 for container in voting results setup
 do
@@ -25,9 +24,6 @@ do
     #build runtime image
     docker build -t $registry"quiz-"$container:$sha -f ./docker/$container/Dockerfile .
  
-    # #remove ci image
-    # docker rmi -f quiz-$container-ci:$sha
-
     #push to registry
     if [ ! -z "$registry" ]; then 
         docker push $registry"quiz-"$container:$sha 
