@@ -2,8 +2,8 @@
 
 REPO=$1
 SHA=${2:-master}
-TOKEN=$3
-REGISTRY=$4
+REGISTRY=$3
+TOKEN=$4
 
 echo Repo:$REPO
 echo Sha:$SHA
