@@ -33,4 +33,3 @@ The quiz voting api can be tested with swagger UI ``http://localhost:5000/swagge
 * Docker swarm local cluster thanks to   
   ``https://codefresh.io/blog/deploy-docker-compose-v3-swarm-mode-cluster/``
   
-  
