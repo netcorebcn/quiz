@@ -1,6 +1,7 @@
 SERVICE_PRINCIPAL_ID=$1
 SERVICE_PRINCIPAL_SECRET=$2
 SSH_PUBLIC_KEY=$3
+GROUP_NAME=$4
 
 PARAMETERS='{"adServicePrincipalAppID":{"value":"'$SERVICE_PRINCIPAL_ID'"},
 "adServicePrincipalAppSecret":{"value":"'$SERVICE_PRINCIPAL_SECRET'"},
@@ -9,10 +10,10 @@ PARAMETERS='{"adServicePrincipalAppID":{"value":"'$SERVICE_PRINCIPAL_ID'"},
 "enableSystemPrune":{"value":"yes"},
 "sshPublicKey":{"value":"'$SSH_PUBLIC_KEY'"}}'
 
-az group delete -n quiz-app -y
-az group create --name quiz-app --location "West Europe"
+az group delete -n $GROUP_NAME -y
+az group create --name $GROUP_NAME --location "West Europe"
 az group deployment create \
 --name dockertemplate \
---resource-group quiz-app \
+--resource-group $GROUP_NAME \
 --template-uri https://download.docker.com/azure/edge/Docker.tmpl \
 --parameters "$PARAMETERS"
