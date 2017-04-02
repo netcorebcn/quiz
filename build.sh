@@ -11,6 +11,7 @@ mkdir build
 
 #run unit tests 
 docker build -t quiz-tests-ci:$sha -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
+docker rmi -f quiz-tests-ci:$sha
 
 for container in voting results setup
 do
@@ -22,13 +23,14 @@ do
     docker cp quiz-$container-build:/out build/$container
 
     #build runtime image
-    docker build -t quiz-$container:$sha -f ./docker/$container/Dockerfile .
-    docker tag quiz-$container:$sha $registry"quiz-"$container:$sha
+    docker build -t $registry"quiz-"$container:$sha -f ./docker/$container/Dockerfile .
+ 
+    #remove ci image
+    docker rmi -f quiz-$container-ci:$sha
 done
 
 #build ci
-docker build -t awesome-ci:$sha -f ./docker/ci/Dockerfile .
-docker tag awesome-ci:$sha $registry"awesome-ci:"$sha
+docker build -t $registry"awesome-ci:"$sha -f ./docker/ci/Dockerfile .
 
 #clean up
 docker system prune --force
