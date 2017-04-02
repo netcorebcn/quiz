@@ -55,6 +55,7 @@ services:
       - front-tier
     environment: 
       - CI_TOKEN=${CI_TOKEN}
+      - REGISTRY=${REGISTRY}
     deploy:
       mode: replicated
       replicas: 2
