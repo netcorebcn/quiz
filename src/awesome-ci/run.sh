@@ -18,6 +18,11 @@ docker cp quiz-$SHA-build:/quizapp ./build-$SHA
 # build docker images from the git checkout
 pushd build-$SHA
 ./build.sh $REGISTRY $SHA
+popd
+
+# clean up
+docker rmi -f quiz-$SHA-ci
+rm -rf build-$SHA
 
 # deploy stack to swarm using docker compose
 if [ ! -z "$TOKEN" ]; then
@@ -25,7 +30,3 @@ if [ ! -z "$TOKEN" ]; then
     ./deploy.sh $REGISTRY $TOKEN $SHA;
     popd
 fi
-
-popd
-docker rmi -f quiz-$SHA-ci
-rm -rf build-$SHA
