@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vote:
-    image: quiz-voting:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-voting:${SHA_COMMIT}
     ports:
       - "5000:80"
     networks:
@@ -26,7 +26,7 @@ services:
         constraints: [node.role == manager]
 
   setup:
-    image: quiz-setup:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-setup:${SHA_COMMIT}
     networks:
       - back-tier
     environment: 
@@ -36,7 +36,7 @@ services:
       - eventstore
 
   result:
-    image: quiz-results:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-results:${SHA_COMMIT}
     networks:
       - back-tier
     environment: 
@@ -46,7 +46,7 @@ services:
       - eventstore
   
   ci:
-    image: awesome-ci:${SHA_COMMIT}
+    image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
     ports:
       - "8080:8080"
     volumes:

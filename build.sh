@@ -1,5 +1,9 @@
 #!/bin/bash
-sha=${1:-latest}
+registry=$1
+sha=${2:-latest}
+
+echo Registry:$registry
+echo Sha:$sha
 
 #clean up
 rm -rf build
@@ -19,10 +23,13 @@ do
 
     #build runtime image
     docker build -t quiz-$container:$sha -f ./docker/$container/Dockerfile .
+    docker tag quiz-$container:$sha $registry"quiz-"$container:$sha
 done
 
 #build ci
 docker build -t awesome-ci:$sha -f ./docker/ci/Dockerfile .
+docker tag awesome-ci:$sha $registry"awesome-ci:"$sha
 
 #clean up
 docker system prune --force
+
