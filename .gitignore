@@ -2,6 +2,7 @@
 **/bin/
 **/obj/
 build
+build-*
 ./.vscode
 node_modules
 npm-debug.log
