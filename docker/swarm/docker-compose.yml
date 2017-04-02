@@ -13,6 +13,8 @@ services:
       - eventstore
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+    logging:
+      driver: "json-file"
 
   eventstore:
     image: eventstore/eventstore
@@ -21,6 +23,8 @@ services:
       - "1113:1113"
     networks:
       - back-tier
+    logging:
+      driver: "json-file"
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -34,6 +38,8 @@ services:
       - EVENT_STORE_MANAGER_HOST=eventstore:2113
     depends_on: 
       - eventstore
+    logging:
+      driver: "json-file"
 
   result:
     image: ${REGISTRY}quiz-results:${SHA_COMMIT}
@@ -44,7 +50,9 @@ services:
     depends_on: 
       - setup
       - eventstore
-  
+    logging:
+      driver: "json-file"
+
   ci:
     image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
     ports:
@@ -56,6 +64,8 @@ services:
     environment: 
       - CI_TOKEN=${CI_TOKEN}
       - REGISTRY=${REGISTRY}
+    logging:
+      driver: "json-file"
     deploy:
       mode: replicated
       replicas: 2
