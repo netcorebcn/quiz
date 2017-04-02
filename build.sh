@@ -27,10 +27,18 @@ do
  
     #remove ci image
     docker rmi -f quiz-$container-ci:$sha
+
+    #push to registry
+    if [ ! -z "$registry" ]; then 
+        docker push $registry"quiz-"$container:$sha 
+    fi
 done
 
 #build ci
 docker build -t $registry"awesome-ci:"$sha -f ./docker/ci/Dockerfile .
+if [ ! -z "$registry" ]; then 
+    docker push $registry"awesome-ci:"$sha 
+fi
 
 #clean up
 docker system prune --force
