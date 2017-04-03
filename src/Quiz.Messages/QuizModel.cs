@@ -53,13 +53,13 @@ namespace Quiz.Messages
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.6"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 2.0", true),
-                    }),
-                new Question(Guid.NewGuid(), "What .NET Core version is LTS", 
-                    new List<QuestionOption> {
-                        new QuestionOption(Guid.NewGuid(), ".NET Core 2.0"),
-                        new QuestionOption(Guid.NewGuid(), ".NET Core 1.1", true),
-                        new QuestionOption(Guid.NewGuid(), ".NET Core 1.0"),
                     })
+                // new Question(Guid.NewGuid(), "What .NET Core version is LTS", 
+                //     new List<QuestionOption> {
+                //         new QuestionOption(Guid.NewGuid(), ".NET Core 2.0"),
+                //         new QuestionOption(Guid.NewGuid(), ".NET Core 1.1", true),
+                //         new QuestionOption(Guid.NewGuid(), ".NET Core 1.0"),
+                //     })
 
             });
     }
