@@ -15,6 +15,9 @@ services:
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
     logging:
       driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   eventstore:
     image: eventstore/eventstore
@@ -40,6 +43,14 @@ services:
       - eventstore
     logging:
       driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   result:
     image: ${REGISTRY}quiz-results:${SHA_COMMIT}
@@ -52,6 +63,9 @@ services:
       - eventstore
     logging:
       driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   ci:
     image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
@@ -71,13 +85,11 @@ services:
         constraints: [node.role == manager]
       mode: replicated
       replicas: 2
-      # service restart policy
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
-      # service update configuration
       update_config:
         parallelism: 1
         delay: 10s
