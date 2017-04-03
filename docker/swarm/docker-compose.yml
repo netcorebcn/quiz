@@ -67,6 +67,8 @@ services:
     logging:
       driver: "json-file"
     deploy:
+      placement:
+        constraints: [node.role == manager]
       mode: replicated
       replicas: 2
       # service restart policy
