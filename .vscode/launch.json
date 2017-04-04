@@ -34,11 +34,11 @@
             }
         },
         {
-            "name": "QuizVotingResults",
+            "name": "QuizResults",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.Voting.Results/bin/Debug/netcoreapp1.1/Quiz.Voting.Results.dll",
+            "program": "${workspaceRoot}/src/Quiz.Results/bin/Debug/netcoreapp1.1/Quiz.Results.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
@@ -64,18 +64,6 @@
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
             }
-        },
-        {
-            "name": "QuizResults",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.Results/bin/Debug/netcoreapp1.1/Quiz.Results.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "externalConsole": false,
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "name": "QuizSetup",
