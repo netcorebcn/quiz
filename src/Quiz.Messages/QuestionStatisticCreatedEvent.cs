@@ -15,5 +15,10 @@ namespace Quiz.Messages
             RightAnswersPercent = rightAnswersPercent;
             WrongAnswersPercent = wrongAnswersPercent;
         }
+
+        public override string ToString() => $@"
+            QuestionId:{QuestionId},
+            RightAnswers:{RightAnswersPercent},
+            WrongAnswers:{WrongAnswersPercent}";
     }
 }

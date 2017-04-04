@@ -31,6 +31,7 @@ namespace Quiz.Voting.Results
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
         IServiceProvider serviceProvider,
+        ILoggerFactory loggerFactory,
         IEventStoreConnection eventBus,
         EventTypeResolver typeResolver,
         WebSocketHandler handler)
@@ -39,8 +40,15 @@ namespace Quiz.Voting.Results
             app.UseStaticFiles();
             app.UseWebSockets();
             app.MapWebSocketManager("/ws", handler);     
-        
-            eventBus.StartSubscription(EventStoreOptions, typeResolver, handler.SendMessageToAllAsync)
+
+            var logger = loggerFactory.CreateLogger<Startup>();        
+            eventBus.StartSubscription(
+                EventStoreOptions, 
+                typeResolver, 
+                async (message) => {
+                    logger.LogInformation(message.ToString());
+                    await handler.SendMessageToAllAsync(message);    
+                })
             .Wait();
         }
     }
