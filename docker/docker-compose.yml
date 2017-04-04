@@ -4,19 +4,15 @@ services:
   vote:
     image: quiz-voting
     ports:
-      - "81:80"
+      - "81:81"
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+      - ASPNETCORE_URLS=https://*:81
   
   result:
     image: quiz-results
     ports:
-      - "82:80"
+      - "82:82"
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
-
-  setup:
-    image: quiz-setup
-    environment: 
-      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
-      - EVENT_STORE_MANAGER_HOST=eventstore:2113
+      - ASPNETCORE_URLS=https://*:82
