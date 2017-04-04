@@ -1,4 +1,4 @@
-FROM microsoft/dotnet
+FROM microsoft/aspnetcore-build
 WORKDIR /app/Quiz.Results
 
 COPY src/Quiz.Messages /app/Quiz.Messages
