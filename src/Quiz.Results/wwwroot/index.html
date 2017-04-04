@@ -12,7 +12,7 @@
 
     <script language="javascript" type="text/javascript">
         var list = document.getElementById("messages");
-        var webSocket = new WebSocket("ws://localhost:5001/ws");
+        var webSocket = new WebSocket(getWebSocketUri());
 
         webSocket.onopen = function (event) {
             console.log(event);
@@ -27,6 +27,10 @@
             var item = document.createElement("li");
             item.appendChild(document.createTextNode(message));
             list.appendChild(item);
+        }
+
+        function getWebSocketUri(){
+            return 'ws://' + window.location.host + '/ws';
         }
     </script>
 </body>
