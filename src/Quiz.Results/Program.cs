@@ -29,11 +29,12 @@ namespace Quiz.Results
                 typeResolver, options.Subscription, 
                 msg => 
                 {
-                    if (msg is QuestionRightAnsweredEvent rightEvent)
-                        Console.WriteLine($"Type:{rightEvent.GetType().Name}, OptionId:{rightEvent.OptionId}, QuestionId: {rightEvent.QuestionId}");
-                    
-                    if (msg is QuestionWrongAnsweredEvent wrongEvent)
-                        Console.WriteLine($"Type:{wrongEvent.GetType().Name}, OptionId:{wrongEvent.OptionId}, QuestionId: {wrongEvent.QuestionId}");
+                    if (msg is QuestionStatisticCreatedEvent questionAnswersStats)
+                        Console.WriteLine($@"
+                            Type:{questionAnswersStats.GetType().Name}, 
+                            OptionId:{questionAnswersStats.QuestionId}, 
+                            RightAnswersPercent: {questionAnswersStats.RightAnswersPercent}
+                            WrongAnswersPercent: {questionAnswersStats.WrongAnswersPercent}");                    
                 })
             .Wait();
 
