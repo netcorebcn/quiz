@@ -24,16 +24,14 @@ class App extends Component {
         <div className="App-header">
           <h2>Welcome to Quiz</h2>
         </div>
-        <p className="App-intro">
             {this.state.questions.map(q =>
-              <p> 
-                  {q.description}
-                  <ul key={q.id}>    
-                    {q.options.map(o => <li key={o.id}>{o.description}</li>)}
-                  </ul>
-              </p>
+              <ul key={q.id}>    
+                {q.description}
+                {q.options.map(o => 
+                  <li key={o.id}>{o.description}</li>
+                  )}
+              </ul>
             )}
-        </p>
       </div>
     );
   }
