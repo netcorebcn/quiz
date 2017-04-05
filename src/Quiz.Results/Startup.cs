@@ -36,8 +36,6 @@ namespace Quiz.Voting.Results
         EventTypeResolver typeResolver,
         WebSocketHandler handler)
         {
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
             app.UseWebSockets();
             app.MapWebSocketManager("/ws", handler);     
 

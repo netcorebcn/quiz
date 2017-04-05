@@ -8,4 +8,4 @@ RUN dotnet restore
 
 COPY src/Quiz.Voting .
 
-RUN dotnet publish  --output /out/ --configuration Release
+RUN dotnet publish  --output /build/ --configuration Release

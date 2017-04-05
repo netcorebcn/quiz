@@ -16,3 +16,8 @@ services:
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
       - ASPNETCORE_URLS=https://*:82
+
+  ui:
+    image: quiz-ui
+    ports:
+      - "80:5000"

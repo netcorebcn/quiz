@@ -7,4 +7,4 @@ RUN dotnet restore
 
 COPY src/Quiz.EventSourcing.Setup .
 
-RUN dotnet publish  --output /out/ --configuration Release
+RUN dotnet publish  --output /build/ --configuration Release

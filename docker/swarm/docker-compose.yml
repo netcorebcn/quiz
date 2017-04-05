@@ -1,12 +1,25 @@
 version: "3"
 
 services:
+  ui:
+    image: ${REGISTRY}quiz-ui:${SHA_COMMIT}
+    ports:
+      - "80:5000"
+    networks:
+      - front-tier
+    depends_on: 
+      - vote
+      - results
+    logging:
+      driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
   vote:
     image: ${REGISTRY}quiz-voting:${SHA_COMMIT}
     ports:
       - "81:80"
     networks:
-      - front-tier
       - back-tier
     depends_on: 
       - setup
@@ -24,7 +37,6 @@ services:
     ports:
       - "82:80"
     networks:
-      - front-tier
       - back-tier
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
@@ -77,7 +89,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - front-tier
+      - back-tier
     environment: 
       - CI_TOKEN=${CI_TOKEN}
       - REGISTRY=${REGISTRY}
