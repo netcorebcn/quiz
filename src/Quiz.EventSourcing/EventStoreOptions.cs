@@ -1,3 +1,4 @@
+using System;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Extensions.Configuration;
 
@@ -21,6 +22,6 @@ namespace Quiz.EventSourcing
             new EventStoreOptions(
                 configuration["EVENT_STORE"] ?? "tcp://admin:changeit@localhost:1113",
                 configuration["EVENT_STORE_MANAGER_HOST"] ?? "localhost:2113",
-                (configuration["STREAM_NAME"] ?? "QuestionAnswers",  configuration["GROUP_NAME"] ?? "Default"));
+                (configuration["STREAM_NAME"] ?? "QuestionAnswers",  Guid.NewGuid().ToString()));
     }
 }
