@@ -25,17 +25,27 @@ namespace Quiz.Voting.Results
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials() );
+            });
             services.AddEventStoreSubscription(EventStoreOptions);
             services.AddWebSocketManager();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
-        IServiceProvider serviceProvider,
-        ILoggerFactory loggerFactory,
-        IEventStoreConnection eventBus,
-        EventTypeResolver typeResolver,
-        WebSocketHandler handler)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            IServiceProvider serviceProvider,
+            ILoggerFactory loggerFactory,
+            IEventStoreConnection eventBus,
+            EventTypeResolver typeResolver,
+            WebSocketHandler handler)
         {
+            app.UseCors("CorsPolicy");
             app.UseWebSockets();
             app.MapWebSocketManager("/ws", handler);     
 
