@@ -8,7 +8,7 @@ namespace Quiz.EventSourcing
     {
         public static async Task DefaultRetry (this Task @this) =>
             await Policy.Handle<Exception>()
-                    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
                     .ExecuteAsync(async () => await @this);
     }
 }

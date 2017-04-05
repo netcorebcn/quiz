@@ -9,10 +9,8 @@ namespace Quiz.EventSourcing.Setup
     public class EventStoreSetup
     {
         public static async Task Create(IEventStoreConnection conn, EventStoreOptions options) =>
-            await Task.WhenAll(
-                CreateProjections(options).DefaultRetry(),
-                CreateSubscription(conn, options).DefaultRetry());
-
+            await CreateProjections(options).DefaultRetry();
+        
         private static async Task CreateProjections(EventStoreOptions options)
         {
             var address = await GetIPEndPointFromHostName(options.ManagerHost);
@@ -21,26 +19,6 @@ namespace Quiz.EventSourcing.Setup
                 projections.EnableAsync("$by_category", options.Credentials),
                 projections.CreateContinuousAsync(options.Subscription.stream, Projections.QuestionAnswers, options.Credentials)
             );
-        }
-
-        private static async Task CreateSubscription(IEventStoreConnection conn, EventStoreOptions options)
-        {
-            try
-            {
-                var settings = PersistentSubscriptionSettings.Create()
-                    .ResolveLinkTos()
-                    .StartFromCurrent();
-
-                await conn.CreatePersistentSubscriptionAsync(options.Subscription.stream, options.Subscription.group, settings, options.Credentials);
-            }
-            catch (AggregateException ex)
-            {
-                if (ex.InnerException.GetType() != typeof(InvalidOperationException)
-                    && ex.InnerException?.Message != $"Subscription group {options.Subscription.group} on stream {options.Subscription.stream} already exists")
-                {
-                    throw;
-                }
-            }
         }
 
        private static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
