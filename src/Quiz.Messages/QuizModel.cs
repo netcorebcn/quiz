@@ -53,8 +53,13 @@ namespace Quiz.Messages
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.6"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 2.0", true)
+                    }),
+                new Question(Guid.NewGuid(), "Which is the managed option for using swarm in azure", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "ACS", true),
+                        new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
+                        new QuestionOption(Guid.NewGuid(), "VM extensions")
                     })
             });
     }
-    
 }
