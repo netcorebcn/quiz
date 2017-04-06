@@ -63,21 +63,22 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>Welcome to Quiz</h2>
-        </div>
-            QuizId:{this.state.quizId}
+          <h2>Welcome to Quiz {this.state.quizId}</h2>
             {this.state.questions.map(q =>
-              <ul key={q.id}>    
-                {q.id.slice(0,7)}-{q.description} 
-                - Right {q.rightAnswersPercent || 0} 
-                - Wrong {q.wrongAnswersPercent || 0}
-                {q.options.map(o => 
-                  <li key={o.id} onClick={() => this.voteQuestion(q.id,o.id)}>
-                    {o.id.slice(0,7)}-{o.description}
-                  </li>
-                  )}
-              </ul>
+              <div>
+                <ul key={q.id}>    
+                  {q.description} 
+                  {q.options.map(o => 
+                    <li key={o.id} onClick={() => this.voteQuestion(q.id,o.id)}>
+                      {o.description}
+                    </li>
+                    )}
+                </ul>
+                <p>
+                  <span>Right {q.rightAnswersPercent || 0} </span>
+                  <span>Wrong {q.wrongAnswersPercent || 0} </span>
+                </p>
+              </div>              
             )}
 
             <button onClick={() => this.startQuiz(1)}>
