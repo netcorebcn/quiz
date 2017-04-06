@@ -30,13 +30,17 @@ namespace Quiz.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<QuizModel> Start(int id)
+        public async Task<object> Start(int id)
         {
             var quizModel = QuizModelFactory.Create(id);
             var quiz = new QuizAggregate();
             quiz.Start(quizModel);
             await _quizRepository.Save(quiz);
-            return quizModel;
+            return new 
+            {
+                QuizId = quiz.Id,
+                Questions = quiz.QuizModel.Questions
+            };
         }
 
         [HttpDelete]
