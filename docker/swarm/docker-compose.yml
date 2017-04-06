@@ -72,6 +72,7 @@ services:
       - eventstore
     logging:
       driver: "json-file"
+    deploy:
       placement:
         constraints: [node.role == worker]
       mode: replicated
