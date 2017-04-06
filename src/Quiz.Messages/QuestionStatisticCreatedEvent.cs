@@ -12,8 +12,8 @@ namespace Quiz.Messages
         public QuestionStatisticCreatedEvent(Guid questionId, decimal rightAnswersPercent, decimal wrongAnswersPercent)
         {
             QuestionId = questionId;
-            RightAnswersPercent = rightAnswersPercent;
-            WrongAnswersPercent = wrongAnswersPercent;
+            RightAnswersPercent = Math.Round(rightAnswersPercent,2);
+            WrongAnswersPercent = Math.Round(wrongAnswersPercent,2);
         }
 
         public override string ToString() => $@"
