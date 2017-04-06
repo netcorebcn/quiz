@@ -52,6 +52,6 @@ namespace Quiz.Voting.Domain
             CorrectAnswers ++;
 
         public void Apply(QuestionWrongAnsweredEvent @event) => 
-            WrongAnswers ++;
+            WrongAnswers ++
     }    
 }
