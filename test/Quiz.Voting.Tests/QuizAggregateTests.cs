@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Quiz.Messages;
 using Quiz.Voting.Domain;
