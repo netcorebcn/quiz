@@ -17,7 +17,13 @@ class App extends Component {
     fetch(`http://localhost:81/quiz`)
       .then(r => r.json())
       .then(json => {
-        console.log(json);
+        this.setState({ 
+          quizId: json.quizId, 
+          questions: json.quizModel.questions.map(q => {
+            var stats = json.questions.find(x => x.questionId === q.id);
+            return { ...q, ...stats};
+          })
+        });
       })
       .catch(e => console.log(e));  
 
@@ -74,8 +80,8 @@ class App extends Component {
           <h2>Welcome to Quiz {this.state.quizId}</h2>
             {this.state.questions.map(q =>
               <div key={q.id}>
+                {q.description} 
                 <ul key={q.id}>    
-                  {q.description} 
                   {q.options.map(o => 
                     <li key={o.id} onClick={() => this.voteQuestion(q.id,o.id)}>
                       {o.description}
@@ -88,7 +94,6 @@ class App extends Component {
                 </p>
               </div>              
             )}
-
             <button onClick={() => this.startQuiz()}>
               Start Quiz
             </button>
