@@ -65,7 +65,7 @@ class App extends Component {
       <div className="App">
           <h2>Welcome to Quiz {this.state.quizId}</h2>
             {this.state.questions.map(q =>
-              <div>
+              <div key={q.id}>
                 <ul key={q.id}>    
                   {q.description} 
                   {q.options.map(o => 
