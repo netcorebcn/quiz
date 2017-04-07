@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace Quiz.Messages
 {
+    public class QuizReadModel
+    {
+        public Guid QuizId { get; set; }
+        public QuizModel QuizModel { get; set; }
+        public List<QuestionStatisticCreatedEvent> Questions { get; set;}
+    }
+
     public class QuizModel
     {
         public IEnumerable<Question> Questions { get; }

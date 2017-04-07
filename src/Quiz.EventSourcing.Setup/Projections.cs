@@ -40,11 +40,11 @@ namespace Quiz.EventSourcing.Setup
         
         function processEvent(state, event, right){ 
             var questionId = event.data.QuestionId;
-            var current = state.questions.find(q => q.id === questionId);
+            var current = state.questions.find(q => q.questionId === questionId);
             
             if (!current){
                 current = {
-                    id: questionId,
+                    questionId,
                     wrongAnswers: 0,
                     wrongAnswersPercent: 0,
                     rightAnswers: 0,

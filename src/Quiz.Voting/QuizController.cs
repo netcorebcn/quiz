@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Quiz.EventSourcing;
 using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
@@ -21,10 +22,10 @@ namespace Quiz.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get()
+        public async Task<QuizReadModel> Get()
         {
             var result = await _projectionsClient.GetStateAsync(); 
-            return new JsonResult(result);
+            return JsonConvert.DeserializeObject<QuizReadModel>(result);
         }
 
         [HttpPost]
