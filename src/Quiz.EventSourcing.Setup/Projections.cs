@@ -22,38 +22,48 @@ namespace Quiz.EventSourcing.Setup
         .when({
             $init : function(state, event)
             {
-                return { }
+                return { 
+                }
             },
             'QuestionRightAnsweredEvent': function (state, event) {
                 processEvent(state, event, true);
             },
             'QuestionWrongAnsweredEvent': function (state, event) {
                 processEvent(state, event, false);
+            },
+            'QuizStartedEvent': function(state, event) {
+                state.quizId = event.data.QuizId;
+                state.questions = [];
             }
         });
         
         function processEvent(state, event, right){ 
             var questionId = event.data.QuestionId;
-            if(!state[questionId])
-                state[questionId] = { 
-                    total: 0,
+            var current = state.questions.find(q => q.id === questionId);
+            
+            if (!current){
+                current = {
+                    id: questionId,
                     wrongAnswers: 0,
                     wrongAnswersPercent: 0,
                     rightAnswers: 0,
                     rightAnswersPercent: 0
                 }
+                state.questions.push(current);
+            }
             
-            var current = state[questionId];
             if (right)
                 current.rightAnswers++;
             else
                 current.wrongAnswers++;
-                
-            current.total++;
-            current.rightAnswersPercent = (current.rightAnswers * 100) / current.total;
-            current.wrongAnswersPercent = (current.wrongAnswers * 100) / current.total;
+            
+            const total = current.rightAnswers + current.wrongAnswers;
+            current.rightAnswersPercent = (current.rightAnswers * 100) / total;
+            current.wrongAnswersPercent = (current.wrongAnswers * 100) / total;
+            
             emit('QuestionAnswers', 'QuestionStatisticCreatedEvent', 
             {
+                'quizId': state.quizId,
                 'questionId': questionId,
                 'rightAnswersPercent': current.rightAnswersPercent,
                 'wrongAnswersPercent': current.wrongAnswersPercent
