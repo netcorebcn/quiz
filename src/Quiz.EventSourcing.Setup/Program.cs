@@ -13,7 +13,8 @@ namespace Quiz.EventSourcing.Setup
             Console.WriteLine("Starting Event Store Quiz Setup.");
 
             var options = EventStoreOptions.Create(configuration);
-            EventStoreProjections.CreateProjection(options, Projections.QuestionAnswers).Wait();
+            var projections = new EventStoreProjectionsClient(options);
+            projections.CreateAsync(Projections.QuestionAnswers).Wait();
             
             Console.WriteLine("Event Store Quiz Setup Done!");
         }

@@ -46,7 +46,7 @@ namespace Quiz.Messages
 
     public static class QuizModelFactory
     {
-        public static QuizModel Create(int quizId) =>
+        public static QuizModel Create() =>
             new QuizModel(new List<Question>{
                 new Question(Guid.NewGuid(), "What .NET Standard implements net461", 
                     new List<QuestionOption> {

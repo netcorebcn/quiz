@@ -6,30 +6,46 @@ using EventStore.ClientAPI.Projections;
 
 namespace Quiz.EventSourcing
 {
-    public class EventStoreProjections
+    public interface IEventStoreProjections
     {
-        public static async Task<string> GetStateAsync(EventStoreOptions options, string projectionName)
+        Task<string> GetStateAsync(string projectionName);
+
+        Task<string> GetStateAsync();
+
+        Task CreateAsync(string projectionName);        
+    }
+
+    public class EventStoreProjectionsClient : IEventStoreProjections
+    {
+        private readonly EventStoreOptions _options;
+
+        public EventStoreProjectionsClient(EventStoreOptions options) =>
+            _options = options;
+        
+        public async Task<string> GetStateAsync(string projectionName)
         {
-            var projectionsClient = await CreateProjectionsClient(options);
-            return await projectionsClient.GetStateAsync(projectionName, options.Credentials);
+            var projectionsClient = await CreateProjectionsClient();
+            return await projectionsClient.GetStateAsync(projectionName, _options.Credentials);
         }        
 
-        public static async Task CreateProjection(EventStoreOptions options, string projectionName)
+        public async Task<string> GetStateAsync() => await GetStateAsync(_options.Subscription.stream);
+
+        public async Task CreateAsync(string query)
         {
-            var projectionsClient = await CreateProjectionsClient(options);
+            var projectionsClient = await CreateProjectionsClient();
             await Task.WhenAll(
-                projectionsClient.EnableAsync("$by_category", options.Credentials),
-                projectionsClient.CreateContinuousAsync(options.Subscription.stream, projectionName, options.Credentials)
+                projectionsClient.EnableAsync("$by_category", _options.Credentials),
+                projectionsClient.CreateContinuousAsync(_options.Subscription.stream, query, _options.Credentials)
             );
         }
 
-        private static async Task<ProjectionsManager> CreateProjectionsClient(EventStoreOptions options)
+        private async Task<ProjectionsManager> CreateProjectionsClient()
         {
-            var address = await GetIPEndPointFromHostName(options.ManagerHost);
+            var address = await GetIPEndPointFromHostName(_options.ManagerHost);
             return new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(90));
         }
 
-       private static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
+       private async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)
        {
             var hostParts = hostName.Split(':');
 

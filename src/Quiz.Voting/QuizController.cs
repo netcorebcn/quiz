@@ -1,27 +1,34 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Quiz.EventSourcing;
 using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
 using Quiz.Voting.Domain;
 
 namespace Quiz.Api.Controllers
 {
-    [Route("[controller]/{id}")]
+    [Route("[controller]")]
     public class QuizController
     {
         private readonly IRepository _quizRepository;
+        private readonly IEventStoreProjections _projectionsClient;
 
-        public QuizController(IRepository quizRepository)
+        public QuizController(IRepository quizRepository, IEventStoreProjections projectionsClient)
         {
             _quizRepository = quizRepository;
+            _projectionsClient = projectionsClient;
         }
 
         [HttpGet]
-        public QuizModel Get(int id) => 
-            QuizModelFactory.Create(id);
+        public async Task<JsonResult> Get()
+        {
+            var result = await _projectionsClient.GetStateAsync(); 
+            return new JsonResult(result);
+        }
 
         [HttpPost]
+        [Route("{id}")]
         public async Task Vote(Guid id, [FromBody]QuestionAnswerCommand answer)
         {
             var quiz = await _quizRepository.GetById<QuizAggregate>(id);
@@ -30,9 +37,9 @@ namespace Quiz.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<object> Start(int id)
+        public async Task<object> Start()
         {
-            var quizModel = QuizModelFactory.Create(id);
+            var quizModel = QuizModelFactory.Create();
             var quiz = new QuizAggregate();
             quiz.Start(quizModel);
             await _quizRepository.Save(quiz);
@@ -44,6 +51,7 @@ namespace Quiz.Api.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task Close(Guid id)
         {
             var quiz = await _quizRepository.GetById<QuizAggregate>(id);

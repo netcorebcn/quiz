@@ -27,7 +27,7 @@ namespace Quiz.Voting.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create(1);
+            var quizModel = QuizModelFactory.Create();
 
             // Act
             quiz.Start(quizModel);
@@ -43,7 +43,7 @@ namespace Quiz.Voting.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create(1);
+            var quizModel = QuizModelFactory.Create();
             var selectedQuestion = quizModel.Questions.FirstOrDefault();
             var selectedOption = selectedQuestion.Options.FirstOrDefault(x => x.IsCorrect);
 
@@ -65,7 +65,7 @@ namespace Quiz.Voting.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create(1);
+            var quizModel = QuizModelFactory.Create();
             var selectedQuestion = quizModel.Questions.FirstOrDefault();
             var selectedOption = selectedQuestion.Options.FirstOrDefault(x => !x.IsCorrect);
 

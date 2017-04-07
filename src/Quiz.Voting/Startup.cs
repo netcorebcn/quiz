@@ -55,9 +55,11 @@ namespace Quiz.Voting
         private void AddEventStore(IServiceCollection services)
         {
             var options = EventStoreOptions.Create(Configuration);
+
             services.AddSingleton(EventStoreConnectionFactory.Create(options.ConnectionString));
             services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
-            services.AddTransient<IRepository, EventStoreRepository>();          
+            services.AddSingleton<IEventStoreProjections>(new EventStoreProjectionsClient(options));
+            services.AddTransient<IRepository, EventStoreRepository>();
         }
     }
 }

@@ -14,6 +14,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    fetch(`http://localhost:81/quiz`)
+      .then(r => r.json())
+      .then(json => {
+        console.log(json);
+      })
+      .catch(e => console.log(e));  
+
     var webSocket = new WebSocket('ws://localhost:82/ws');
 
     webSocket.onopen = (e) => {
@@ -33,13 +40,14 @@ class App extends Component {
     }
   }
 
-  startQuiz(quizId) {
-    fetch(`http://localhost:81/quiz/${quizId}`, { method: 'PUT'})
+  startQuiz() {
+    fetch(`http://localhost:81/quiz`, { method: 'PUT'})
       .then(r => r.json())
       .then(json => {
         console.log(json);
         this.setState({ ...json });
-      });  
+      })
+      .catch(e => console.log(e));  
   }
 
   voteQuestion(questionId, optionId) {
@@ -81,7 +89,7 @@ class App extends Component {
               </div>              
             )}
 
-            <button onClick={() => this.startQuiz(1)}>
+            <button onClick={() => this.startQuiz()}>
               Start Quiz
             </button>
       </div>

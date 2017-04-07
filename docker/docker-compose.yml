@@ -7,6 +7,7 @@ services:
       - "81:81"
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
+      - EVENT_STORE_MANAGER_HOST=eventstore:2113
       - ASPNETCORE_URLS=https://*:81
   
   result:
