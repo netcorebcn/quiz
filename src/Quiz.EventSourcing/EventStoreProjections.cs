@@ -4,21 +4,29 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Projections;
 
-namespace Quiz.EventSourcing.Setup
+namespace Quiz.EventSourcing
 {
-    public class EventStoreSetup
+    public class EventStoreProjections
     {
-        public static async Task Create(IEventStoreConnection conn, EventStoreOptions options) =>
-            await CreateProjections(options).DefaultRetry();
-        
-        private static async Task CreateProjections(EventStoreOptions options)
+        public static async Task<string> GetStateAsync(EventStoreOptions options, string projectionName)
+        {
+            var projectionsClient = await CreateProjectionsClient(options);
+            return await projectionsClient.GetStateAsync(projectionName, options.Credentials);
+        }        
+
+        public static async Task CreateProjection(EventStoreOptions options, string projectionName)
+        {
+            var projectionsClient = await CreateProjectionsClient(options);
+            await Task.WhenAll(
+                projectionsClient.EnableAsync("$by_category", options.Credentials),
+                projectionsClient.CreateContinuousAsync(options.Subscription.stream, projectionName, options.Credentials)
+            );
+        }
+
+        private static async Task<ProjectionsManager> CreateProjectionsClient(EventStoreOptions options)
         {
             var address = await GetIPEndPointFromHostName(options.ManagerHost);
-            var projections = new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(90));
-            await Task.WhenAll(
-                projections.EnableAsync("$by_category", options.Credentials),
-                projections.CreateContinuousAsync(options.Subscription.stream, Projections.QuestionAnswers, options.Credentials)
-            );
+            return new ProjectionsManager(new FakeLogger(), address, TimeSpan.FromSeconds(90));
         }
 
        private static async Task<IPEndPoint> GetIPEndPointFromHostName(string hostName)

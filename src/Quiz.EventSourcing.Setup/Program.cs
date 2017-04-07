@@ -13,11 +13,9 @@ namespace Quiz.EventSourcing.Setup
             Console.WriteLine("Starting Event Store Quiz Setup.");
 
             var options = EventStoreOptions.Create(configuration);
-            var conn = EventStoreConnectionFactory.Create(options.ConnectionString);
-            EventStoreSetup.Create(conn, options).Wait();
-
+            EventStoreProjections.CreateProjection(options, Projections.QuestionAnswers).Wait();
+            
             Console.WriteLine("Event Store Quiz Setup Done!");
-
         }
     }
 }
