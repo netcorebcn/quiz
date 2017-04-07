@@ -33,6 +33,7 @@ namespace Quiz.EventSourcing.Setup
             },
             'QuizStartedEvent': function(state, event) {
                 state.quizId = event.data.QuizId;
+                state.quizModel = event.data.QuizModel;
                 state.questions = [];
             }
         });
