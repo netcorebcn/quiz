@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import {get, post, put, startWs} from './api';
 
 class App extends Component {
   constructor(props) {
@@ -14,64 +15,33 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:81/quiz`)
-      .then(r => r.json())
-      .then(json => {
+    get().then(json => {
         this.setState({ 
           quizId: json.quizId, 
-          questions: json.quizModel.questions.map(q => {
-            var stats = json.questions.find(x => x.questionId === q.id);
-            return { ...q, ...stats};
-          })
-        });
-      })
-      .catch(e => console.log(e));  
+          questions: json.quizModel.questions.map(q => 
+            ({ ...q, 
+              ...json.questions.find(x => x.questionId === q.id)
+            }))
+        })
+    });
 
-    var webSocket = new WebSocket('ws://localhost:82/ws');
-
-    webSocket.onopen = (e) => {
-      console.log(e);
-    };
-
-    webSocket.onmessage = (e) => {
-      console.log(e.data);
-      var questionStats = JSON.parse(e.data);
-
+    startWs(questionStats =>
       this.setState({ ...this.state,
         questions: this.state.questions.map(
           question => question.id === questionStats.questionId 
             ? { ...question, ...questionStats  } 
-            : question) 
-      });
-    }
+            : question)
+      })
+    );
   }
 
   startQuiz() {
-    fetch(`http://localhost:81/quiz`, { method: 'PUT'})
-      .then(r => r.json())
-      .then(json => {
-        console.log(json);
-        this.setState({ ...json });
-      })
-      .catch(e => console.log(e));  
+    put().then(json => this.setState({ ...json }));
   }
 
   voteQuestion(questionId, optionId) {
-    fetch(`http://localhost:81/quiz/${this.state.quizId}`, 
-      { 
-        method: 'POST', 
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({questionId, optionId})
-      })
-      .then(r => r.json())
-      .then(json => { 
-        console.log(json);
-        this.setState({ questions: json.questions });
-      })
-      .catch(e => console.log(e));  
+    post(this.state.quizId, questionId, optionId)
+      .then(json => this.setState({ questions: json.questions }));
   }
 
   render() {
