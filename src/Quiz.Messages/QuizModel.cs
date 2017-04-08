@@ -55,13 +55,13 @@ namespace Quiz.Messages
     {
         public static QuizModel Create() =>
             new QuizModel(new List<Question>{
-                new Question(Guid.NewGuid(), "What .NET Standard implements net461", 
+                new Question(Guid.NewGuid(), "What .NET Standard implements .NET 4.6.1?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.6"),
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 2.0", true)
                     }),
-                new Question(Guid.NewGuid(), "Which is the managed option for using swarm in azure", 
+                new Question(Guid.NewGuid(), "Which is the managed option for using swarm in azure?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "Azure Container Service", true),
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
