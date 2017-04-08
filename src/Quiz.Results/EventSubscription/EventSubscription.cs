@@ -9,7 +9,7 @@ namespace Quiz.Voting.Results
     {
         public static async Task StartSubscription(this IEventStoreConnection eventBus, EventStoreOptions options, EventTypeResolver typeResolver, Func<object,Task> messageSender)
         {
-            await CreateSubscription(eventBus, options).DefaultRetry();
+            await CreateSubscription(eventBus, options);
             await eventBus.Subscribe(typeResolver, options.Subscription, async msg => await messageSender(msg));
         }
 

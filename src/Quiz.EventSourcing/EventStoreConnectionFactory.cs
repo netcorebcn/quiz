@@ -26,8 +26,7 @@ namespace Quiz.EventSourcing
             await @this.ConnectToPersistentSubscriptionAsync(
                 subscription.streamName, 
                 subscription.groupName, 
-                (_, x) => action(x.Event.Deserialize(typeResolver)))
-            .DefaultRetry();
+                (_, x) => action(x.Event.Deserialize(typeResolver)));
 
         public static object Deserialize(this RecordedEvent evt, EventTypeResolver eventTypeResolver)
         {

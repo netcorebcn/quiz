@@ -57,6 +57,7 @@ namespace Quiz.Voting.Results
                     logger.LogInformation(message.ToString());
                     await handler.SendMessageToAllAsync(message);    
                 })
+            .DefaultRetry()
             .Wait();
         }
     }
