@@ -85,7 +85,39 @@ services:
         failure_action: continue
         monitor: 60s
         max_failure_ratio: 0.3
-        
+  
+  eventstore:
+    image: eventstore/eventstore
+    ports:
+      - "2113:2113"
+      - "1113:1113"
+    networks:
+      - back-tier
+    logging:
+      driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  setup:
+    image: ${REGISTRY}quiz-setup:${SHA_COMMIT}
+    networks:
+      - back-tier
+    environment: 
+      - EVENT_STORE_MANAGER_HOST=eventstore:2113
+    depends_on: 
+      - eventstore
+    logging:
+      driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 120s   
+
   ci:
     image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
     ports:
