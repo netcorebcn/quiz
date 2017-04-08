@@ -7,7 +7,7 @@ services:
       - "80:5000"
     networks:
       - front-tier
-    depends_on: 
+     depends_on: 
       - vote
       - results
     logging:
@@ -35,9 +35,6 @@ services:
       - "81:80"
     networks:
       - back-tier
-    depends_on: 
-      - setup
-      - eventstore
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
       - EVENT_STORE_MANAGER_HOST=eventstore:2113
@@ -60,7 +57,7 @@ services:
         monitor: 60s
         max_failure_ratio: 0.3
   
-  result:
+  results:
     image: ${REGISTRY}quiz-results:${SHA_COMMIT}
     ports:
       - "82:80"
@@ -70,7 +67,6 @@ services:
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
     depends_on: 
       - setup
-      - eventstore
     logging:
       driver: "json-file"
     deploy:
@@ -90,25 +86,11 @@ services:
         monitor: 60s
         max_failure_ratio: 0.3
 
-  eventstore:
-    image: eventstore/eventstore
-    ports:
-      - "2113:2113"
-      - "1113:1113"
-    networks:
-      - back-tier
-    logging:
-      driver: "json-file"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
   setup:
     image: ${REGISTRY}quiz-setup:${SHA_COMMIT}
     networks:
       - back-tier
     environment: 
-      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
       - EVENT_STORE_MANAGER_HOST=eventstore:2113
     depends_on: 
       - eventstore
@@ -120,8 +102,8 @@ services:
       restart_policy:
         condition: on-failure
         delay: 5s
-        max_attempts: 3
-        window: 120s
+        max_attempts: 2
+        window: 120s   
 
   ci:
     image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
@@ -130,7 +112,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - back-tier
+      - front-tier
     environment: 
       - CI_TOKEN=${CI_TOKEN}
       - REGISTRY=${REGISTRY}
