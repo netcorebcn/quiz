@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Polly;
 using Quiz.EventSourcing;
 
 namespace Quiz.Voting.Results
@@ -49,15 +50,16 @@ namespace Quiz.Voting.Results
             app.UseWebSockets();
             app.MapWebSocketManager("/ws", handler);     
 
-            var logger = loggerFactory.CreateLogger<Startup>();        
-            eventBus.StartSubscription(
-                EventStoreOptions, 
-                typeResolver, 
+            var logger = loggerFactory.CreateLogger<Startup>();     
+
+            Policy.Handle<Exception>()
+            .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .ExecuteAsync(async () =>  
+                await eventBus.StartSubscription(EventStoreOptions, typeResolver, 
                 async (message) => {
                     logger.LogInformation(message.ToString());
                     await handler.SendMessageToAllAsync(message);    
-                })
-            .DefaultRetry()
+                }))
             .Wait();
         }
     }

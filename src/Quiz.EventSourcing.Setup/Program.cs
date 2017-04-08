@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Polly;
 
@@ -16,13 +17,11 @@ namespace Quiz.EventSourcing.Setup
             var options = EventStoreOptions.Create(configuration);
             var projections = new EventStoreProjectionsClient(options);
 
-            Policy
-            .Handle<Exception>()
-            .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), 
-                (exception, timeSpan, context) => 
-                    projections.CreateAsync(Projections.QuestionAnswers).Wait()
-            );
-            
+            Policy.Handle<Exception>()
+            .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .ExecuteAsync(async () => await projections.CreateAsync(Projections.QuestionAnswers))
+            .Wait();
+
             Console.WriteLine("Event Store Quiz Setup Done!");
         }
     }
