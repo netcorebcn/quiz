@@ -13,7 +13,7 @@ mkdir build
 docker build -t quiz-tests-ci:$sha -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
 
 #build build
-for container in voting results setup ui
+for container in voting results setup
 do
     #build ci image
     docker build -t quiz-$container-ci:$sha -f ./docker/$container/Dockerfile.build .
