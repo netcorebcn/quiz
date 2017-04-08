@@ -7,7 +7,7 @@ services:
       - "80:5000"
     networks:
       - front-tier
-     depends_on: 
+    depends_on: 
       - vote
       - results
     logging:

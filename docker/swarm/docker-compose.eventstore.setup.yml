@@ -1,7 +1,6 @@
 version: "3"
 
 services:
-
   setup:
     image: ${REGISTRY}quiz-setup:${SHA_COMMIT}
     networks:
