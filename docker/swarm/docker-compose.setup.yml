@@ -5,6 +5,9 @@ services:
     image: registry:2
     ports:
       - "5000:5000"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
   viz:
     image: manomarks/visualizer
