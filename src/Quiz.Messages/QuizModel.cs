@@ -66,6 +66,12 @@ namespace Quiz.Messages
                         new QuestionOption(Guid.NewGuid(), "Azure Container Service", true),
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
                         new QuestionOption(Guid.NewGuid(), "Docker VM Extension for Microsoft Azures")
+                    }),
+                 new Question(Guid.NewGuid(), "How many managers in a docker swarm do you need to keep consistency?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "2 managers"),
+                        new QuestionOption(Guid.NewGuid(), "4 managers"),
+                        new QuestionOption(Guid.NewGuid(), "5 managers", true)
                     })
             });
     }
