@@ -33,10 +33,8 @@ namespace Quiz.EventSourcing
         public async Task CreateAsync(string query)
         {
             var projectionsClient = await CreateProjectionsClient();
-            await Task.WhenAll(
-                projectionsClient.EnableAsync("$by_category", _options.Credentials),
-                projectionsClient.CreateContinuousAsync(_options.Subscription.stream, query, _options.Credentials)
-            );
+            await projectionsClient.EnableAsync("$by_category", _options.Credentials);
+            await projectionsClient.CreateContinuousAsync(_options.Subscription.stream, query, _options.Credentials);
         }
 
         private async Task<ProjectionsManager> CreateProjectionsClient()
