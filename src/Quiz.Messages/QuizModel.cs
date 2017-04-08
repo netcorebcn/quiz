@@ -65,7 +65,7 @@ namespace Quiz.Messages
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "Azure Container Service", true),
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
-                        new QuestionOption(Guid.NewGuid(), "VM extensions")
+                        new QuestionOption(Guid.NewGuid(), "Docker VM Extension for Microsoft Azures")
                     })
             });
     }
