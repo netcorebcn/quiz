@@ -63,7 +63,7 @@ namespace Quiz.Messages
                     }),
                 new Question(Guid.NewGuid(), "Which is the managed option for using swarm in azure", 
                     new List<QuestionOption> {
-                        new QuestionOption(Guid.NewGuid(), "ACS", true),
+                        new QuestionOption(Guid.NewGuid(), "Azure Container Service", true),
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
                         new QuestionOption(Guid.NewGuid(), "VM extensions")
                     })
