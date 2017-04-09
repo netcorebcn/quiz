@@ -10,7 +10,7 @@ rm -rf build
 mkdir build
 
 #run unit tests 
-docker build -t quiz-tests-ci:$sha -f ./docker/voting/Dockerfile.tests . || { echo "unit test failed"; exit 1; }
+docker build -t quiz-tests-ci:$sha -f ./docker/voting/Dockerfile.tests .
 
 #build build
 for container in voting results setup ui

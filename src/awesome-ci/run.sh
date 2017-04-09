@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 REPO=$1
 SHA=${2:-master}
 REGISTRY=$3
