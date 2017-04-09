@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 registry=$1
 sha=${2:-latest}
 
