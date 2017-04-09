@@ -23,3 +23,4 @@ Example application with .NET Core, Event Store and Docker
 * Docker swarm local cluster thanks to
   <https://codefresh.io/blog/deploy-docker-compose-v3-swarm-mode-cluster/>
   
+
