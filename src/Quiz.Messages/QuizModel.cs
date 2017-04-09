@@ -55,6 +55,12 @@ namespace Quiz.Messages
     {
         public static QuizModel Create() =>
             new QuizModel(new List<Question>{
+                new Question(Guid.NewGuid(), "Which cloud provider is awesome?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "AWS"),
+                        new QuestionOption(Guid.NewGuid(), "Azure", true),
+                        new QuestionOption(Guid.NewGuid(), "Google Cloud")
+                    }),
                 new Question(Guid.NewGuid(), "What .NET Standard implements .NET 4.6.1?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
