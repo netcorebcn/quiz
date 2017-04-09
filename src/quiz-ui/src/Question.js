@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import QuestionOption from './QuestionOption';
-import { bindClass } from './utils';
 
 import './Question.css';
 
@@ -21,7 +20,7 @@ class Question extends Component {
           ))}
         </div>
         <div>
-          <span>Questions statistics: </span>
+          <span>Answers statistics: </span>
           <span className="correct">{question.rightAnswersPercent || 0}%</span>
           <span>/</span>
           <span className="incorrect">

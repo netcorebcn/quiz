@@ -22,7 +22,7 @@ h1 {
     font-size: 55px;
 }
 
-.content {
+.root {
     position: relative;
     height: 100vh;
 }

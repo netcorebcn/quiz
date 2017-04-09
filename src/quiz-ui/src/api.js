@@ -3,9 +3,7 @@ const ws = `ws://${window.location.hostname}:82/ws`;
 
 export const get = () => fetch(url).then(r => r.json());
 
-export const put = () => fetch(url, {
-  method: 'PUT'
-}).then(r => r.json());
+export const put = () => fetch(url, { method: 'PUT' }).then(r => r.json());
 
 export const post = (quizId, questionId, optionId) => fetch(`${url}${quizId}`, {
   method: 'POST',
@@ -13,11 +11,8 @@ export const post = (quizId, questionId, optionId) => fetch(`${url}${quizId}`, {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify({
-    questionId,
-    optionId
-  })
-}).then(r => r.json());
+  body: JSON.stringify({ questionId, optionId })
+}).catch(err => console.log(err));
 
 export const startWs = cb => {
   const webSocket = new WebSocket(ws);

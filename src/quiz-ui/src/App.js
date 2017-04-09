@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Loader from './Loader';
 import Question from './Question';
 import { get, post, put, startWs } from './api';
 import { bindClass } from './utils';
@@ -10,7 +11,8 @@ class App extends Component {
     super(props);
     this.state = {
       quizId: 0,
-      questions: []
+      questions: [],
+      isProcessing: true
     };
 
     bindClass(this);
@@ -23,7 +25,8 @@ class App extends Component {
         questions: json.quizModel.questions.map(q => ({
           ...q,
           ...json.questions.find(x => x.questionId === q.id)
-        }))
+        })),
+        isProcessing: false
       });
     });
 
@@ -43,32 +46,43 @@ class App extends Component {
   }
 
   voteQuestion(questionId, optionId) {
-    post(this.state.quizId, questionId, optionId).then(json =>
-      this.setState({ questions: json.questions }));
+    this.setState({ isProcessing: true });
+
+    post(this.state.quizId, questionId, optionId).then(json => {
+      this.setState({
+        isProcessing: false
+      });
+    });
   }
 
   render() {
-    const { questions, quizId } = this.state;
+    const { isProcessing, questions, quizId } = this.state;
     return (
-      <div className="App-container">
-        <div className="App">
-          <h1>Welcome to Quiz App</h1>
-          <h2>
-            Current quiz ID: <b>{quizId}</b> <button
-              className="start-button"
-              onClick={this.startQuiz}
-            >
-              Start New Quiz
-            </button>
-          </h2>
-          <h2>Questions: </h2>
-          {questions.map(question => (
-            <Question
-              question={question}
-              voteQuestion={this.voteQuestion}
-              key={question.id}
-            />
-          ))}
+      <div className="Container">
+        {isProcessing &&
+          <div className="overlay">
+            <Loader />
+          </div>}
+        <div className="App-container">
+          <div className="App">
+            <h1>Welcome to Quiz App</h1>
+            <h2>
+              Current quiz ID: <b>{quizId}</b> <button
+                className="start-button"
+                onClick={this.startQuiz}
+              >
+                Start New Quiz
+              </button>
+            </h2>
+            <h2>Questions: </h2>
+            {questions.map(question => (
+              <Question
+                question={question}
+                voteQuestion={this.voteQuestion}
+                key={question.id}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );
