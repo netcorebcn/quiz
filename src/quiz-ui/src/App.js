@@ -47,7 +47,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-          <h2>Welcome to Quiz {this.state.quizId}</h2>
+          <h2>Welcome to Quiz App {this.state.quizId}</h2>
             {this.state.questions.map(q =>
               <div key={q.id}>
                 {q.description} 
