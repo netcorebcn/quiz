@@ -79,7 +79,7 @@ namespace Quiz.Voting.Tests
 
             Assert.Null(startedEvent);
             Assert.IsAssignableFrom(typeof(QuizStartedEvent), startedEvent);
-            Assert.NotNull(answeredEvent);
+            Assert.Null(answeredEvent);
             Assert.IsAssignableFrom(typeof(QuestionWrongAnsweredEvent), answeredEvent);            
         }
     }
