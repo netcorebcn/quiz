@@ -14,7 +14,7 @@ namespace Quiz.Voting.Tests
             var quiz = new QuizAggregate();
 
             // Act
-            quiz.Close();
+            quiz.Close()
 
             // Assert
             var closedEvent = quiz.GetPendingEvents().FirstOrDefault();
