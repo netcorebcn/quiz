@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import Question from './Question';
+import { get, post, put, startWs } from './api';
+import { bindClass } from './utils';
+
 import './App.css';
-import {get, post, put, startWs} from './api';
 
 class App extends Component {
   constructor(props) {
@@ -10,29 +13,29 @@ class App extends Component {
       questions: []
     };
 
-    this.startQuiz = this.startQuiz.bind(this);
-    this.voteQuestion = this.voteQuestion.bind(this);
+    bindClass(this);
   }
 
   componentDidMount() {
     get().then(json => {
-        this.setState({ 
-          quizId: json.quizId, 
-          questions: json.quizModel.questions.map(q => 
-            ({ ...q, 
-              ...json.questions.find(x => x.questionId === q.id)
-            }))
-        })
+      this.setState({
+        quizId: json.quizId,
+        questions: json.quizModel.questions.map(q => ({
+          ...q,
+          ...json.questions.find(x => x.questionId === q.id)
+        }))
+      });
     });
 
-    startWs(questionStats =>
-      this.setState({ ...this.state,
-        questions: this.state.questions.map(
-          question => question.id === questionStats.questionId 
-            ? { ...question, ...questionStats  } 
-            : question)
-      })
-    );
+    startWs(questionStats => this.setState({
+      ...this.state,
+      questions: this.state.questions.map(
+        question =>
+          question.id === questionStats.questionId
+            ? { ...question, ...questionStats }
+            : question
+      )
+    }));
   }
 
   startQuiz() {
@@ -40,33 +43,33 @@ class App extends Component {
   }
 
   voteQuestion(questionId, optionId) {
-    post(this.state.quizId, questionId, optionId)
-      .then(json => this.setState({ questions: json.questions }));
+    post(this.state.quizId, questionId, optionId).then(json =>
+      this.setState({ questions: json.questions }));
   }
 
   render() {
+    const { questions, quizId } = this.state;
     return (
-      <div className="App">
-          <h2>Welcome to Quiz App {this.state.quizId}</h2>
-            {this.state.questions.map(q =>
-              <div key={q.id}>
-                {q.description} 
-                <ul key={q.id}>    
-                  {q.options.map(o => 
-                    <li key={o.id} onClick={() => this.voteQuestion(q.id,o.id)}>
-                      {o.description}
-                    </li>
-                    )}
-                </ul>
-                <p>
-                  <span>Right {q.rightAnswersPercent || 0} </span>
-                  <span>Wrong {q.wrongAnswersPercent || 0} </span>
-                </p>
-              </div>              
-            )}
-            <button onClick={() => this.startQuiz()}>
-              Start Quiz
+      <div className="App-container">
+        <div className="App">
+          <h1>Welcome to Quiz App</h1>
+          <h2>
+            Current quiz ID: <b>{quizId}</b> <button
+              className="start-button"
+              onClick={this.startQuiz}
+            >
+              Start New Quiz
             </button>
+          </h2>
+          <h2>Questions: </h2>
+          {questions.map(question => (
+            <Question
+              question={question}
+              voteQuestion={this.voteQuestion}
+              key={question.id}
+            />
+          ))}
+        </div>
       </div>
     );
   }

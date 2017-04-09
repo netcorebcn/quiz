@@ -1,15 +1,25 @@
-.App {
-  text-align: left;
+.App-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.start-button {
+    width: 200px;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 10px;
+    border: 1px solid #00BCD4;
+    color: #00BCD4;
+    background: transparent;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
-.App-intro {
-  font-size: large;
+.start-button:hover {
+    background: #00BCD4;
+    color: #fff;
 }
-

@@ -1,0 +1,14 @@
+.QuestionOption {
+    margin: 10px 10px 10px 10px;
+    padding: 5px 5px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    outline: none;
+}
+
+.QuestionOption:hover {
+    background: #cecece;
+}
