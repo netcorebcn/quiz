@@ -61,36 +61,40 @@ const createStatus = (pull_request, state = 'pending') =>
   });
 
 const runCI = (pull_request, registry) =>
-    runScript(ciScript(pull_request, registry),
+    runScript(getParameters(pull_request, registry),
         () => createStatus(pull_request, 'success'),
         () => createStatus(pull_request, 'failure'));
 
 const runCD = (pull_request, registry, ci_token) =>
-    runScript(ciScript(pull_request, registry, ci_token),
+    runScript(getParameters(pull_request, registry, ci_token),
         () => console.log('deployment success'),
         () => console.log("deployment failed"));
 
-const ciScript = (pull_request, registry, ci_token = '') => `./run.sh \
-            ${pull_request.base.repo.full_name}.git \
-            ${pull_request.head.sha.slice(0, 7)} \
-            ${registry} \
-            ${ci_token}`;
+const getParameters = (pull_request, registry, ci_token = '') =>
+            [`${pull_request.base.repo.full_name}.git`,
+            pull_request.head.sha.slice(0, 7),
+            registry,
+            ci_token];
 
-var util = require('util'),
-    exec = require('child_process').exec,
-    child;
+const spawn = require('child_process').spawn;
 
-const runScript = (command, successHandler, errorHandler) => {
-    child = exec(command,
-    function (error, stdout, stderr) {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+const runScript = (parameters, successHandler, errorHandler) => {
+    const ciScript = spawn('./run.sh', parameters);
 
-        // hack to detect non-zero value returned because error variable does not work
-        if(stderr.indexOf('non-zero code: 1') > -1) {
-            errorHandler();
-        } else {
+    ciScript.stdout.on('data', (data) => {
+        console.log(data.toString());
+    });
+
+    ciScript.stderr.on('data', (data) => {
+        console.log(`ciScript stderr: ${data}`);
+    });
+
+    ciScript.on('close', (code) => {
+        console.log(`ciScript process exited with code ${code}`);
+        if (code === 0) {
             successHandler();
+        } else {
+            errorHandler();
         }
     });
 };
