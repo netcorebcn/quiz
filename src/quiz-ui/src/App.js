@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Loader from './Loader';
 import Question from './Question';
-import { get, post, put, startWs } from './api';
+import { getQuiz, postOption, startNewQuiz, initWebsockets } from './api';
 import { bindClass } from './utils';
 
 import './App.css';
@@ -19,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    get().then(json => {
+    getQuiz().then(json => {
       this.setState({
         quizId: json.quizId,
         questions: json.quizModel.questions.map(q => ({
@@ -30,7 +30,7 @@ class App extends Component {
       });
     });
 
-    startWs(questionStats => this.setState({
+    initWebsockets(questionStats => this.setState({
       ...this.state,
       questions: this.state.questions.map(
         question =>
@@ -42,13 +42,13 @@ class App extends Component {
   }
 
   startQuiz() {
-    put().then(json => this.setState({ ...json }));
+    startNewQuiz().then(json => this.setState({ ...json }));
   }
 
   voteQuestion(questionId, optionId) {
     this.setState({ isProcessing: true });
 
-    post(this.state.quizId, questionId, optionId).then(json => {
+    postOption(this.state.quizId, questionId, optionId).then(json => {
       this.setState({
         isProcessing: false
       });
