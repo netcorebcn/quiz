@@ -66,7 +66,8 @@ namespace Quiz.Messages
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "DC/OS"),
                         new QuestionOption(Guid.NewGuid(), "Kubernetes"),
-                        new QuestionOption(Guid.NewGuid(), "Swarm", true)
+                        new QuestionOption(Guid.NewGuid(), "Swarm", true),
+                        new QuestionOption(Guid.NewGuid(), "CoreOS"),
                     }),
                 new Question(Guid.NewGuid(), "Which is the more managed option for using Swarm in Azure?", 
                     new List<QuestionOption> {
