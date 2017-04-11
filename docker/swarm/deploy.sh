@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -z $1 ]; then registry=$1/; else registry=""; fi
+registry=$1
 token=$2
 sha=${3:-latest}
 
