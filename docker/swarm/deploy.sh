@@ -8,7 +8,7 @@ export CI_TOKEN=$token
 export SHA_COMMIT=$sha
 
 echo Registry:$REGISTRY
-echo Token.$CI_TOKEN
+echo Token:$CI_TOKEN
 echo Sha:$SHA_COMMIT
 
 docker deploy --compose-file docker-compose.yml stack
