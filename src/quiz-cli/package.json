@@ -1,0 +1,15 @@
+{
+  "name": "quiz-cli",
+  "version": "1.0.0",
+  "description": "quiz cli",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pau lopez",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^1.6.3"
+  }
+}
