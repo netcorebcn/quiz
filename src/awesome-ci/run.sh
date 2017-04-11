@@ -11,7 +11,7 @@ echo Token:$TOKEN
 echo Registry:$REGISTRY
 
 # checkout sha commit from github repo
-docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/ci/Dockerfile.ci
+docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/containers/awesome-ci/Dockerfile.ci
 docker create --name quiz-$SHA-build quiz-$SHA-ci echo ""
 docker cp quiz-$SHA-build:/quizapp ./build-$SHA
 
@@ -20,7 +20,7 @@ pushd build-$SHA
 ./build.sh $REGISTRY $SHA
 
 # deploy stack to swarm using docker compose
-if [ ! -z "$TOKEN" ]; then
+if [ ! -z $TOKEN ]; then
     pushd docker/swarm
     ./deploy.sh $REGISTRY $TOKEN $SHA;
     popd
