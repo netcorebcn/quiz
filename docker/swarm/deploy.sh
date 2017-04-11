@@ -11,6 +11,5 @@ echo Registry:$REGISTRY
 echo Token:$CI_TOKEN
 echo Sha:$SHA_COMMIT
 
-docker deploy --compose-file docker-compose.setup.yml stack
 docker deploy --compose-file docker-compose.yml stack
 docker service ls
