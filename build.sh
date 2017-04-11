@@ -22,7 +22,6 @@ for containerPath in ./docker/containers/* ; do
     if [ -f $containerPath/Dockerfile.build ]; then 
         #build ci image
         docker build -t $container-ci:$sha -f $containerPath/Dockerfile.build .
-
         #publish build
         docker create --name $container-build-$sha $container-ci:$sha
         docker cp $container-build-$sha:/build build/$container    
@@ -32,9 +31,7 @@ for containerPath in ./docker/containers/* ; do
     docker build -t $registry$container:$sha -f $containerPath/Dockerfile .
  
     #push runtime image to registry
-    if [ ! -z $registry ]; then 
-        docker push $registry$container:$sha 
-    fi
+    if [ ! -z $registry ]; then docker push $registry$container:$sha; fi
 done
 
 #clean up
