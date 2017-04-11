@@ -22,14 +22,21 @@ class App extends Component {
 
   componentDidMount() {
     getQuiz().then(json => {
-      this.setState({
-        quizId: json.quizId,
-        questions: json.quizModel.questions.map(q => ({
-          ...q,
-          ...json.questions.find(x => x.questionId === q.id)
-        })),
-        isProcessing: false
-      });
+      if (json != null) {
+        this.setState({
+          quizId: json.quizId,
+          questions: json.quizModel.questions.map(q => ({
+            ...q,
+            ...json.questions.find(x => x.questionId === q.id)
+          })),
+          isProcessing: false
+        });
+      } else {
+        this.setState({
+          isProcessing: false,
+          showResults: true
+        });
+      }
     });
 
     initWebsockets(questionStats => this.setState({
@@ -60,7 +67,9 @@ class App extends Component {
   }
 
   voteQuestionHandler(questionId, optionId) {
-    this.setState({ isProcessing: true });
+    this.setState({
+      isProcessing: true
+    });
 
     postOption(this.state.quizId, questionId, optionId).then(json => {
       this.setState({

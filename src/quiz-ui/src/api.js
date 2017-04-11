@@ -1,7 +1,14 @@
 const url = `http://${window.location.hostname}:81/quiz/`;
 const ws = `ws://${window.location.hostname}:82/ws`;
 
-export const getQuiz = () => fetch(url).then(r => r.json());
+export const getQuiz = () => fetch(url).then(response => {
+  if (response.status === 204) {
+    return null;
+  }
+  if (response.status === 200) {
+    return response.json();
+  }
+});
 
 export const startNewQuiz = () =>
   fetch(url, { method: 'PUT' }).then(r => r.json());
