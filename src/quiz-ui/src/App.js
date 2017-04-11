@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Loader from './Loader';
 import Question from './Question';
+import QuestionResults from './QuestionResults';
 import { getQuiz, postOption, startNewQuiz, initWebsockets } from './api';
 import { bindClass } from './utils';
 
@@ -12,7 +13,8 @@ class App extends Component {
     this.state = {
       quizId: 0,
       questions: [],
-      isProcessing: true
+      isProcessing: true,
+      showResults: false
     };
 
     bindClass(this);
@@ -45,6 +47,18 @@ class App extends Component {
     startNewQuiz().then(json => this.setState({ ...json }));
   }
 
+  showResults() {
+    this.setState({
+      showResults: true
+    });
+  }
+
+  showVoting() {
+    this.setState({
+      showResults: false
+    });
+  }
+
   voteQuestion(questionId, optionId) {
     this.setState({ isProcessing: true });
 
@@ -56,7 +70,7 @@ class App extends Component {
   }
 
   render() {
-    const { isProcessing, questions, quizId } = this.state;
+    const { isProcessing, showResults, questions, quizId } = this.state;
     return (
       <div className="Container">
         {isProcessing &&
@@ -66,22 +80,47 @@ class App extends Component {
         <div className="App-container">
           <div className="App">
             <h1>Welcome to Quiz App</h1>
-            <h2>
-              Current quiz ID: <b>{quizId}</b> <button
-                className="start-button"
-                onClick={this.startQuiz}
-              >
-                Start New Quiz
-              </button>
-            </h2>
-            <h2>Questions: </h2>
-            {questions.map(question => (
-              <Question
-                question={question}
-                voteQuestion={this.voteQuestion}
-                key={question.id}
-              />
-            ))}
+            {showResults
+              ? <div className="App-Results">
+                  <h2>
+                    Current quiz ID: <b>{quizId}</b>
+                  </h2>
+                  {questions.map(question => (
+                    <QuestionResults question={question} key={question.id} />
+                  ))}
+                  <div className="buttons">
+                    <button
+                      className="voting-button button"
+                      onClick={this.showVoting}
+                    >
+                      Show voting
+                    </button>
+                    <button
+                      className="start-button button"
+                      onClick={this.startQuiz}
+                    >
+                      Start New Quiz
+                    </button>
+                  </div>
+                </div>
+              : <div className="App-Voting">
+                  <h2>Questions: </h2>
+                  {questions.map(question => (
+                    <Question
+                      question={question}
+                      voteQuestion={this.voteQuestion}
+                      key={question.id}
+                    />
+                  ))}
+                  <div className="buttons">
+                    <button
+                      className="results-button button"
+                      onClick={this.showResults}
+                    >
+                      Show results
+                    </button>
+                  </div>
+                </div>}
           </div>
         </div>
       </div>

@@ -23,7 +23,15 @@
      justify-content: center;
  }
  
- .start-button {
+ .buttons {
+     display: flex;
+     flex-wrap: wrap;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
+ }
+ 
+ .button {
      width: 200px;
      display: inline-block;
      margin: 10px;
@@ -37,7 +45,7 @@
      outline: none;
  }
  
- .start-button:hover {
+ .button:hover {
      background: #00BCD4;
      color: #fff;
  }

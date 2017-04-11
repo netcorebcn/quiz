@@ -19,14 +19,6 @@ class Question extends Component {
             />
           ))}
         </div>
-        <div>
-          <span>Answers statistics: </span>
-          <span className="correct">{question.rightAnswersPercent || 0}%</span>
-          <span>/</span>
-          <span className="incorrect">
-            {question.wrongAnswersPercent || 0}%
-          </span>
-        </div>
       </div>
     );
   }
