@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-if [ ! -z $1 ]; then registry=$1/; else registry=""; fi
+registry=$1
 sha=${2:-latest}
 
 echo Registry:$registry
