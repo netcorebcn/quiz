@@ -59,6 +59,7 @@ namespace Quiz.Messages
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "AWS"),
                         new QuestionOption(Guid.NewGuid(), "Azure", true),
+                        new QuestionOption(Guid.NewGuid(), "Digital Ocean"),
                         new QuestionOption(Guid.NewGuid(), "Google Cloud")
                     }),
                 new Question(Guid.NewGuid(), "Which is the Docker native built-in orchestrator?", 
