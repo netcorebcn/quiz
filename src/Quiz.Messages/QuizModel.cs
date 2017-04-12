@@ -55,29 +55,37 @@ namespace Quiz.Messages
     {
         public static QuizModel Create() =>
             new QuizModel(new List<Question>{
-                new Question(Guid.NewGuid(), "Which cloud provider is awesome?", 
+                new Question(Guid.NewGuid(), "Which is the most awesome cloud provider?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "AWS"),
                         new QuestionOption(Guid.NewGuid(), "Azure", true),
+                        new QuestionOption(Guid.NewGuid(), "Digital Ocean"),
                         new QuestionOption(Guid.NewGuid(), "Google Cloud")
                     }),
-                new Question(Guid.NewGuid(), "What .NET Standard implements .NET 4.6.1?", 
+                new Question(Guid.NewGuid(), "Which is the Docker native built-in orchestrator?", 
                     new List<QuestionOption> {
-                        new QuestionOption(Guid.NewGuid(), ".NET Standard 1.8"),
-                        new QuestionOption(Guid.NewGuid(), ".NET Standard 1.6"),
-                        new QuestionOption(Guid.NewGuid(), ".NET Standard 2.0", true)
+                        new QuestionOption(Guid.NewGuid(), "DC/OS"),
+                        new QuestionOption(Guid.NewGuid(), "Kubernetes"),
+                        new QuestionOption(Guid.NewGuid(), "Swarm", true),
+                        new QuestionOption(Guid.NewGuid(), "CoreOS"),
                     }),
-                new Question(Guid.NewGuid(), "Which is the managed option for using swarm in azure?", 
+                new Question(Guid.NewGuid(), "Which is the more managed option for using Swarm in Azure?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "Azure Container Service", true),
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
                         new QuestionOption(Guid.NewGuid(), "Docker VM Extension for Microsoft Azures")
                     }),
-                 new Question(Guid.NewGuid(), "How many managers in a docker swarm do you need to keep consistency?", 
+                 new Question(Guid.NewGuid(), "What is the average size of a .NET Core runtime image?", 
                     new List<QuestionOption> {
-                        new QuestionOption(Guid.NewGuid(), "2 managers"),
-                        new QuestionOption(Guid.NewGuid(), "4 managers"),
-                        new QuestionOption(Guid.NewGuid(), "5 managers", true)
+                        new QuestionOption(Guid.NewGuid(), "1 GB"),
+                        new QuestionOption(Guid.NewGuid(), "100 MB"),
+                        new QuestionOption(Guid.NewGuid(), "300 MB", true)
+                    }),
+                new Question(Guid.NewGuid(), "How do you upload your awesome-app image to a Container Registry?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "docker push awesome-app", true),
+                        new QuestionOption(Guid.NewGuid(), "git push awesome-app"),
+                        new QuestionOption(Guid.NewGuid(), "docker pull awesome-app")
                     })
             });
     }

@@ -147,6 +147,36 @@ services:
         failure_action: continue
         monitor: 60s
         max_failure_ratio: 0.3
+  
+  registry: 
+    image: registry:2
+    ports:
+      - "5000:5000"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  viz:
+    image: manomarks/visualizer
+    ports:
+      - "9090:8080"
+    environment: 
+      - PORT=9090
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  portainer:
+    image: portainer/portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
 networks:
   front-tier:
