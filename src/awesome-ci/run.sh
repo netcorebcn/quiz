@@ -16,6 +16,8 @@ export SHA_COMMIT=$SHA
 
 # checkout sha commit from github repo
 docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/containers/awesome-ci/Dockerfile.ci
+
+docker rm --force $(docker ps -qa --filter "name=quiz-$SHA-build") > /dev/null 2>&1 || true
 docker create --name quiz-$SHA-build quiz-$SHA-ci echo ""
 docker cp quiz-$SHA-build:/quizapp ./build-$SHA
 
