@@ -23,7 +23,6 @@ for containerPath in ./docker/containers/* ; do
         #build ci image
         docker build -t $container-ci:$sha -f $containerPath/Dockerfile.build .
         #publish build
-        docker rm --force $(docker ps -q --filter "name=$container-build-$sha") > /dev/null 2>&1
         docker create --name $container-build-$sha $container-ci:$sha
         docker cp $container-build-$sha:/build build/$container    
     fi
