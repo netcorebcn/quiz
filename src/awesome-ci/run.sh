@@ -14,8 +14,11 @@ export REGISTRY=$REGISTRY
 export CI_TOKEN=$TOKEN
 export SHA_COMMIT=$SHA
 
+# clean up
+rm -rf build-$SHA
+
 # checkout sha commit from github repo
-docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/containers/awesome-ci/Dockerfile.ci
+docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./docker/containers/awesome-ci/Dockerfile.ci --no-cache
 
 docker rm --force $(docker ps -qa --filter "name=quiz-$SHA-build") > /dev/null 2>&1 || true
 docker create --name quiz-$SHA-build quiz-$SHA-ci echo ""
