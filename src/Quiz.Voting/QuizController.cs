@@ -65,9 +65,4 @@ namespace Quiz.Api.Controllers
             await _quizRepository.Save(quiz);
         }
     }
-
-    public class QuizAnswerCommand
-    {
-        public List<QuestionAnswerCommand> Answers { get; set; }
-    }
 }
