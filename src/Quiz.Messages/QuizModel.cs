@@ -73,11 +73,17 @@ namespace Quiz.Messages
                         new QuestionOption(Guid.NewGuid(), "Docker for Azure"),
                         new QuestionOption(Guid.NewGuid(), "Docker VM Extension for Microsoft Azures")
                     }),
-                 new Question(Guid.NewGuid(), "What is the average size of a .NET Core runtime image?", 
+                new Question(Guid.NewGuid(), "What is the average size of a .NET Core runtime image?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "1 GB"),
                         new QuestionOption(Guid.NewGuid(), "100 MB"),
                         new QuestionOption(Guid.NewGuid(), "300 MB", true)
+                    }),
+                new Question(Guid.NewGuid(), "What is the average size of the ASP.NET Core build image?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
+                        new QuestionOption(Guid.NewGuid(), "1 GB"),
+                        new QuestionOption(Guid.NewGuid(), "300 MB")
                     })
             });
     }
