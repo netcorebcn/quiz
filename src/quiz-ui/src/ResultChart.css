@@ -1,0 +1,12 @@
+.ResultChart-Label {
+    text-align: center;
+    font-size: 16px;
+}
+
+.ResultChart-Label_correct {
+    color: #66BB6A;
+}
+
+.ResultChart-Label_incorrect {
+    color: #EF5350;
+}

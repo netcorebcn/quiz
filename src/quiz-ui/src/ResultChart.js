@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { RadialChart } from 'react-vis';
 
+import './ResultChart.css';
+
 class ResultChart extends Component {
   render() {
     const { correct, incorrect } = this.props;
@@ -16,14 +18,26 @@ class ResultChart extends Component {
       }
     ];
     return (
-      <RadialChart
-        colorType="literal"
-        animation
-        data={data}
-        innerRadius={50}
-        width={200}
-        height={200}
-      />
+      <div>
+        <RadialChart
+          colorType="literal"
+          animation
+          data={data}
+          innerRadius={40}
+          radius={80}
+          width={220}
+          height={180}
+        />
+        <div className="ResultChart-Label">
+          <span className="ResultChart-Label_correct">
+            {correct.toFixed(1)}%
+          </span>
+          /
+          <span className="ResultChart-Label_incorrect">
+            {incorrect.toFixed(1)}%
+          </span>
+        </div>
+      </div>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ResultListItem from './ResultListItem';
-import ResultChart from './ResultChart';
 
 import './Results.css';
 
@@ -11,7 +10,14 @@ class Results extends Component {
       quizId,
       startQuizHandler
     } = this.props;
-    console.log(questions);
+    const correctScore = questions
+      .map(question => question.rightAnswersPercent)
+      .reduce((acc, val) => acc + val, 0) / questions.length;
+
+    const incorrectScore = questions
+      .map(question => question.wrongAnswersPercent)
+      .reduce((acc, val) => acc + val, 0) / questions.length;
+
     return (
       <div className="Results">
         <h2>
@@ -22,8 +28,8 @@ class Results extends Component {
             <ResultListItem
               key={question.id}
               description={question.description}
-              correct={question.rightAnswersPercent}
-              incorrect={question.wrongAnswersPercent}
+              correct={question.rightAnswersPercent || 0}
+              incorrect={question.wrongAnswersPercent || 0}
             />
           ))}
         </div>
@@ -31,7 +37,10 @@ class Results extends Component {
           <h2>
             Overall Score
           </h2>
-          <ResultListItem correct={1} incorrect={2} />
+          <ResultListItem
+            correct={correctScore || 0}
+            incorrect={incorrectScore || 0}
+          />
         </div>
         <div className="buttons">
           <button className="start-button button" onClick={startQuizHandler}>
