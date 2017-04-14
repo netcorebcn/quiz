@@ -14,7 +14,7 @@ const postOption = (quizId, questionId, optionId) =>
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ questionId, optionId })
+    body: JSON.stringify([{ questionId, optionId }])
   }).catch(err => console.log(err));
 
 const random = (max) => {

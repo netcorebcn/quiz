@@ -30,10 +30,14 @@ namespace Quiz.Api.Controllers
 
         [HttpPost]
         [Route("{id}")]
-        public async Task Vote(Guid id, [FromBody]QuestionAnswerCommand answer)
+        public async Task Vote(Guid id, [FromBody]QuizAnswersCommand quizAnswersComand)
         {
             var quiz = await _quizRepository.GetById<QuizAggregate>(id);
-            quiz.Vote(answer.QuestionId, answer.OptionId);
+
+            quizAnswersComand.Answers.ForEach(answer =>
+               quiz.Vote(answer.QuestionId, answer.OptionId)
+            );
+
             await _quizRepository.Save(quiz);
         }
 

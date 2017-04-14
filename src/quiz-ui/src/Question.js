@@ -5,7 +5,7 @@ import './Question.css';
 
 class Question extends Component {
   render() {
-    var { question, voteQuestion } = this.props;
+    var { question, selectAnswer, selectedOption } = this.props;
     return (
       <div className="Question">
         <h3> {question.description}</h3>
@@ -14,8 +14,9 @@ class Question extends Component {
             <QuestionOption
               key={option.id}
               questionId={question.id}
+              isSelected={option.id === selectedOption}
               option={option}
-              voteQuestion={voteQuestion}
+              selectAnswer={selectAnswer}
             />
           ))}
         </div>

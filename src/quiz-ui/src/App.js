@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Loader from './Loader';
 import Voting from './Voting';
 import Results from './Results';
-import { getQuiz, postOption, startNewQuiz, initWebsockets } from './api';
+import { getQuiz, postQuizAnswers, startNewQuiz, initWebsockets } from './api';
 import { bindClass } from './utils';
 
 import './App.css';
@@ -42,16 +42,20 @@ class App extends Component {
     initWebsockets(questionStats => this.setState({
       ...this.state,
       questions: this.state.questions.map(
-        question =>
-          question.id === questionStats.questionId
-            ? { ...question, ...questionStats }
-            : question
+        question => question.id === questionStats.questionId
+          ? {
+              ...question,
+              ...questionStats
+            }
+          : question
       )
     }));
   }
 
   startQuizHandler() {
-    startNewQuiz().then(json => this.setState({ ...json }));
+    startNewQuiz().then(json => this.setState({
+      ...json
+    }));
   }
 
   showResultsHandler() {
@@ -66,12 +70,12 @@ class App extends Component {
     });
   }
 
-  voteQuestionHandler(questionId, optionId) {
+  voteQuestionHandler(answers) {
     this.setState({
       isProcessing: true
     });
 
-    postOption(this.state.quizId, questionId, optionId).then(json => {
+    postQuizAnswers(this.state.quizId, answers).then(json => {
       this.setState({
         isProcessing: false
       });
@@ -79,7 +83,12 @@ class App extends Component {
   }
 
   render() {
-    const { isProcessing, showResults, questions, quizId } = this.state;
+    const {
+      isProcessing,
+      showResults,
+      questions,
+      quizId
+    } = this.state;
     return (
       <div className="Container">
         {isProcessing &&
