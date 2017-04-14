@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
 
+import { RadialChart } from 'react-vis';
+
 import './QuestionResults.css';
 
 class QuestionResults extends Component {
   render() {
-    var { question } = this.props;
+    const { question } = this.props;
+    const data = [
+      {
+        angle: question.rightAnswersPercent || 0,
+        color: '#66BB6A',
+        label: 'Correct Answers'
+      },
+      {
+        angle: question.wrongAnswersPercent || 0,
+        color: '#EF5350',
+        label: 'Wrong Answers'
+      }
+    ];
     return (
-      <div className="Question">
-        <h3> {question.description}</h3>
+      <div className="QuestionResult">
+        <h3>{question.description}</h3>
         <div>
-          <span className="correct">{question.rightAnswersPercent || 0}%</span>
-          <span>/</span>
-          <span className="incorrect">
-            {question.wrongAnswersPercent || 0}%
-          </span>
+          <RadialChart
+            colorType="literal"
+            data={data}
+            width={300}
+            height={300}
+          />
         </div>
       </div>
     );

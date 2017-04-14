@@ -39,7 +39,7 @@ class Voting extends Component {
     return null;
   }
   render() {
-    const { questions, showResultsHandler } = this.props;
+    const { questions, isSubmitted } = this.props;
     return (
       <div className="Voting">
         <h2>Questions: </h2>
@@ -49,19 +49,15 @@ class Voting extends Component {
             question={question}
             selectedOption={this.getSelectedOption(question.id)}
             selectAnswer={this.selectAnswer}
+            isSubmitted={isSubmitted}
           />
         ))}
-        <div className="buttons">
-          <button className="submit-button button" onClick={this.voteHandler}>
-            Submit
-          </button>
-          <button
-            className="results-button button"
-            onClick={showResultsHandler}
-          >
-            Show results
-          </button>
-        </div>
+        {!isSubmitted &&
+          <div className="buttons">
+            <button className="submit-button button" onClick={this.voteHandler}>
+              Submit
+            </button>
+          </div>}
       </div>
     );
   }

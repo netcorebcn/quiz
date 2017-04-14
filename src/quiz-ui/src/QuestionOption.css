@@ -18,3 +18,13 @@
     background: #3F51B5;
     color: #fff;
 }
+
+.QuestionOption.correct {
+    background: #66BB6A;
+    color: #fff;
+}
+
+.QuestionOption.incorrect {
+    background: #EF5350;
+    color: #fff;
+}

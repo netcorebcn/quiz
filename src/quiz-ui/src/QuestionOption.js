@@ -10,12 +10,22 @@ class QuestionOption extends Component {
   }
 
   handleClick() {
-    var { questionId, option, selectAnswer } = this.props;
-    selectAnswer(questionId, option.id);
+    var { questionId, option, selectAnswer, isSubmitted } = this.props;
+    if (!isSubmitted) {
+      selectAnswer(questionId, option.id);
+    }
   }
   render() {
-    var { option, isSelected } = this.props;
-    const className = `QuestionOption ${isSelected ? 'selected' : ''}`;
+    var { option, isSelected, isSubmitted } = this.props;
+    let className = 'QuestionOption ';
+    if (isSelected) {
+      if (!isSubmitted) {
+        className += 'selected';
+      }
+      if (isSubmitted) {
+        className += option.isCorrect ? 'correct' : 'incorrect';
+      }
+    }
     return (
       <div className={className} onClick={this.handleClick}>
         {option.description}
