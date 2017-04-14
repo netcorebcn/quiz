@@ -14,7 +14,8 @@ class App extends Component {
       quizId: 0,
       questions: [],
       isProcessing: true,
-      showResults: false
+      isSubmitted: false,
+      showResults: window.location.search.indexOf('results') !== -1
     };
 
     bindClass(this);
@@ -33,8 +34,7 @@ class App extends Component {
         });
       } else {
         this.setState({
-          isProcessing: false,
-          showResults: true
+          isProcessing: false
         });
       }
     });
@@ -58,18 +58,6 @@ class App extends Component {
     }));
   }
 
-  showResultsHandler() {
-    this.setState({
-      showResults: true
-    });
-  }
-
-  showVotingHandler() {
-    this.setState({
-      showResults: false
-    });
-  }
-
   voteQuestionHandler(answers) {
     this.setState({
       isProcessing: true
@@ -77,7 +65,8 @@ class App extends Component {
 
     postQuizAnswers(this.state.quizId, answers).then(json => {
       this.setState({
-        isProcessing: false
+        isProcessing: false,
+        isSubmitted: true
       });
     });
   }
@@ -87,7 +76,8 @@ class App extends Component {
       isProcessing,
       showResults,
       questions,
-      quizId
+      quizId,
+      isSubmitted
     } = this.state;
     return (
       <div className="Container">
@@ -102,13 +92,12 @@ class App extends Component {
               ? <Results
                   questions={questions}
                   quizId={quizId}
-                  showVotingHandler={this.showVotingHandler}
                   startQuizHandler={this.startQuizHandler}
                 />
               : <Voting
                   questions={questions}
                   voteQuestionHandler={this.voteQuestionHandler}
-                  showResultsHandler={this.showResultsHandler}
+                  isSubmitted={isSubmitted}
                 />}
           </div>
         </div>
