@@ -17,7 +17,7 @@ class QuestionOption extends Component {
   }
   render() {
     var { option, isSelected, isSubmitted } = this.props;
-    let className = 'QuestionOption ';
+    let className = `QuestionOption ${!isSubmitted ? 'active' : ''} `;
     if (isSelected) {
       if (!isSubmitted) {
         className += 'selected';

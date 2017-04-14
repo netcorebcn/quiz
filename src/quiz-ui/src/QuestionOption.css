@@ -9,7 +9,7 @@
     outline: none;
 }
 
-.QuestionOption:hover {
+.QuestionOption.active:hover {
     background: #7986CB;
     color: #fff;
 }
