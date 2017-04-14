@@ -49,3 +49,13 @@
      background: #00BCD4;
      color: #fff;
  }
+ 
+ .submit-button {
+     border: 1px solid #4CAF50;
+     color: #4CAF50;
+ }
+ 
+ .submit-button:hover {
+     background: #4CAF50;
+     color: #fff;
+ }

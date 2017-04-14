@@ -13,15 +13,14 @@ export const getQuiz = () => fetch(url).then(response => {
 export const startNewQuiz = () =>
   fetch(url, { method: 'PUT' }).then(r => r.json());
 
-export const postOption = (quizId, questionId, optionId) =>
-  fetch(`${url}${quizId}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ questionId, optionId })
-  }).catch(err => console.log(err));
+export const postQuizAnswers = (quizId, answers) => fetch(`${url}${quizId}`, {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ answers })
+}).catch(err => console.log(err));
 
 export const initWebsockets = cb => {
   const webSocket = new WebSocket(ws);

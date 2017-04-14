@@ -1,22 +1,60 @@
 import React, { Component } from 'react';
 import Question from './Question';
+import { bindClass } from './utils';
 
 import './Voting.css';
 
 class Voting extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      answers: []
+    };
+
+    bindClass(this);
+  }
+
+  voteHandler() {
+    this.props.voteQuestionHandler(this.state.answers);
+  }
+  selectAnswer(questionId, answerId) {
+    this.setState(prevState => {
+      const answers = prevState.answers.filter(
+        _ => _.questionId !== questionId
+      );
+      answers.push({
+        questionId,
+        answerId
+      });
+      return {
+        answers
+      };
+    });
+  }
+  getSelectedOption(questionId) {
+    var answer = this.state.answers.find(_ => _.questionId === questionId);
+    if (answer) {
+      return answer.answerId;
+    }
+    return null;
+  }
   render() {
-    const { questions, voteQuestionHandler, showResultsHandler } = this.props;
+    const { questions, showResultsHandler } = this.props;
     return (
       <div className="Voting">
         <h2>Questions: </h2>
         {questions.map(question => (
           <Question
-            question={question}
-            voteQuestion={voteQuestionHandler}
             key={question.id}
+            question={question}
+            selectedOption={this.getSelectedOption(question.id)}
+            selectAnswer={this.selectAnswer}
           />
         ))}
         <div className="buttons">
+          <button className="submit-button button" onClick={this.voteHandler}>
+            Submit
+          </button>
           <button
             className="results-button button"
             onClick={showResultsHandler}

@@ -10,13 +10,14 @@ class QuestionOption extends Component {
   }
 
   handleClick() {
-    var { questionId, option, voteQuestion } = this.props;
-    voteQuestion(questionId, option.id);
+    var { questionId, option, selectAnswer } = this.props;
+    selectAnswer(questionId, option.id);
   }
   render() {
-    var { option } = this.props;
+    var { option, isSelected } = this.props;
+    const className = `QuestionOption ${isSelected ? 'selected' : ''}`;
     return (
-      <div className="QuestionOption" onClick={this.handleClick}>
+      <div className={className} onClick={this.handleClick}>
         {option.description}
       </div>
     );

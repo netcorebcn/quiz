@@ -1,6 +1,6 @@
 .QuestionOption {
     margin: 10px 10px 10px 10px;
-    padding: 5px 5px;
+    padding: 10px 10px;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -10,5 +10,11 @@
 }
 
 .QuestionOption:hover {
-    background: #cecece;
+    background: #7986CB;
+    color: #fff;
+}
+
+.QuestionOption.selected {
+    background: #3F51B5;
+    color: #fff;
 }
