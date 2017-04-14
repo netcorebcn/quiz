@@ -17,14 +17,14 @@ class Voting extends Component {
   voteHandler() {
     this.props.voteQuestionHandler(this.state.answers);
   }
-  selectAnswer(questionId, answerId) {
+  selectAnswer(questionId, optionId) {
     this.setState(prevState => {
       const answers = prevState.answers.filter(
         _ => _.questionId !== questionId
       );
       answers.push({
         questionId,
-        answerId
+        optionId
       });
       return {
         answers
@@ -34,7 +34,7 @@ class Voting extends Component {
   getSelectedOption(questionId) {
     var answer = this.state.answers.find(_ => _.questionId === questionId);
     if (answer) {
-      return answer.answerId;
+      return answer.optionId;
     }
     return null;
   }
