@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -30,10 +31,14 @@ namespace Quiz.Api.Controllers
 
         [HttpPost]
         [Route("{id}")]
-        public async Task Vote(Guid id, [FromBody]QuestionAnswerCommand answer)
+        public async Task Vote(Guid id, [FromBody]List<QuestionAnswerCommand> answersComand)
         {
             var quiz = await _quizRepository.GetById<QuizAggregate>(id);
-            quiz.Vote(answer.QuestionId, answer.OptionId);
+
+            answersComand.ForEach(answer =>
+               quiz.Vote(answer.QuestionId, answer.OptionId)
+            );
+
             await _quizRepository.Save(quiz);
         }
 
@@ -59,5 +64,10 @@ namespace Quiz.Api.Controllers
             quiz.Close();
             await _quizRepository.Save(quiz);
         }
+    }
+
+    public class QuizAnswerCommand
+    {
+        public List<QuestionAnswerCommand> Answers { get; set; }
     }
 }
