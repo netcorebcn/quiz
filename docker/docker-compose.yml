@@ -2,7 +2,7 @@ version: "3"
 
 services:
   vote:
-    image: quiz-voting
+    image: ${REGISTRY}quiz-voting:${SHA_COMMIT}
     ports:
       - "81:80"
     environment: 
@@ -10,14 +10,14 @@ services:
       - EVENT_STORE_MANAGER_HOST=eventstore:2113
   
   results:
-    image: quiz-results
+    image: ${REGISTRY}quiz-results:${SHA_COMMIT}
     ports:
       - "82:80"
     environment: 
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
  
   ui:
-    image: quiz-ui
+    image: ${REGISTRY}quiz-ui:${SHA_COMMIT}
     depends_on:
       - vote
       - results
@@ -25,7 +25,7 @@ services:
       - "80:5000"
 
   setup:
-    image: quiz-setup
+    image: ${REGISTRY}quiz-setup:${SHA_COMMIT}
     depends_on:
       - eventstore
     environment: 

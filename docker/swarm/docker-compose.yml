@@ -14,7 +14,7 @@ services:
       driver: "json-file"
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
       mode: replicated
       replicas: 2
       restart_policy:
@@ -42,7 +42,7 @@ services:
       driver: "json-file"
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
       mode: replicated
       replicas: 2
       restart_policy:
@@ -71,7 +71,7 @@ services:
       driver: "json-file"
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
       mode: replicated
       replicas: 2
       restart_policy:
@@ -111,7 +111,7 @@ services:
       driver: "json-file"
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
       restart_policy:
         condition: on-failure
         delay: 5s
