@@ -55,6 +55,12 @@ namespace Quiz.Messages
     {
         public static QuizModel Create() =>
             new QuizModel(new List<Question>{
+                new Question(Guid.NewGuid(), "What is the most awesome stack?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), ".NET Core", true),
+                        new QuestionOption(Guid.NewGuid(), "Node JS"),
+                        new QuestionOption(Guid.NewGuid(), "Java")
+                    }),
                 new Question(Guid.NewGuid(), "Which is the most awesome cloud provider?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "AWS"),
@@ -83,7 +89,13 @@ namespace Quiz.Messages
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
                         new QuestionOption(Guid.NewGuid(), "1 GB"),
-                        new QuestionOption(Guid.NewGuid(), "300 MB")
+                        new QuestionOption(Guid.NewGuid(), "400 MB")
+                    }),
+                 new Question(Guid.NewGuid(), "What is the average size of the ASP.NET Core build image?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
+                        new QuestionOption(Guid.NewGuid(), "1 GB"),
+                        new QuestionOption(Guid.NewGuid(), "400 MB")
                     })
             });
     }
