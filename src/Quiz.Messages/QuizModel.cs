@@ -89,7 +89,7 @@ namespace Quiz.Messages
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
                         new QuestionOption(Guid.NewGuid(), "1 GB"),
-                        new QuestionOption(Guid.NewGuid(), "300 MB")
+                        new QuestionOption(Guid.NewGuid(), "400 MB")
                     })
             });
     }
