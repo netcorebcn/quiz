@@ -90,6 +90,12 @@ namespace Quiz.Messages
                         new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
                         new QuestionOption(Guid.NewGuid(), "1 GB"),
                         new QuestionOption(Guid.NewGuid(), "400 MB")
+                    }),
+                 new Question(Guid.NewGuid(), "What is the average size of the ASP.NET Core build image?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "1.3 GB", true),
+                        new QuestionOption(Guid.NewGuid(), "1 GB"),
+                        new QuestionOption(Guid.NewGuid(), "400 MB")
                     })
             });
     }
