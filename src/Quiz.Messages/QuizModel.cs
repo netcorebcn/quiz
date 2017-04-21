@@ -55,6 +55,12 @@ namespace Quiz.Messages
     {
         public static QuizModel Create() =>
             new QuizModel(new List<Question>{
+                new Question(Guid.NewGuid(), "Which is the most awesome cloud provider?", 
+                    new List<QuestionOption> {
+                        new QuestionOption(Guid.NewGuid(), "AWS"),
+                        new QuestionOption(Guid.NewGuid(), "Azure", true),
+                        new QuestionOption(Guid.NewGuid(), "Google Cloud")
+                    }),
                 new Question(Guid.NewGuid(), "Which is the Docker native built-in orchestrator?", 
                     new List<QuestionOption> {
                         new QuestionOption(Guid.NewGuid(), "DC/OS"),
