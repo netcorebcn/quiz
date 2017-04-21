@@ -37,8 +37,8 @@
      margin: 10px;
      padding: 10px 10px;
      border: 1px solid #00BCD4;
-     color: #00BCD4;
-     background: transparent;
+     background: #00BCD4;
+     color: #fff;
      font-size: 16px;
      text-decoration: none;
      text-transform: uppercase;
@@ -46,16 +46,17 @@
  }
  
  .button:hover {
-     background: #00BCD4;
-     color: #fff;
+     background: #4DD0E1;
+     border: 1px solid #4DD0E1;
  }
  
  .submit-button {
+     background: #4CAF50;
+     color: #fff;
      border: 1px solid #4CAF50;
-     color: #4CAF50;
  }
  
  .submit-button:hover {
-     background: #4CAF50;
-     color: #fff;
+     background: #81C784;
+     border: 1px solid #81C784;
  }
