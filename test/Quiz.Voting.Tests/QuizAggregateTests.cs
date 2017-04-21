@@ -34,7 +34,7 @@ namespace Quiz.Voting.Tests
 
             // Assert
             var startEvent = quiz.GetPendingEvents().FirstOrDefault();
-            Assert.NotNull(startEvent);
+            Assert.Null(startEvent);
             Assert.IsAssignableFrom(typeof(QuizStartedEvent), startEvent);
         }
 
