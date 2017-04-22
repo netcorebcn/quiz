@@ -18,7 +18,7 @@ namespace Quiz.Voting.Tests
 
             // Assert
             var closedEvent = quiz.GetPendingEvents().FirstOrDefault();
-            Assert.NotNull(closedEvent);
+            Assert.Null(closedEvent);
             Assert.IsAssignableFrom(typeof(QuizClosedEvent), closedEvent);
         }
 
