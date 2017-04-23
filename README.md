@@ -2,11 +2,14 @@
 Example application with .NET Core, Event Store and Docker
 
 * run with [**docker**](https://www.docker.com/products/docker)  
-  ``.\run.sh``
   
-  Open <http://localhost> for use quiz ui
+  from MacOS ``.\run.sh`` or from Windows ``.\run.ps1``
   
-  Open <http://localhost:81/swagger> for use quiz api
+  Open <http://localhost> for quiz voting
+  
+  Open <http://localhost?results> for quiz results
+  
+  Open <http://localhost:81/swagger> for quiz api
   
   Open <http://localhost:2113> for manage event store
   
