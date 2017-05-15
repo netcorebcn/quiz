@@ -46,7 +46,7 @@ namespace Quiz.EventSourcing
                 if (currentSlice.Status == SliceReadStatus.StreamDeleted)
                     throw new AggregateDeletedException(id, typeof (TAggregate));
 
-                eventNumber = currentSlice.NextEventNumber;
+                eventNumber = (int)currentSlice.NextEventNumber;
 
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
@@ -93,7 +93,7 @@ namespace Quiz.EventSourcing
             }
 
             aggregate.ClearPendingEvents();
-            return result.NextExpectedVersion;
+            return (int)result.NextExpectedVersion;
         }
         
         private IList<IList<EventData>> GetEventBatches(IEnumerable<EventData> events) =>
