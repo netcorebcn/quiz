@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using EasyEventSourcing;
+using EasyEventSourcing.Aggregate;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Quiz.EventSourcing;
-using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
 using Quiz.Voting.Domain;
 

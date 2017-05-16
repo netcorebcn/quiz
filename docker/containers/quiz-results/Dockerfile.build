@@ -2,7 +2,6 @@ FROM microsoft/aspnetcore-build
 WORKDIR /app/Quiz.Results
 
 COPY src/Quiz.Messages /app/Quiz.Messages
-COPY src/Quiz.EventSourcing /app/Quiz.EventSourcing
 COPY src/Quiz.Results/Quiz.Results.csproj .
 RUN dotnet restore
 

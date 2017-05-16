@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="1.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.3"/>
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.2" />
+    <PackageReference Include="EasyEventSourcing" Version="0.0.7" />
+    <PackageReference Include="Polly" Version="5.1.0"/>
 
-    <ProjectReference Include="../Quiz.EventSourcing/Quiz.EventSourcing.csproj"/>
     <ProjectReference Include="../Quiz.Messages/Quiz.Messages.csproj"/>
 
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using EasyEventSourcing;
 using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
-using Quiz.EventSourcing;
+using Quiz.Messages;
 
 namespace Quiz.Voting.Results
 {
@@ -14,14 +15,11 @@ namespace Quiz.Voting.Results
     {
         public IConfigurationRoot Configuration { get; }
 
-        public EventStoreOptions EventStoreOptions { get; }
-
         public Startup(ILoggerFactory loggerFactory)
         {
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             Configuration = builder.Build();
             loggerFactory.AddConsole();
-            EventStoreOptions = EventStoreOptions.Create(Configuration);
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -34,7 +32,14 @@ namespace Quiz.Voting.Results
                     .AllowAnyHeader()
                     .AllowCredentials() );
             });
-            services.AddEventStoreSubscription(EventStoreOptions);
+
+            services.AddEasyEventSourcing(
+                EventStoreOptions.Create(
+                    Configuration["EVENT_STORE"], 
+                    Configuration["EVENT_STORE_MANAGER_HOST"], 
+                    Configuration["STREAM_NAME"]), 
+                ReflectionHelper.MessagesAssembly);
+
             services.AddWebSocketManager();
         }
 
@@ -42,8 +47,7 @@ namespace Quiz.Voting.Results
             IHostingEnvironment env, 
             IServiceProvider serviceProvider,
             ILoggerFactory loggerFactory,
-            IEventStoreConnection eventBus,
-            EventTypeResolver typeResolver,
+            IEventStoreBus eventBus,
             WebSocketHandler handler)
         {
             app.UseCors("CorsPolicy");
@@ -55,7 +59,7 @@ namespace Quiz.Voting.Results
             Policy.Handle<Exception>()
             .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
             .ExecuteAsync(async () =>  
-                await eventBus.StartSubscription(EventStoreOptions, typeResolver, 
+                await eventBus.Subscribe( 
                 async (message) => {
                     logger.LogInformation(message.ToString());
                     await handler.SendMessageToAllAsync(message);    

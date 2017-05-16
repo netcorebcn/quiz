@@ -1,11 +1,10 @@
-﻿using EventStore.ClientAPI;
+﻿using EasyEventSourcing;
+using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Quiz.EventSourcing;
-using Quiz.EventSourcing.Domain;
 using Quiz.Messages;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -39,7 +38,12 @@ namespace Quiz.Voting
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
             );
             
-            AddEventStore(services);
+            services.AddEasyEventSourcing(
+                EventStoreOptions.Create(
+                    Configuration["EVENT_STORE"], 
+                    Configuration["EVENT_STORE_MANAGER_HOST"], 
+                    Configuration["STREAM_NAME"]), 
+                ReflectionHelper.MessagesAssembly);
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IEventStoreConnection conn, ILoggerFactory loggerFactory)
@@ -47,19 +51,9 @@ namespace Quiz.Voting
             app.UseCors("CorsPolicy");
             app.UseMvc();
             app.UseSwagger();
-            app.UseSwaggerUi(c =>
+            app.UseSwaggerUI(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
-        }
-        
-        private void AddEventStore(IServiceCollection services)
-        {
-            var options = EventStoreOptions.Create(Configuration);
-
-            services.AddSingleton(EventStoreConnectionFactory.Create(options.ConnectionString));
-            services.AddSingleton(new EventTypeResolver(ReflectionHelper.MessagesAssembly));
-            services.AddSingleton<IEventStoreProjections>(new EventStoreProjectionsClient(options));
-            services.AddTransient<IRepository, EventStoreRepository>();
-        }
+        }        
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Quiz.EventSourcing.Domain;
+using EasyEventSourcing.Aggregate;
 using Quiz.Messages;
 
 namespace Quiz.Voting.Domain
