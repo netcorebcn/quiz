@@ -1,0 +1,10 @@
+FROM microsoft/aspnetcore-build
+WORKDIR /app/Quiz.Api
+
+COPY src/Quiz.Domain /app/Quiz.Domain
+COPY src/Quiz.Api/Quiz.Api.csproj .
+RUN dotnet restore
+
+COPY src/Quiz.Api .
+
+RUN dotnet publish  --output /build/ --configuration Release

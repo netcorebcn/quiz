@@ -66,18 +66,6 @@
             }
         },
         {
-            "name": "QuizSetup",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.EventSourcing.Setup/bin/Debug/netcoreapp1.1/Quiz.EventSourcing.Setup.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "externalConsole": false,
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",

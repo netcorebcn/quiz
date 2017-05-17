@@ -1,9 +1,0 @@
-FROM microsoft/dotnet
-WORKDIR /app/Quiz.EventSourcing.Setup
-
-COPY src/Quiz.EventSourcing.Setup/Quiz.EventSourcing.Setup.csproj .
-RUN dotnet restore
-
-COPY src/Quiz.EventSourcing.Setup .
-
-RUN dotnet publish  --output /build/ --configuration Release

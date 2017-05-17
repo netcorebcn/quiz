@@ -1,0 +1,10 @@
+FROM microsoft/aspnetcore-build
+WORKDIR /test/Quiz.Domain.Tests
+
+COPY src/Quiz.Domain /src/Quiz.Domain
+COPY test/Quiz.Domain.Tests/Quiz.Domain.Tests.csproj .
+RUN dotnet restore
+
+COPY test/Quiz.Domain.Tests .
+
+RUN dotnet test

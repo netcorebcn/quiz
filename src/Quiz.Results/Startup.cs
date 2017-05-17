@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
-using Quiz.Messages;
+using Quiz.Domain;
 
 namespace Quiz.Voting.Results
 {
@@ -38,7 +38,7 @@ namespace Quiz.Voting.Results
                     Configuration["EVENT_STORE"], 
                     Configuration["EVENT_STORE_MANAGER_HOST"], 
                     Configuration["STREAM_NAME"]), 
-                ReflectionHelper.MessagesAssembly);
+                ReflectionHelper.DomainAssembly);
 
             services.AddWebSocketManager();
         }
@@ -48,6 +48,7 @@ namespace Quiz.Voting.Results
             IServiceProvider serviceProvider,
             ILoggerFactory loggerFactory,
             IEventStoreBus eventBus,
+            IEventStoreProjections projections,
             WebSocketHandler handler)
         {
             app.UseCors("CorsPolicy");
@@ -58,12 +59,15 @@ namespace Quiz.Voting.Results
 
             Policy.Handle<Exception>()
             .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-            .ExecuteAsync(async () =>  
-                await eventBus.Subscribe( 
-                async (message) => {
-                    logger.LogInformation(message.ToString());
-                    await handler.SendMessageToAllAsync(message);    
-                }))
+            .ExecuteAsync(
+                async () => {
+                    await projections.CreateAsync(Projections.QuestionAnswers);
+                    await eventBus.Subscribe( 
+                        async (message) => {
+                            logger.LogInformation(message.ToString());
+                            await handler.SendMessageToAllAsync(message);
+                        });
+                })
             .Wait();
         }
     }

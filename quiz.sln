@@ -5,15 +5,13 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AD4C29E2-BCBA-4BF7-9B0B-3FF0637C09ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.EventSourcing.Setup", "src\Quiz.EventSourcing.Setup\Quiz.EventSourcing.Setup.csproj", "{71972FD7-DC3B-4C96-9BB3-EA2C03941740}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Domain", "src\Quiz.Domain\Quiz.Domain.csproj", "{81E40AEF-84C6-4130-A27C-721E16E63BAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Messages", "src\Quiz.Messages\Quiz.Messages.csproj", "{81E40AEF-84C6-4130-A27C-721E16E63BAD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Voting", "src\Quiz.Voting\Quiz.Voting.csproj", "{845B6010-7525-4EDB-8CAF-00BFE69B8D7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Api", "src\Quiz.Api\Quiz.Api.csproj", "{845B6010-7525-4EDB-8CAF-00BFE69B8D7F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6A3D905E-3393-44D1-A216-B5EF441ACB07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Voting.Tests", "test\Quiz.Voting.Tests\Quiz.Voting.Tests.csproj", "{9454BBD5-092F-46EF-B4C6-81370C8FFF31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Domain.Tests", "test\Quiz.Domain.Tests\Quiz.Domain.Tests.csproj", "{9454BBD5-092F-46EF-B4C6-81370C8FFF31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Results", "src\Quiz.Results\Quiz.Results.csproj", "{D9A2D1B9-8038-446A-ADD1-632C3D733D79}"
 EndProject
@@ -30,18 +28,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|x64.ActiveCfg = Debug|x64
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|x64.Build.0 = Debug|x64
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|x86.ActiveCfg = Debug|x86
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Debug|x86.Build.0 = Debug|x86
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|x64.ActiveCfg = Release|x64
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|x64.Build.0 = Release|x64
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|x86.ActiveCfg = Release|x86
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740}.Release|x86.Build.0 = Release|x86
 		{81E40AEF-84C6-4130-A27C-721E16E63BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81E40AEF-84C6-4130-A27C-721E16E63BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81E40AEF-84C6-4130-A27C-721E16E63BAD}.Debug|x64.ActiveCfg = Debug|x64
@@ -92,7 +78,6 @@ Global
 		{D9A2D1B9-8038-446A-ADD1-632C3D733D79}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{71972FD7-DC3B-4C96-9BB3-EA2C03941740} = {AD4C29E2-BCBA-4BF7-9B0B-3FF0637C09ED}
 		{81E40AEF-84C6-4130-A27C-721E16E63BAD} = {AD4C29E2-BCBA-4BF7-9B0B-3FF0637C09ED}
 		{845B6010-7525-4EDB-8CAF-00BFE69B8D7F} = {AD4C29E2-BCBA-4BF7-9B0B-3FF0637C09ED}
 		{9454BBD5-092F-46EF-B4C6-81370C8FFF31} = {6A3D905E-3393-44D1-A216-B5EF441ACB07}
