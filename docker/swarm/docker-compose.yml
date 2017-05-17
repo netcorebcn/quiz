@@ -39,6 +39,7 @@ services:
       - EVENT_STORE=tcp://admin:changeit@eventstore:1113
       - EVENT_STORE_MANAGER_HOST=eventstore:2113
       - STREAM_NAME=QuestionAnswers
+      - BUS_CONNECTION=host=bus;username=guest;password=guest
     logging:
       driver: "json-file"
     deploy:
@@ -92,6 +93,19 @@ services:
     ports:
       - "2113:2113"
       - "1113:1113"
+    networks:
+      - back-tier
+    logging:
+      driver: "json-file"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  bus:
+    image: rabbitmq:3-management
+    ports:
+      - "8081:15672" 
+      - "5672:5672"
     networks:
       - back-tier
     logging:
