@@ -14,11 +14,17 @@ namespace Quiz.Domain.Commands
             OptionId = optionId;
         }
     }
+
     public class QuizAnswersCommand
     {
+        public Guid QuizId { get; set; }
+
         public List<QuestionAnswerCommand> Answers { get; }
 
-        public QuizAnswersCommand(List<QuestionAnswerCommand> answers) =>
-            Answers = answers;   
+        public QuizAnswersCommand(Guid quizId, List<QuestionAnswerCommand> answers)
+        {
+            QuizId = quizId;
+            Answers = answers;  
+        }   
     }
 }

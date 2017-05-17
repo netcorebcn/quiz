@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EasyEventSourcing;
 using EasyEventSourcing.Aggregate;
+using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Quiz.Domain;
@@ -14,11 +16,16 @@ namespace Quiz.Api
     {
         private readonly IRepository _quizRepository;
         private readonly IEventStoreProjections _projectionsClient;
+        private readonly IBus _brokerBus;
 
-        public QuizController(IRepository quizRepository, IEventStoreProjections projectionsClient)
+        public QuizController(
+            IRepository quizRepository, 
+            IEventStoreProjections projectionsClient,
+            IBus brokerBus)
         {
             _quizRepository = quizRepository;
             _projectionsClient = projectionsClient;
+            _brokerBus = brokerBus;
         }
 
         [HttpGet]
@@ -30,16 +37,8 @@ namespace Quiz.Api
 
         [HttpPost]
         [Route("{id}")]
-        public async Task Vote(Guid id, [FromBody]QuizAnswersCommand quizAnswersComand)
-        {
-            var quiz = await _quizRepository.GetById<QuizAggregate>(id);
-
-            quizAnswersComand.Answers.ForEach(answer =>
-               quiz.Vote(answer.QuestionId, answer.OptionId)
-            );
-
-            await _quizRepository.Save(quiz);
-        }
+        public async Task Vote(Guid id, [FromBody]QuizAnswersCommand quizAnswersComand) =>
+            await _brokerBus.PublishAsync(new QuizAnswersCommand(id, quizAnswersComand.Answers));
 
         [HttpPut]
         public async Task<object> Start()
