@@ -7,7 +7,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.Voting/bin/Debug/netcoreapp1.1/Quiz.Voting.dll",
+            "program": "${workspaceRoot}/src/Quiz.Api/bin/Debug/netcoreapp1.1/Quiz.Api.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
