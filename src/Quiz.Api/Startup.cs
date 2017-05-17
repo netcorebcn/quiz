@@ -1,11 +1,16 @@
-﻿using EasyEventSourcing;
+﻿using System;
+using EasyEventSourcing;
+using EasyEventSourcing.Aggregate;
+using EasyNetQ;
 using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Polly;
 using Quiz.Domain;
+using Quiz.Domain.Commands;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Quiz.Api
@@ -44,15 +49,38 @@ namespace Quiz.Api
                     Configuration["EVENT_STORE_MANAGER_HOST"], 
                     Configuration["STREAM_NAME"]), 
                 ReflectionHelper.DomainAssembly);
+                
+            services.AddSingleton<IBus>(RabbitHutch.CreateBus(Configuration["BUS_CONNECTION"]));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IEventStoreConnection conn, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app, 
+            ILoggerFactory loggerFactory,
+            IRepository quizRepository,
+            IBus brokerBus)
         {
             app.UseCors("CorsPolicy");
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
+            );
+
+            var logger = loggerFactory.CreateLogger<Startup>();     
+
+            Policy.Handle<Exception>()
+            .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .Execute(() => 
+                brokerBus.SubscribeAsync<QuizAnswersCommand>("QuizAnswersCommandSubscription", 
+                    async message => {
+                        logger.LogInformation(message.ToString());
+
+                        var quiz = await quizRepository.GetById<QuizAggregate>(message.QuizId);
+                        message.Answers.ForEach(answer =>
+                            quiz.Vote(answer.QuestionId, answer.OptionId)
+                        );
+                        await quizRepository.Save(quiz);
+                    })
             );
         }        
     }
