@@ -52,8 +52,8 @@ class App extends Component {
     }));
   }
 
-  startQuizHandler() {
-    startNewQuiz().then(json => this.setState({
+  startQuizHandler(quiz) {
+    startNewQuiz(quiz).then(json => this.setState({
       ...json
     }));
   }

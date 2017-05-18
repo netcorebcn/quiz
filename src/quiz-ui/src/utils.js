@@ -8,4 +8,6 @@ function bindClass(classToBind) {
     );
 }
 
-export { bindClass };
+const prettyPrint = (json) => JSON.stringify(json, undefined, 4);
+
+export { bindClass, prettyPrint };

@@ -10,8 +10,15 @@ export const getQuiz = () => fetch(url).then(response => {
   }
 });
 
-export const startNewQuiz = () =>
-  fetch(url, { method: 'PUT' }).then(r => r.json());
+export const startNewQuiz = (quiz) =>
+  fetch(url, { 
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }, 
+    body: JSON.stringify(quiz)
+  }).then(r => r.json());
 
 export const postQuizAnswers = (quizId, answers) => fetch(`${url}${quizId}`, {
   method: 'POST',
