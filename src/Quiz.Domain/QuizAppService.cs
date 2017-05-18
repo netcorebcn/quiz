@@ -5,7 +5,7 @@ using EasyEventSourcing.Aggregate;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 
-namespace Quiz.Api
+namespace Quiz.Domain
 {
     public class QuizAppService
     {
