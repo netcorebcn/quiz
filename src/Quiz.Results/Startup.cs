@@ -1,17 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EasyEventSourcing;
-using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Polly;
 using Quiz.Domain;
-using static Quiz.Voting.Results.RetryExtensions;
+using static Quiz.Results.RetryExtensions;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public class Startup
     {
@@ -46,8 +42,6 @@ namespace Quiz.Voting.Results
         }
 
         public void Configure(IApplicationBuilder app, 
-            IHostingEnvironment env, 
-            IServiceProvider serviceProvider,
             ILoggerFactory loggerFactory,
             IEventStoreBus eventBus,
             IEventStoreProjections projections,

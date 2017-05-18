@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public class Program
     {

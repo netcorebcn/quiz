@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public class WebSocketConnectionManager
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Polly;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public static class RetryExtensions
     {

@@ -1,14 +1,9 @@
-﻿using System;
-using EasyEventSourcing;
-using EasyEventSourcing.Aggregate;
+﻿using EasyEventSourcing;
 using EasyNetQ;
-using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Polly;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 using Swashbuckle.AspNetCore.Swagger;
@@ -30,8 +25,6 @@ namespace Quiz.Api
             loggerFactory.AddConsole();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -57,7 +50,7 @@ namespace Quiz.Api
             services.AddSingleton<IBus>(RabbitHutch.CreateBus(Configuration["BUS_CONNECTION"]));
             services.AddTransient<QuizAppService>();
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IBus brokerBus, QuizAppService quizAppService)
         {
             app.UseCors("CorsPolicy");

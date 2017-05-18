@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public class WebSocketHandler
     {

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Quiz.Voting.Results
+namespace Quiz.Results
 {
     public class WebSocketManagerMiddleware
     {
