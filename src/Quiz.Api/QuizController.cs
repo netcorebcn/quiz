@@ -14,16 +14,16 @@ namespace Quiz.Api
     [Route("[controller]")]
     public class QuizController
     {
-        private readonly IRepository _quizRepository;
+        private readonly QuizAppService _quizAppService;
         private readonly IEventStoreProjections _projectionsClient;
         private readonly IBus _brokerBus;
 
         public QuizController(
-            IRepository quizRepository, 
+            QuizAppService quizAppService, 
             IEventStoreProjections projectionsClient,
             IBus brokerBus)
         {
-            _quizRepository = quizRepository;
+            _quizAppService = quizAppService;
             _projectionsClient = projectionsClient;
             _brokerBus = brokerBus;
         }
@@ -41,26 +41,12 @@ namespace Quiz.Api
             await _brokerBus.PublishAsync(new QuizAnswersCommand(id, quizAnswersComand.Answers));
 
         [HttpPut]
-        public async Task<object> Start()
-        {
-            var quizModel = QuizModelFactory.Create();
-            var quiz = new QuizAggregate();
-            quiz.Start(quizModel);
-            await _quizRepository.Save(quiz);
-            return new 
-            {
-                QuizId = quiz.Id,
-                Questions = quiz.QuizModel.Questions
-            };
-        }
+        public async Task<object> Start() => 
+            await _quizAppService.Start();
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task Close(Guid id)
-        {
-            var quiz = await _quizRepository.GetById<QuizAggregate>(id);
-            quiz.Close();
-            await _quizRepository.Save(quiz);
-        }
+        public async Task Close(Guid id) =>
+            await _quizAppService.Close(id);
     }
 }

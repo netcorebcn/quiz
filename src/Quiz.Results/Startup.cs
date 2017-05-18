@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EasyEventSourcing;
 using EventStore.ClientAPI;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Quiz.Domain;
+using static Quiz.Voting.Results.RetryExtensions;
 
 namespace Quiz.Voting.Results
 {
@@ -56,19 +58,19 @@ namespace Quiz.Voting.Results
             app.MapWebSocketManager("/ws", handler);     
 
             var logger = loggerFactory.CreateLogger<Startup>();     
+            
+            DefaultRetryAsync(
+                async () => await projections.CreateAsync(Projections.QuestionAnswers))
+                .Wait();
+            
+            DefaultRetryAsync(SubscribeToEventStore)
+                .Wait();
 
-            Policy.Handle<Exception>()
-            .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-            .ExecuteAsync(
-                async () => {
-                    await projections.CreateAsync(Projections.QuestionAnswers);
-                    await eventBus.Subscribe( 
-                        async (message) => {
-                            logger.LogInformation(message.ToString());
-                            await handler.SendMessageToAllAsync(message);
-                        });
-                })
-            .Wait();
+            async Task SubscribeToEventStore () => await eventBus.Subscribe(
+                async (message) => { 
+                    logger.LogInformation(message.ToString());
+                    await handler.SendMessageToAllAsync(message);
+                });
         }
     }
 }
