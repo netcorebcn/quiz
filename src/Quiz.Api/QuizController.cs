@@ -41,8 +41,8 @@ namespace Quiz.Api
             await _brokerBus.PublishAsync(new QuizAnswersCommand(id, quizAnswersComand.Answers));
 
         [HttpPut]
-        public async Task<object> Start() => 
-            await _quizAppService.Start();
+        public async Task<object> Start([FromBody]QuizModel quizModel) => 
+            await _quizAppService.Start(quizModel);
 
         [HttpDelete]
         [Route("{id}")]

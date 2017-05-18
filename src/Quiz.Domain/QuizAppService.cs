@@ -22,9 +22,8 @@ namespace Quiz.Domain
             await _quizRepository.Save(quiz);
         }
 
-        public async Task<object> Start()
+        public async Task<object> Start(QuizModel quizModel)
         {
-            var quizModel = QuizModelFactory.Create();
             var quiz = new QuizAggregate();
             quiz.Start(quizModel);
             await _quizRepository.Save(quiz);

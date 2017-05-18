@@ -1,4 +1,6 @@
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Quiz.Domain;
 using Quiz.Domain.Events;
 using Xunit;
@@ -27,7 +29,7 @@ namespace Quiz.Domain.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create();
+            var quizModel = CreateQuiz();
 
             // Act
             quiz.Start(quizModel);
@@ -43,7 +45,7 @@ namespace Quiz.Domain.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create();
+            var quizModel = CreateQuiz();
             var selectedQuestion = quizModel.Questions.FirstOrDefault();
             var selectedOption = selectedQuestion.Options.FirstOrDefault(x => x.IsCorrect);
 
@@ -65,7 +67,7 @@ namespace Quiz.Domain.Tests
         {
             // Arrange
             var quiz = new QuizAggregate();
-            var quizModel = QuizModelFactory.Create();
+            var quizModel = CreateQuiz();
             var selectedQuestion = quizModel.Questions.FirstOrDefault();
             var selectedOption = selectedQuestion.Options.FirstOrDefault(x => !x.IsCorrect);
 
@@ -82,5 +84,8 @@ namespace Quiz.Domain.Tests
             Assert.NotNull(answeredEvent);
             Assert.IsAssignableFrom(typeof(QuestionWrongAnsweredEvent), answeredEvent);            
         }
+
+        private QuizModel CreateQuiz() =>
+            JsonConvert.DeserializeObject<QuizModel>(File.ReadAllText("quiz.json"));
     }
 }
