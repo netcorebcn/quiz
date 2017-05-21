@@ -15,7 +15,7 @@ Example application with .NET Core, Event Store and Docker
 
   Open <http://localhost:8081> for manage rabbitmq broker
   
-**Notes**: We aren't started from the scratch and we don't reinvent wheels. We are using ideas and code from other awesome repos.
+**Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
 * Example architecture thanks to the popular  
   <https://github.com/docker/example-voting-app>
