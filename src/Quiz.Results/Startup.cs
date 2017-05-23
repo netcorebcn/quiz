@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EasyEventSourcing;
+using EasyWebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
