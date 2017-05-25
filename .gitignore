@@ -6,4 +6,3 @@ build-*
 ./.vscode
 node_modules
 npm-debug.log
-test.sh
