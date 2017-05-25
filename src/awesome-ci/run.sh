@@ -10,25 +10,23 @@ echo Sha:$SHA
 echo Registry:$REGISTRY
 echo Token:$TOKEN
 
-export REGISTRY=$REGISTRY
-export CI_TOKEN=$TOKEN
-export SHA_COMMIT=$SHA
-
 # clean up
 rm -rf build-$SHA
 
 # checkout sha commit from github repo
 docker build -t quiz-$SHA-ci https://github.com/$REPO#$SHA -f ./src/awesome-ci/Dockerfile.ci --no-cache
-
 docker rm --force $(docker ps -qa --filter "name=quiz-$SHA-build") > /dev/null 2>&1 || true
 docker create --name quiz-$SHA-build quiz-$SHA-ci echo ""
 docker cp quiz-$SHA-build:/quizapp ./build-$SHA
 
 pushd build-$SHA
 
-# build docker images from the git checkout
-./build.sh $REGISTRY $SHA
-# deploy stack to swarm using docker compose
+export TAG=$SHA
+export REGISTRY=$REGISTRY
+export CI_TOKEN=$TOKEN
+
+docker-compose build
+if [ ! -z $REGISTRY ]; then docker-compose push; fi
 if [ ! -z $TOKEN ]; then docker deploy --compose-file ./docker/swarm/docker-compose.yml stack; fi
 
 popd
