@@ -1,10 +1,10 @@
-version: "3"
+version: "3.1"
 
 services:
   api:
-    image: quiz-api
+    image: ${REGISTRY}quiz-api:${TAG}
     build:
-      context: .
+      context: ${BUILD_CONTEXT}
       dockerfile: ./src/Quiz.Api/Dockerfile
     ports:
       - "81:80"
@@ -15,9 +15,9 @@ services:
       - BUS_CONNECTION=host=bus;username=guest;password=guest
   
   results:
-    image: quiz-results
+    image: ${REGISTRY}quiz-results:${TAG}
     build:
-      context: .
+      context: ${BUILD_CONTEXT}
       dockerfile: ./src/Quiz.Results/Dockerfile
     ports:
       - "82:80"
@@ -27,9 +27,9 @@ services:
       - STREAM_NAME=QuestionAnswers
 
   ui:
-    image: quiz-ui
+    image: ${REGISTRY}quiz-ui:${TAG}
     build:
-      context: .
+      context: ${BUILD_CONTEXT}
       dockerfile: ./src/quiz-ui/Dockerfile
     depends_on:
       - api

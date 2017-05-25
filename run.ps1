@@ -1,3 +1,2 @@
-docker rm -f $(docker ps -qa)
-docker-compose build
+./build.ps1
 docker-compose up

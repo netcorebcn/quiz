@@ -11,7 +11,7 @@ COPY src/quiz-ui .
 RUN npm run build
 
 # build production image
-FROM node
+FROM node:alpine
 RUN npm install -g serve
 
 WORKDIR /app
