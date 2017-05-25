@@ -1,8 +1,11 @@
-version: "3"
+version: "3.1"
 
 services:
   api:
-    image: quiz-api
+    image: ${REGISTRY}quiz-api:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/Quiz.Api/Dockerfile
     ports:
       - "81:80"
     environment: 
@@ -12,7 +15,10 @@ services:
       - BUS_CONNECTION=host=bus;username=guest;password=guest
   
   results:
-    image: quiz-results
+    image: ${REGISTRY}quiz-results:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/Quiz.Results/Dockerfile
     ports:
       - "82:80"
     environment: 
@@ -21,7 +27,10 @@ services:
       - STREAM_NAME=QuestionAnswers
 
   ui:
-    image: quiz-ui
+    image: ${REGISTRY}quiz-ui:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/quiz-ui/Dockerfile
     depends_on:
       - api
       - results
@@ -32,10 +41,8 @@ services:
     image: eventstore/eventstore
     ports:
       - "2113:2113"
-      - "1113:1113"
 
   bus:
     image: rabbitmq:3-management
     ports:
       - "8081:15672" 
-      - "5672:5672"

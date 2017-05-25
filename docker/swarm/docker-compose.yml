@@ -1,8 +1,8 @@
-version: "3"
+version: "3.1"
 
 services:
   ui:
-    image: ${REGISTRY}quiz-ui:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-ui:${TAG}
     ports:
       - "80:5000"
     networks:
@@ -30,7 +30,7 @@ services:
         max_failure_ratio: 0.3
         
   api:
-    image: ${REGISTRY}quiz-api:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-api:${TAG}
     ports:
       - "81:80"
     networks:
@@ -60,7 +60,7 @@ services:
         max_failure_ratio: 0.3
   
   results:
-    image: ${REGISTRY}quiz-results:${SHA_COMMIT}
+    image: ${REGISTRY}quiz-results:${TAG}
     ports:
       - "82:80"
     networks:
@@ -92,7 +92,6 @@ services:
     image: eventstore/eventstore
     ports:
       - "2113:2113"
-      - "1113:1113"
     networks:
       - back-tier
     logging:
@@ -105,7 +104,6 @@ services:
     image: rabbitmq:3-management
     ports:
       - "8081:15672" 
-      - "5672:5672"
     networks:
       - back-tier
     logging:

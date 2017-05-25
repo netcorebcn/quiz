@@ -1,3 +1,4 @@
-./build.sh
-docker rm -f $(docker ps -qa)
-docker-compose -f ./docker/docker-compose.yml up
+#!/bin/bash
+set -e
+./build.sh \
+&& docker-compose up
