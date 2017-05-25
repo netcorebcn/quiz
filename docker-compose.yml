@@ -3,6 +3,9 @@ version: "3"
 services:
   api:
     image: quiz-api
+    build:
+      context: .
+      dockerfile: ./src/Quiz.Api/Dockerfile
     ports:
       - "81:80"
     environment: 
@@ -13,6 +16,9 @@ services:
   
   results:
     image: quiz-results
+    build:
+      context: .
+      dockerfile: ./src/Quiz.Results/Dockerfile
     ports:
       - "82:80"
     environment: 
@@ -22,6 +28,9 @@ services:
 
   ui:
     image: quiz-ui
+    build:
+      context: .
+      dockerfile: ./src/quiz-ui/Dockerfile
     depends_on:
       - api
       - results
