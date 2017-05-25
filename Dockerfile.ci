@@ -1,2 +1,2 @@
 FROM alpine
-COPY . .
+COPY . ./app
