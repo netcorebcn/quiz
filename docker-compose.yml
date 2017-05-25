@@ -41,10 +41,8 @@ services:
     image: eventstore/eventstore
     ports:
       - "2113:2113"
-      - "1113:1113"
 
   bus:
     image: rabbitmq:3-management
     ports:
       - "8081:15672" 
-      - "5672:5672"
