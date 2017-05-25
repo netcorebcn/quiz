@@ -113,7 +113,7 @@ services:
         constraints: [node.role == manager]
 
   ci:
-    image: ${REGISTRY}awesome-ci:${SHA_COMMIT}
+    image: paulopez/awesome-ci
     ports:
       - "8080:8080"
     volumes:
