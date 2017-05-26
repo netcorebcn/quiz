@@ -99,6 +99,13 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 1000M
+        reservations:
+          cpus: '0.25'
+          memory: 500M
 
   bus:
     image: rabbitmq:3-management
@@ -111,66 +118,13 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
-
-  ci:
-    image: paulopez/awesome-ci
-    ports:
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - front-tier
-    environment: 
-      - CI_TOKEN=${CI_TOKEN}
-      - REGISTRY=${REGISTRY}
-    logging:
-      driver: "json-file"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-      mode: replicated
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      update_config:
-        parallelism: 1
-        delay: 10s
-        failure_action: continue
-        monitor: 60s
-        max_failure_ratio: 0.3
-  
-  registry: 
-    image: registry:2
-    ports:
-      - "5000:5000"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-  viz:
-    image: manomarks/visualizer
-    ports:
-      - "9090:8080"
-    environment: 
-      - PORT=9090
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
-  portainer:
-    image: portainer/portainer
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    deploy:
-      placement:
-        constraints: [node.role == manager]
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 1000M
+        reservations:
+          cpus: '0.25'
+          memory: 500M
 
 networks:
   front-tier:
