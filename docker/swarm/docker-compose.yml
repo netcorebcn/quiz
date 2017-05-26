@@ -74,8 +74,6 @@ services:
     deploy:
       placement:
         constraints: [node.role == worker]
-      mode: replicated
-      replicas: 2
       restart_policy:
         condition: on-failure
         delay: 5s
