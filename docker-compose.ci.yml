@@ -1,0 +1,20 @@
+version: "3.1"
+
+services:
+  api:
+    image: ${REGISTRY}quiz-api:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/Quiz.Api/Dockerfile
+  
+  results:
+    image: ${REGISTRY}quiz-results:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/Quiz.Results/Dockerfile
+
+  ui:
+    image: ${REGISTRY}quiz-ui:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/quiz-ui/Dockerfile

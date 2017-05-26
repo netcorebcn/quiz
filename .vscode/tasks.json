@@ -9,6 +9,14 @@
             "args": [
                 "${workspaceRoot}/quiz.sln"
             ],
+            "isBuildCommand": false,
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "taskName": "publish",
+            "args": [
+                "${workspaceRoot}/quiz.sln", "-c", "Debug", "-o", "bin/PublishOutput"
+            ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
         }

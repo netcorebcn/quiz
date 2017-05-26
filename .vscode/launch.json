@@ -1,88 +1,43 @@
 {
     "version": "0.2.0",
     "configurations": [
-
         {
-            "name": "QuizVoting",
+            "name": "Quiz.Api (Docker)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.Api/bin/Debug/netcoreapp1.1/Quiz.Api.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
-            "launchBrowser": {
-                "enabled": true,
-                "args": "${auto-detect-url}/swagger",
-                "windows": {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}/swagger"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
+            "cwd": "/app",
+            "program": "/app/Quiz.Api.dll",
             "sourceFileMap": {
-                "/Views": "${workspaceRoot}/Views"
+                "/app": "${workspaceRoot}/src/Quiz.Api"
+            },
+            "pipeTransport": {
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeProgram": "/bin/bash",
+                "pipeCwd": "${workspaceRoot}",
+                "pipeArgs": [
+                    "-c",
+                    "docker exec -i quiz_api_1 /vsdbg/vsdbg --interpreter=vscode"
+                ]
             }
         },
         {
-            "name": "QuizResults",
+            "name": "Quiz.Results (Docker)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/Quiz.Results/bin/Debug/netcoreapp1.1/Quiz.Results.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
-            "launchBrowser": {
-                "enabled": true,
-                "args": "${auto-detect-url}",
-                "windows": {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://*:5001"
-            },
+            "cwd": "/app",
+            "program": "/app/Quiz.Results.dll",
             "sourceFileMap": {
-                "/Views": "${workspaceRoot}/Views"
+                "/app": "${workspaceRoot}/src/Quiz.Results"
+            },
+            "pipeTransport": {
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeProgram": "/bin/bash",
+                "pipeCwd": "${workspaceRoot}",
+                "pipeArgs": [
+                    "-c",
+                    "docker exec -i quiz_results_1 /vsdbg/vsdbg --interpreter=vscode"
+                ]
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command.pickProcess}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Awesome CI",
-            "program": "${workspaceRoot}/src/awesome-ci/server.js"
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Node Attach",
-            "address": "localhost",
-            "port": 5858
         }
     ]
 }
