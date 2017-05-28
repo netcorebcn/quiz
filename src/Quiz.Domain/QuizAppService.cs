@@ -19,7 +19,7 @@ namespace Quiz.Domain
             var quiz = await _quizRepository.GetById<QuizAggregate>(quizAnswersComand.QuizId);
             quizAnswersComand.Answers.ForEach(
                 answer => quiz.Vote(answer.QuestionId, answer.OptionId));
-            await _quizRepository.Save(quiz);
+            await _quizRepository.Save(quiz, concurrencyCheck: false);
         }
 
         public async Task<object> Start(QuizModel quizModel)

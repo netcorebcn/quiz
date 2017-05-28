@@ -1,5 +1,4 @@
 ﻿using EasyEventSourcing;
-using EasyNetQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,11 +46,10 @@ namespace Quiz.Api
                     Configuration["STREAM_NAME"]),
                 ReflectionHelper.DomainAssembly);
 
-            services.AddSingleton<IBus>(RabbitHutch.CreateBus(Configuration["BUS_CONNECTION"]));
             services.AddTransient<QuizAppService>();
         }
 
-        public void Configure(IApplicationBuilder app, IBus brokerBus, QuizAppService quizAppService)
+        public void Configure(IApplicationBuilder app, QuizAppService quizAppService)
         {
             app.UseCors("CorsPolicy");
             app.UseMvc();
@@ -59,16 +57,6 @@ namespace Quiz.Api
             app.UseSwaggerUI(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
-
-            DefaultRetry(SubscribeToQuizAnswers);            
-
-            void SubscribeToQuizAnswers () => 
-                brokerBus.SubscribeAsync<QuizAnswersCommand>("QuizAnswersCommandSubscription",
-                    async message =>
-                    {
-                        Logger.LogInformation(message.ToString());
-                        await quizAppService.Vote(message);
-                    });
         }
     }
 }

@@ -100,29 +100,10 @@ services:
       resources:
         limits:
           cpus: '0.40'
-          memory: 1000M
+          memory: 1500M
         reservations:
           cpus: '0.25'
-          memory: 500M
-
-  bus:
-    image: rabbitmq:3-management
-    ports:
-      - "8081:15672" 
-    networks:
-      - back-tier
-    logging:
-      driver: "json-file"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-      resources:
-        limits:
-          cpus: '0.40'
           memory: 1000M
-        reservations:
-          cpus: '0.25'
-          memory: 500M
 
 networks:
   front-tier:

@@ -12,8 +12,6 @@ Example application with .NET Core, Event Store and Docker
   Open <http://localhost:81/swagger> for quiz api
   
   Open <http://localhost:2113> for manage event store
-
-  Open <http://localhost:8081> for manage rabbitmq broker
   
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
