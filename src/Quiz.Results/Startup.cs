@@ -36,18 +36,17 @@ namespace Quiz.Results
                     Configuration["EVENT_STORE"], 
                     Configuration["EVENT_STORE_MANAGER_HOST"]));
 
-            services.AddWebSocketManager();
+            services.AddEasyWebSockets();
         }
 
         public void Configure(IApplicationBuilder app, 
             ILoggerFactory loggerFactory,
             IEventStoreBus eventBus,
             IEventStoreProjections projections,
-            WebSocketHandler handler)
+            IWebSocketPublisher wsPublisher)
         {
             app.UseCors("CorsPolicy");
-            app.UseWebSockets();
-            app.MapWebSocketManager("/ws", handler);     
+            app.UseEasyWebSockets();   
 
             var logger = loggerFactory.CreateLogger<Startup>();     
             
@@ -58,7 +57,7 @@ namespace Quiz.Results
                 nameof(Projections.QuestionAnswers),
                 async (message) => { 
                     logger.LogInformation(message.ToString());
-                    await handler.SendMessageToAllAsync(message);
+                    await wsPublisher.SendMessageToAllAsync(message);
                 })
                 .Wait();
         }
