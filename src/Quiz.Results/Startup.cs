@@ -52,7 +52,6 @@ namespace Quiz.Results
             var logger = loggerFactory.CreateLogger<Startup>();     
             
             projections.CreateAsync(nameof(Projections.QuestionAnswers), Projections.QuestionAnswers)
-                .DefaultRetryAsync()
                 .Wait();
             
             eventBus.Subscribe(
@@ -61,7 +60,6 @@ namespace Quiz.Results
                     logger.LogInformation(message.ToString());
                     await handler.SendMessageToAllAsync(message);
                 })
-                .DefaultRetryAsync()
                 .Wait();
         }
     }
