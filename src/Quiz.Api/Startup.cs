@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 using Swashbuckle.AspNetCore.Swagger;
-using static Quiz.Api.RetryExtensions;
 
 namespace Quiz.Api
 {
@@ -39,12 +38,10 @@ namespace Quiz.Api
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
             );
 
-            services.AddEasyEventSourcing(
+            services.AddEasyEventSourcing<QuizAggregate>(
                 EventStoreOptions.Create(
                     Configuration["EVENT_STORE"],
-                    Configuration["EVENT_STORE_MANAGER_HOST"],
-                    Configuration["STREAM_NAME"]),
-                ReflectionHelper.DomainAssembly);
+                    Configuration["EVENT_STORE_MANAGER_HOST"]));
 
             services.AddTransient<QuizAppService>();
         }

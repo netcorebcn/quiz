@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyEventSourcing" Version="0.0.10" />
+    <PackageReference Include="EasyEventSourcing" Version="0.0.17" />
   </ItemGroup>
 
 </Project>

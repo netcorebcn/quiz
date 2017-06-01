@@ -1,5 +1,5 @@
 # builder image
-FROM node AS builder
+FROM node:6 AS builder
 
 WORKDIR .
 

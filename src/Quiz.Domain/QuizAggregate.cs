@@ -7,6 +7,9 @@ namespace Quiz.Domain
 {
     public class QuizAggregate : AggregateRoot
     {
+        public QuizAggregate() {}
+        public QuizAggregate(Guid id):base(id){}
+        
         public QuizModel QuizModel { get; private set; }
 
         public int CorrectAnswers { get; private set; }
@@ -35,11 +38,8 @@ namespace Quiz.Domain
             }
         }
         
-        public void Apply(QuizStartedEvent @event)
-        {
-            Id = @event.QuizId;
+        public void Apply(QuizStartedEvent @event) =>
             QuizModel = @event.QuizModel;
-        }
 
         public void Apply(QuizClosedEvent @event)
         {

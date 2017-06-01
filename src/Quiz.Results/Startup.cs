@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quiz.Domain;
-using static Quiz.Results.RetryExtensions;
 
 namespace Quiz.Results
 {
@@ -32,12 +31,10 @@ namespace Quiz.Results
                     .AllowCredentials() );
             });
 
-            services.AddEasyEventSourcing(
+            services.AddEasyEventSourcing<QuizAggregate>(
                 EventStoreOptions.Create(
                     Configuration["EVENT_STORE"], 
-                    Configuration["EVENT_STORE_MANAGER_HOST"], 
-                    Configuration["STREAM_NAME"]), 
-                ReflectionHelper.DomainAssembly);
+                    Configuration["EVENT_STORE_MANAGER_HOST"]));
 
             services.AddWebSocketManager();
         }
@@ -54,18 +51,18 @@ namespace Quiz.Results
 
             var logger = loggerFactory.CreateLogger<Startup>();     
             
-            DefaultRetryAsync(
-                async () => await projections.CreateAsync(Projections.QuestionAnswers))
+            projections.CreateAsync(nameof(Projections.QuestionAnswers), Projections.QuestionAnswers)
+                .DefaultRetryAsync()
                 .Wait();
             
-            DefaultRetryAsync(SubscribeToEventStore)
-                .Wait();
-
-            async Task SubscribeToEventStore () => await eventBus.Subscribe(
+            eventBus.Subscribe(
+                nameof(Projections.QuestionAnswers),
                 async (message) => { 
                     logger.LogInformation(message.ToString());
                     await handler.SendMessageToAllAsync(message);
-                });
+                })
+                .DefaultRetryAsync()
+                .Wait();
         }
     }
 }

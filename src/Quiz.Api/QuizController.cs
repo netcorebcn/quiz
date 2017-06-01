@@ -27,7 +27,7 @@ namespace Quiz.Api
         [HttpGet]
         public async Task<QuizReadModel> Get()
         {
-            var result = await _projectionsClient.GetStateAsync(); 
+            var result = await _projectionsClient.GetStateAsync(nameof(Projections.QuestionAnswers)); 
             return JsonConvert.DeserializeObject<QuizReadModel>(result);
         }
 
