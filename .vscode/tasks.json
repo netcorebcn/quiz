@@ -15,9 +15,21 @@
         {
             "taskName": "publish",
             "args": [
-                "${workspaceRoot}/quiz.sln", "-c", "Debug", "-o", "bin/PublishOutput"
+                "${workspaceRoot}/quiz.sln",
+                "-c",
+                "Debug",
+                "-o",
+                "bin/PublishOutput"
             ],
             "isBuildCommand": true,
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "taskName": "test",
+            "args": [
+                "${workspaceRoot}/quiz.sln"
+            ],
+            "isBuildCommand": false,
             "problemMatcher": "$msCompile"
         }
     ]

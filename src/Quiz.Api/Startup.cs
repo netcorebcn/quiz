@@ -11,17 +11,10 @@ namespace Quiz.Api
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public Startup(IConfiguration configuration) =>
+            Configuration = configuration;
 
-        public ILogger<Startup> Logger { get; }
-
-        public Startup(ILoggerFactory loggerFactory)
-        {
-            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
-            Configuration = builder.Build();
-            Logger = loggerFactory.CreateLogger<Startup>();
-            loggerFactory.AddConsole();
-        }
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,28 +25,21 @@ namespace Quiz.Api
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
-            });
-            services.AddMvcCore().AddApiExplorer().AddJsonFormatters();
-            services.AddSwaggerGen(c =>
+            })
+            .AddSwaggerGen(c =>
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
-            );
-
-            services.AddEasyEventSourcing<QuizAggregate>(
-                EventStoreOptions.Create(
-                    Configuration["EVENT_STORE"],
-                    Configuration["EVENT_STORE_MANAGER_HOST"]));
-
-            services.AddTransient<QuizAppService>();
+            )
+            .AddEasyEventSourcing<QuizAggregate>(Configuration)
+            .AddTransient<QuizAppService>()
+            .AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, QuizAppService quizAppService)
-        {
-            app.UseCors("CorsPolicy");
-            app.UseMvc();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+        public void Configure(IApplicationBuilder app) =>
+            app.UseCors("CorsPolicy")
+            .UseMvc()
+            .UseSwagger()
+            .UseSwaggerUI(c =>
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
             );
-        }
     }
 }

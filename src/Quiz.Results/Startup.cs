@@ -11,17 +11,12 @@ namespace Quiz.Results
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public Startup(IConfiguration configuration) =>
+            Configuration = configuration;
 
-        public Startup(ILoggerFactory loggerFactory)
-        {
-            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
-            Configuration = builder.Build();
-            loggerFactory.AddConsole();
-        }
+        public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) =>
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -29,37 +24,14 @@ namespace Quiz.Results
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials() );
-            });
+            })
+            .AddEasyEventSourcing<QuizAggregate>(Configuration)
+            .AddEasyWebSockets()
+            .AddSingleton<QuizResultsService>();
 
-            services.AddEasyEventSourcing<QuizAggregate>(
-                EventStoreOptions.Create(
-                    Configuration["EVENT_STORE"], 
-                    Configuration["EVENT_STORE_MANAGER_HOST"]));
-
-            services.AddEasyWebSockets();
-        }
-
-        public void Configure(IApplicationBuilder app, 
-            ILoggerFactory loggerFactory,
-            IEventStoreBus eventBus,
-            IEventStoreProjections projections,
-            IWebSocketPublisher wsPublisher)
-        {
-            app.UseCors("CorsPolicy");
-            app.UseEasyWebSockets();   
-
-            var logger = loggerFactory.CreateLogger<Startup>();     
-            
-            projections.CreateAsync(nameof(Projections.QuestionAnswers), Projections.QuestionAnswers)
-                .Wait();
-            
-            eventBus.Subscribe(
-                nameof(Projections.QuestionAnswers),
-                async (message) => { 
-                    logger.LogInformation(message.ToString());
-                    await wsPublisher.SendMessageToAllAsync(message);
-                })
-                .Wait();
-        }
+        public void Configure(IApplicationBuilder app) =>
+            app.UseCors("CorsPolicy")
+                .UseEasyWebSockets()
+                .UseQuizResultsService(); 
     }
 }
