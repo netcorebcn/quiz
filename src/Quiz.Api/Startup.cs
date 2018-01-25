@@ -1,5 +1,4 @@
-﻿using EasyEventSourcing;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,7 +28,6 @@ namespace Quiz.Api
             .AddSwaggerGen(c =>
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
             )
-            .AddEasyEventSourcing<QuizAggregate>(Configuration)
             .AddTransient<QuizAppService>()
             .AddMvc();
         }

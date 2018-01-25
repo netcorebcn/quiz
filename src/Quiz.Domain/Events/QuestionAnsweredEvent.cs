@@ -2,24 +2,12 @@ using System;
 
 namespace Quiz.Domain.Events
 {
-    public class QuestionWrongAnsweredEvent
+    public class QuestionAnsweredEvent: QuizEvent
     {
         public Guid QuestionId { get; }
         public Guid OptionId { get; }
 
-        public QuestionWrongAnsweredEvent(Guid questionId, Guid optionId)
-        {
-            QuestionId = questionId;
-            OptionId = optionId;
-        }
-    }
-
-    public class QuestionRightAnsweredEvent
-    {
-        public Guid QuestionId { get; }
-        public Guid OptionId { get; }
-
-        public QuestionRightAnsweredEvent(Guid questionId, Guid optionId)
+        public QuestionAnsweredEvent(Guid quizId, Guid questionId, Guid optionId):base(quizId)
         {
             QuestionId = questionId;
             OptionId = optionId;

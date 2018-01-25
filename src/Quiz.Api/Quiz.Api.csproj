@@ -5,10 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="EasyEventSourcing" Version="0.0.22" />
-
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
     <ProjectReference Include="../Quiz.Domain/Quiz.Domain.csproj"/>
   </ItemGroup>
 

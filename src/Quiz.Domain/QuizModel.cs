@@ -4,21 +4,11 @@ using Quiz.Domain.Events;
 
 namespace Quiz.Domain
 {
-    public class QuizReadModel
-    {
-        public Guid QuizId { get; set; }
-        public QuizModel QuizModel { get; set; }
-        public List<QuestionStatisticCreatedEvent> Questions { get; set;}
-    }
-
     public class QuizModel
     {
-        public IEnumerable<Question> Questions { get; }
+        public List<Question> Questions { get; }
 
-        public QuizModel (IEnumerable<Question> questions)
-        {
-            Questions = questions;
-        }
+        public QuizModel(List<Question> questions) => Questions = questions;
     }
 
     public class Question
@@ -26,9 +16,10 @@ namespace Quiz.Domain
         public Guid Id { get; }
         
         public string Description { get; }
-        public IEnumerable<QuestionOption> Options { get; }
 
-        public Question(Guid id, string description, IEnumerable<QuestionOption> options)
+        public List<QuestionOption> Options { get; }
+
+        public Question(Guid id, string description, List<QuestionOption> options)
         {
             Id = (id == Guid.Empty) ? Guid.NewGuid() : id;
             Description = description;

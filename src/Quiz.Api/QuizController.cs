@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EasyEventSourcing;
-using EasyEventSourcing.Aggregate;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Quiz.Domain;

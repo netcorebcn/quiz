@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EasyEventSourcing.Aggregate;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 
