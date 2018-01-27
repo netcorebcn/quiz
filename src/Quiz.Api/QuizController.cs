@@ -12,35 +12,25 @@ namespace Quiz.Api
     public class QuizController
     {
         private readonly QuizAppService _quizAppService;
-        private readonly IEventStoreProjections _projectionsClient;
 
-        public QuizController(
-            QuizAppService quizAppService, 
-            IEventStoreProjections projectionsClient)
-        {
-            _quizAppService = quizAppService;
-            _projectionsClient = projectionsClient;
-        }
+        public QuizController(QuizAppService quizAppService) => _quizAppService = quizAppService;
 
-        [HttpGet]
-        public async Task<QuizReadModel> Get()
-        {
-            var result = await _projectionsClient.GetStateAsync(nameof(Projections.QuestionAnswers)); 
-            return JsonConvert.DeserializeObject<QuizReadModel>(result);
-        }
-
-        [HttpPost]
-        [Route("{id}")]
-        public async Task Vote(Guid id, [FromBody]QuizAnswersCommand quizAnswersComand) =>
-            await _quizAppService.Vote(new QuizAnswersCommand(id, quizAnswersComand.Answers));
+        [HttpGet("{quizId}")]
+        public async Task<object> Get(Guid quizId) => 
+            await _quizAppService.GetState(quizId);
 
         [HttpPut]
+        [Route("{quizId}")]
+        public async Task Answer(Guid quizId, [FromBody]QuizAnswersCommand quizAnswersComand) =>
+            await _quizAppService.Answer(new QuizAnswersCommand(quizId, quizAnswersComand.Answers));
+
+        [HttpPost]
         public async Task<object> Start([FromBody]QuizModel quizModel) => 
             await _quizAppService.Start(quizModel);
 
         [HttpDelete]
-        [Route("{id}")]
-        public async Task Close(Guid id) =>
-            await _quizAppService.Close(id);
+        [Route("{quizId}")]
+        public async Task Close(Guid quizId) =>
+            await _quizAppService.Close(quizId);
     }
 }

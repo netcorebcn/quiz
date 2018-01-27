@@ -1,43 +1,68 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Marten;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 
-namespace Quiz.Domain
+namespace Quiz.Api
 {
     public class QuizAppService
     {
-        private readonly IRepository _quizRepository;
+        private readonly IDocumentStore _eventStore;
 
-        public QuizAppService(IRepository quizRepository) =>
-            _quizRepository = quizRepository;
-
-        public async Task Vote(QuizAnswersCommand quizAnswersComand)
+        public QuizAppService(IDocumentStore eventStore)
         {
-            var quiz = await _quizRepository.GetById<QuizAggregate>(quizAnswersComand.QuizId);
-            quizAnswersComand.Answers.ForEach(
-                answer => quiz.Vote(answer.QuestionId, answer.OptionId));
-            await _quizRepository.Save(quiz, concurrencyCheck: false);
+            _eventStore = eventStore;
         }
 
-        public async Task<object> Start(QuizModel quizModel)
+        public async Task<object> GetState(Guid quizId)
         {
-            var quiz = new QuizAggregate();
-            quiz.Start(quizModel);
-            await _quizRepository.Save(quiz);
-            return new
+            using(var session = _eventStore.OpenSession())
             {
-                QuizId = quiz.Id,
-                Questions = quiz.QuizModel.Questions
-            };
+                var events = await GetEvents(session, quizId);
+                var aggregate = QuizAggregate.Create(quizId, events);
+                return GetState(quizId, aggregate, events);
+            }
         }
 
-        public async Task Close(Guid id)
+        public async Task<object> Start(QuizModel quizModel) => 
+            await ExecuteTransaction(Guid.NewGuid(), aggregate => aggregate.Start(quizModel));
+
+        public async Task<object> Answer(QuizAnswersCommand command) => 
+            await ExecuteTransaction(command.QuizId, aggregate => aggregate.Answer(command));
+
+        public async Task<object> Close(Guid quizId) => 
+            await ExecuteTransaction(quizId, aggregate => aggregate.Close());
+
+        private async Task<object> ExecuteTransaction(Guid quizId, Action<QuizAggregate> command)
         {
-            var quiz = await _quizRepository.GetById<QuizAggregate>(id);
-            quiz.Close();
-            await _quizRepository.Save(quiz);
+            using(var session = _eventStore.OpenSession())
+            {
+                var eventStreamState = await session.Events.FetchStreamStateAsync(quizId);
+                var events = await GetEvents(session, quizId);
+
+                var aggregate = QuizAggregate.Create(quizId, events);
+                command(aggregate);
+
+                var expectedVersion = (eventStreamState?.Version ?? 0) + aggregate.GetPendingEvents().Count();
+                session.Events.Append(aggregate.QuizId, expectedVersion, aggregate.GetPendingEvents().ToArray());
+                await session.SaveChangesAsync();
+
+                return GetState(quizId, aggregate, events);
+            }
         }
+        private object GetState(Guid quizId, QuizAggregate aggregate, object[] events) => 
+            new
+            {
+                quizId,
+                aggregate.State,
+                QuizResultsAggregate
+                    .Create(quizId, events.Concat(aggregate.GetPendingEvents()))
+                    .QuestionResults
+            };
+            
+        private async Task<object[]> GetEvents(IDocumentSession session, Guid quizId) => 
+            (await session.Events.FetchStreamAsync(quizId)).Select(@event => @event.Data).ToArray();
     }
 }

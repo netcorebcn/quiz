@@ -14,9 +14,9 @@ namespace Quiz.Domain
 
         public bool CanRaiseEvent(Type @eventType) => _raisableEvents.Any(x => x == @eventType);
 
-        public static readonly QuizState Empty = new QuizState
+        public static readonly QuizState Created = new QuizState
         (
-            nameof(Empty),
+            nameof(Created),
             raisableEvents: new Type[]
             {
                 typeof(QuizStartedEvent)
@@ -28,7 +28,7 @@ namespace Quiz.Domain
             nameof(Started),
             raisableEvents: new Type[]
             {
-                typeof(QuestionAnsweredEvent),
+                typeof(QuizAnsweredEvent),
                 typeof(QuizClosedEvent),
             }
         );

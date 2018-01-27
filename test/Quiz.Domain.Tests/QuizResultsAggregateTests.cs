@@ -22,11 +22,9 @@ namespace Quiz.Domain.Tests
             var aggregate = QuizResultsAggregate.Create(Guid.NewGuid(), events);
 
             Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
-
-            Assert.True(aggregate.QuestionResults.All(
-                q => q.Value.options.All(
-                    o => o.Value.correct == 0 && o.Value.incorrect == 0)
-            ));
+            Assert.True(
+                aggregate.QuestionResults.All(
+                    q => q.Value.correctAnswers == 0 && q.Value.incorrectAnswers == 0));
         }
 
         [Fact]
@@ -34,26 +32,25 @@ namespace Quiz.Domain.Tests
         {
             var quizModel = CreateQuiz();
             var quizId = Guid.NewGuid();
-            var question = quizModel.Questions.First();
-            var firstOption= question.Options.First();
-            var secondOption= question.Options.Last();
+            var firstQuestion = quizModel.Questions.First();
+            var lastQuestion = quizModel.Questions.Last();
+            var firstOption= firstQuestion.Options.First();
 
             var events = new object[]
             {
                 new QuizStartedEvent(quizId, quizModel),
-                new QuestionAnsweredEvent(quizId, question.Id, firstOption.Id),
-                new QuestionAnsweredEvent(quizId, question.Id, firstOption.Id),
-                new QuestionAnsweredEvent(quizId, question.Id, secondOption.Id),
-                new QuestionAnsweredEvent(quizId, question.Id, secondOption.Id) 
+                new QuizAnsweredEvent(quizId, new List<(Guid,Guid)> 
+                    { 
+                        (firstQuestion.Id, firstQuestion.Options.First(o => o.IsCorrect).Id),
+                        (lastQuestion.Id, lastQuestion.Options.First(o => !o.IsCorrect).Id),
+                    }),
             };
 
             var aggregate = QuizResultsAggregate.Create(quizId, events);
-            var firstOptionResult = aggregate.QuestionResults[question.Id].options[firstOption.Id];
-            var secondOptionResult = aggregate.QuestionResults[question.Id].options[secondOption.Id];
 
             Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
-            Assert.Equal(2, firstOption.IsCorrect ? firstOptionResult.correct : firstOptionResult.incorrect);
-            Assert.Equal(2, secondOption.IsCorrect ? secondOptionResult.correct : secondOptionResult.incorrect);
+            Assert.Equal(1, aggregate.QuestionResults[firstQuestion.Id].correctAnswers);
+            Assert.Equal(1, aggregate.QuestionResults[lastQuestion.Id].incorrectAnswers);
         }
 
         private QuizModel CreateQuiz() =>

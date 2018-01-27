@@ -35,10 +35,10 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                 })
                 .GetPendingEvents()
-                .AssertLastEventOfType<QuestionAnsweredEvent>()
+                .AssertLastEventOfType<QuizAnsweredEvent>()
                 .WithTotalCount(2);
 
         [Fact]
@@ -46,12 +46,12 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                 })
                 .GetPendingEvents()
-                .AssertLastEventOfType<QuestionAnsweredEvent>()
+                .AssertLastEventOfType<QuizAnsweredEvent>()
                 .WithTotalCount(4);
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                     quiz.Close();
                 })
                 .GetPendingEvents()
@@ -71,7 +71,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                     quiz.Close();
                     quiz.Close();
                     quiz.Close();
@@ -85,7 +85,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                     quiz.Close();
                     quiz.Start(CreateQuiz());
                 })
@@ -98,9 +98,9 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                     quiz.Close();
-                    quiz.Answer(new QuestionAnswerCommand(Guid.NewGuid(), Guid.NewGuid()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizClosedEvent>()
@@ -109,7 +109,7 @@ namespace Quiz.Domain.Tests
         private QuizAggregate ExecuteCommand(Action<QuizAggregate> command)
         {
             var quizId = Guid.NewGuid();
-            var quiz = new QuizAggregate(quizId);
+            var quiz = QuizAggregate.Create(quizId);
             command(quiz);
             return quiz;
         }

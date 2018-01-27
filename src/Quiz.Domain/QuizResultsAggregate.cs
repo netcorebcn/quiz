@@ -10,7 +10,7 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        public Dictionary<Guid, (string description, Dictionary<Guid, (string description, bool isCorrect, int correct, int incorrect)> options)> QuestionResults 
+        public Dictionary<Guid,(Guid correctOption, int correctAnswers, int incorrectAnswers)> QuestionResults 
         { 
             get; 
             private set; 
@@ -28,7 +28,7 @@ namespace Quiz.Domain
                 case QuizStartedEvent started:
                     state = Reduce(state, started);
                     break;
-                case QuestionAnsweredEvent answered:
+                case QuizAnsweredEvent answered:
                     state = Reduce(state, answered);
                     break;
             }
@@ -41,35 +41,22 @@ namespace Quiz.Domain
             state.QuestionResults = @event.QuizModel.Questions.ToDictionary(
                 q => q.Id,
                 q => (
-                    description: q.Description, 
-                    options: q.Options.ToDictionary(
-                       o => o.Id,
-                       o => (
-                           description: o.Description, 
-                           isCorrect: o.IsCorrect, 
-                           correctAnswers:0, 
-                           incorrectAnswers: 0)
-                ))
+                    correctOption: q.Options.First(o => o.IsCorrect).Id, 
+                    correctAnswers:0, incorrectAnswers:0)
             );
+
             return state;
         }
 
-        private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuestionAnsweredEvent @event)
+        private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizAnsweredEvent @event)
         {
-            state.QuestionResults = state.QuestionResults.ToDictionary(
-                q => q.Key ,
-                q => (
-                    description: q.Value.description, 
-                    options: q.Value.options.ToDictionary(
-                       o => o.Key,
-                       o => o.Key == @event.OptionId 
-                            ? (description: o.Value.description, 
-                                isCorrect: o.Value.isCorrect, 
-                                correct: o.Value.isCorrect ? o.Value.correct + 1 : o.Value.correct, 
-                                incorrect: o.Value.isCorrect ? o.Value.incorrect : o.Value.incorrect + 1)
-                            : o.Value
-                ))
-            );
+            @event.Answers.ForEach(answer => state.QuestionResults[answer.questionId] = Reduce(state.QuestionResults[answer.questionId], answer.optionId));
+
+            (Guid correctOption, int correctAnswers, int incorrectAnswers) Reduce((Guid correctOption, int correctAnswers, int incorrectAnswers) questionResult, Guid optionId) =>
+                (questionResult.correctOption, 
+                    questionResult.correctOption == optionId ? questionResult.correctAnswers + 1 : questionResult.correctAnswers,
+                    questionResult.correctOption == optionId ? questionResult.incorrectAnswers : questionResult.incorrectAnswers + 1);
+
             return state;
         }
     }    

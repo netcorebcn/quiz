@@ -9,17 +9,17 @@ namespace Quiz.Domain.Tests
         [Theory]
         [InlineData(typeof(QuizStartedEvent))]
         public void Given_QuizState_When_Empty_Then_CanRaiseEvent(Type eventType) => 
-            Assert.True(QuizState.Empty.CanRaiseEvent(eventType));
+            Assert.True(QuizState.Created.CanRaiseEvent(eventType));
 
         [Theory]
         [InlineData(typeof(QuizClosedEvent))]
-        [InlineData(typeof(QuestionAnsweredEvent))]
+        [InlineData(typeof(QuizAnsweredEvent))]
         public void Given_QuizState_When_Empty_Then_CanNotRaiseEvent(Type eventType) => 
-            Assert.False(QuizState.Empty.CanRaiseEvent(eventType));
+            Assert.False(QuizState.Created.CanRaiseEvent(eventType));
 
         [Theory]
         [InlineData(typeof(QuizClosedEvent))]
-        [InlineData(typeof(QuestionAnsweredEvent))]
+        [InlineData(typeof(QuizAnsweredEvent))]
         public void Given_QuizState_When_Started_Then_CanRaiseEvent(Type eventType) => 
             Assert.True(QuizState.Started.CanRaiseEvent(eventType));
 
@@ -31,7 +31,7 @@ namespace Quiz.Domain.Tests
         [Theory]
         [InlineData(typeof(QuizClosedEvent))]
         [InlineData(typeof(QuizStartedEvent))]
-        [InlineData(typeof(QuestionAnsweredEvent))]
+        [InlineData(typeof(QuizAnsweredEvent))]
         public void Given_QuizState_When_Closed_Then_CanNotRaiseEvent(Type eventType) => 
             Assert.False(QuizState.Closed.CanRaiseEvent(eventType));
 

@@ -12,9 +12,12 @@ namespace Quiz.Domain
 
         public Guid QuizId { get; }
 
-        public QuizState State { get; private set; } = QuizState.Empty;
+        public QuizState State { get; private set; } = QuizState.Created;
 
-        public QuizAggregate(Guid quizId) => QuizId = quizId;
+        private QuizAggregate(Guid quizId) => QuizId = quizId;
+
+        public static QuizAggregate Create(Guid quizId, params object[] events) =>
+            events.Aggregate(new QuizAggregate(quizId), Reduce);
         
         public void Start(QuizModel quizModel) => 
             TryRaiseEvent(new QuizStartedEvent(QuizId, quizModel));
@@ -22,8 +25,8 @@ namespace Quiz.Domain
         public void Close() =>  
             TryRaiseEvent(new QuizClosedEvent(QuizId));
 
-        public void Answer(QuestionAnswerCommand command) => 
-            TryRaiseEvent(new QuestionAnsweredEvent(QuizId, command.QuestionId, command.OptionId));
+        public void Answer(QuizAnswersCommand command) => 
+            TryRaiseEvent(new QuizAnsweredEvent(QuizId, command.Answers));
 
         public static QuizAggregate Reduce(QuizAggregate state, object @event)
         {
