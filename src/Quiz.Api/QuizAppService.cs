@@ -15,6 +15,15 @@ namespace Quiz.Api
 
         public async Task<object> GetState()
         {
+            using (var session = _eventStore.OpenSession())
+            {
+                var currentQuiz = await session.Query<CurrentQuizAggregate>().FirstOrDefaultAsync();
+                if (currentQuiz != null)
+                {
+                    return await GetState(currentQuiz.Id);
+                }
+            }
+
             return null;
         }
 

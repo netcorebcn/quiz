@@ -4,6 +4,7 @@ using Quiz.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using Quiz.Api.Projections;
 
 namespace Quiz.Api.EventStore
 {
@@ -19,6 +20,8 @@ namespace Quiz.Api.EventStore
                         _.Events.DatabaseSchemaName = databaseSchema;
                         _.DatabaseSchemaName = databaseSchema;
                         _.AutoCreateSchemaObjects = AutoCreate.All;
+                        _.Events.InlineProjections.Add(new QuizProjection());
+                        _.Schema.For<CurrentQuizAggregate>().UseOptimisticConcurrency(true); 
                     })));
 
             return services;
