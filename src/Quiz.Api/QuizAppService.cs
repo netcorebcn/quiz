@@ -11,18 +11,19 @@ namespace Quiz.Api
     {
         private readonly IDocumentStore _eventStore;
 
-        public QuizAppService(IDocumentStore eventStore)
+        public QuizAppService(IDocumentStore eventStore) => _eventStore = eventStore;
+
+        public async Task<object> GetState()
         {
-            _eventStore = eventStore;
+            return null;
         }
 
         public async Task<object> GetState(Guid quizId)
         {
             using(var session = _eventStore.OpenSession())
             {
-                var events = await GetEvents(session, quizId);
-                var aggregate = QuizAggregate.Create(quizId, events);
-                return GetState(quizId, aggregate, events);
+                var aggregate = await CreateAggregate(session, quizId);
+                return aggregate.GetState();
             }
         }
 
@@ -40,29 +41,22 @@ namespace Quiz.Api
             using(var session = _eventStore.OpenSession())
             {
                 var eventStreamState = await session.Events.FetchStreamStateAsync(quizId);
-                var events = await GetEvents(session, quizId);
 
-                var aggregate = QuizAggregate.Create(quizId, events);
+                var aggregate = await CreateAggregate(session, quizId);
                 command(aggregate);
 
                 var expectedVersion = (eventStreamState?.Version ?? 0) + aggregate.GetPendingEvents().Count();
                 session.Events.Append(aggregate.QuizId, expectedVersion, aggregate.GetPendingEvents().ToArray());
                 await session.SaveChangesAsync();
 
-                return GetState(quizId, aggregate, events);
+                return aggregate.GetState();
             }
         }
-        private object GetState(Guid quizId, QuizAggregate aggregate, object[] events) => 
-            new
-            {
-                quizId,
-                aggregate.State,
-                QuizResultsAggregate
-                    .Create(quizId, events.Concat(aggregate.GetPendingEvents()))
-                    .QuestionResults
-            };
-            
-        private async Task<object[]> GetEvents(IDocumentSession session, Guid quizId) => 
-            (await session.Events.FetchStreamAsync(quizId)).Select(@event => @event.Data).ToArray();
+
+        private async Task<QuizAggregate> CreateAggregate(IDocumentSession session, Guid quizId) 
+        {
+            var events = (await session.Events.FetchStreamAsync(quizId)).Select(@event => @event.Data).ToArray();
+            return QuizAggregate.Create(quizId, events);
+        }
     }
 }

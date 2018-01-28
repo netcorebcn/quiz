@@ -10,7 +10,7 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        public Dictionary<Guid,(Guid correctOption, int correctAnswers, int incorrectAnswers)> QuestionResults 
+        public Dictionary<Guid,(string description, Guid correctOption, int correctAnswers, int incorrectAnswers)> QuestionResults 
         { 
             get; 
             private set; 
@@ -41,6 +41,7 @@ namespace Quiz.Domain
             state.QuestionResults = @event.QuizModel.Questions.ToDictionary(
                 q => q.Id,
                 q => (
+                    description: q.Description,
                     correctOption: q.Options.First(o => o.IsCorrect).Id, 
                     correctAnswers:0, incorrectAnswers:0)
             );
@@ -52,8 +53,9 @@ namespace Quiz.Domain
         {
             @event.Answers.ForEach(answer => state.QuestionResults[answer.questionId] = Reduce(state.QuestionResults[answer.questionId], answer.optionId));
 
-            (Guid correctOption, int correctAnswers, int incorrectAnswers) Reduce((Guid correctOption, int correctAnswers, int incorrectAnswers) questionResult, Guid optionId) =>
-                (questionResult.correctOption, 
+            (string description, Guid correctOption, int correctAnswers, int incorrectAnswers) Reduce((string description, Guid correctOption, int correctAnswers, int incorrectAnswers) questionResult, Guid optionId) =>
+                (questionResult.description,
+                    questionResult.correctOption, 
                     questionResult.correctOption == optionId ? questionResult.correctAnswers + 1 : questionResult.correctAnswers,
                     questionResult.correctOption == optionId ? questionResult.incorrectAnswers : questionResult.incorrectAnswers + 1);
 

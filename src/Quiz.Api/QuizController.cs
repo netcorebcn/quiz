@@ -15,13 +15,17 @@ namespace Quiz.Api
 
         public QuizController(QuizAppService quizAppService) => _quizAppService = quizAppService;
 
+        [HttpGet]
+        public async Task<object> Get() => 
+            await _quizAppService.GetState();
+
         [HttpGet("{quizId}")]
         public async Task<object> Get(Guid quizId) => 
             await _quizAppService.GetState(quizId);
 
         [HttpPut]
         [Route("{quizId}")]
-        public async Task Answer(Guid quizId, [FromBody]QuizAnswersCommand quizAnswersComand) =>
+        public async Task<object> Answer(Guid quizId, [FromBody]QuizAnswersCommand quizAnswersComand) =>
             await _quizAppService.Answer(new QuizAnswersCommand(quizId, quizAnswersComand.Answers));
 
         [HttpPost]

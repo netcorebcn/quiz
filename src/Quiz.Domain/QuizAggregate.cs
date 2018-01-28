@@ -12,7 +12,9 @@ namespace Quiz.Domain
 
         public Guid QuizId { get; }
 
-        public QuizState State { get; private set; } = QuizState.Created;
+        private QuizState _state = QuizState.Created;
+
+        private QuizModel _model; 
 
         private QuizAggregate(Guid quizId) => QuizId = quizId;
 
@@ -33,10 +35,11 @@ namespace Quiz.Domain
             switch (@event)
             {
                 case QuizStartedEvent started:
-                    state.State = QuizState.Started;
+                    state._model = started.QuizModel;
+                    state._state = QuizState.Started;
                     break;
                 case QuizClosedEvent closed:
-                    state.State = QuizState.Closed;
+                    state._state = QuizState.Closed;
                     break;
             }
 
@@ -49,11 +52,20 @@ namespace Quiz.Domain
 
         private void TryRaiseEvent(object @event) 
         {
-            if (@event != null && State.CanRaiseEvent(@event.GetType()))
+            if (@event != null && _state.CanRaiseEvent(@event.GetType()))
             {
                 _pendingEvents.Add(@event);
                 Reduce(this, @event);
             }
+        }
+
+        public object GetState()
+        {
+            return new {
+                QuizId,
+                State = _state.ToString(),
+                Questions = _state == QuizState.Started ? _model.Questions : null
+            };
         }
     }    
 }
