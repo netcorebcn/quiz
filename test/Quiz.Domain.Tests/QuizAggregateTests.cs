@@ -35,7 +35,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizAnsweredEvent>()
@@ -46,9 +46,9 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizAnsweredEvent>()
@@ -59,7 +59,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                     quiz.Close();
                 })
                 .GetPendingEvents()
@@ -71,7 +71,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                     quiz.Close();
                     quiz.Close();
                     quiz.Close();
@@ -85,7 +85,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                     quiz.Close();
                     quiz.Start(CreateQuiz());
                 })
@@ -98,9 +98,9 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => 
                 {
                     quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                     quiz.Close();
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), new List<(Guid,Guid)> {(Guid.NewGuid(), Guid.NewGuid())}));
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizClosedEvent>()
@@ -116,6 +116,12 @@ namespace Quiz.Domain.Tests
 
         private QuizModel CreateQuiz() =>
             JsonConvert.DeserializeObject<QuizModel>(File.ReadAllText("quiz.json"));
+
+        private List<QuizAnswer> CreateRandomQuizAnswers() =>
+            new List<QuizAnswer> { 
+                new QuizAnswer { QuestionId = Guid.NewGuid(), OptionId = Guid.NewGuid() },
+                new QuizAnswer { QuestionId = Guid.NewGuid(), OptionId = Guid.NewGuid() }
+            };
     }
 
     public static class AggregateTestsExtensions

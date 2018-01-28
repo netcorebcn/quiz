@@ -10,7 +10,7 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        public Dictionary<Guid,(string description, Guid correctOption, int correctAnswers, int incorrectAnswers)> QuestionResults 
+        public Dictionary<Guid,QuestionResult> QuestionResults 
         { 
             get; 
             private set; 
@@ -40,10 +40,12 @@ namespace Quiz.Domain
         {
             state.QuestionResults = @event.QuizModel.Questions.ToDictionary(
                 q => q.Id,
-                q => (
-                    description: q.Description,
-                    correctOption: q.Options.First(o => o.IsCorrect).Id, 
-                    correctAnswers:0, incorrectAnswers:0)
+                q => new QuestionResult {
+                    Description = q.Description,
+                    CorrectOption = q.Options.First(o => o.IsCorrect).Id, 
+                    CorrectAnswers = 0, 
+                    IncorrectAnswers = 0
+                }
             );
 
             return state;
@@ -51,15 +53,25 @@ namespace Quiz.Domain
 
         private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizAnsweredEvent @event)
         {
-            @event.Answers.ForEach(answer => state.QuestionResults[answer.questionId] = Reduce(state.QuestionResults[answer.questionId], answer.optionId));
+            @event.Answers.ForEach(answer => state.QuestionResults[answer.QuestionId] = Reduce(state.QuestionResults[answer.QuestionId], answer.OptionId));
 
-            (string description, Guid correctOption, int correctAnswers, int incorrectAnswers) Reduce((string description, Guid correctOption, int correctAnswers, int incorrectAnswers) questionResult, Guid optionId) =>
-                (questionResult.description,
-                    questionResult.correctOption, 
-                    questionResult.correctOption == optionId ? questionResult.correctAnswers + 1 : questionResult.correctAnswers,
-                    questionResult.correctOption == optionId ? questionResult.incorrectAnswers : questionResult.incorrectAnswers + 1);
+            QuestionResult Reduce(QuestionResult questionResult, Guid optionId) =>
+                new QuestionResult {
+                    Description = questionResult.Description,
+                    CorrectOption = questionResult.CorrectOption, 
+                    CorrectAnswers = questionResult.CorrectOption == optionId ? questionResult.CorrectAnswers + 1 : questionResult.CorrectAnswers,
+                    IncorrectAnswers = questionResult.CorrectOption == optionId ? questionResult.IncorrectAnswers : questionResult.IncorrectAnswers + 1
+                };
 
             return state;
         }
     }    
+
+    public class QuestionResult
+    {
+        public string Description { get; set; }
+        public Guid CorrectOption { get; set; }
+        public int CorrectAnswers { get; set; }
+        public int IncorrectAnswers { get; set; }
+    }
 }

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Quiz.Domain.Commands;
 
 namespace Quiz.Domain.Events
 {
     public class QuizAnsweredEvent: QuizEvent
     {
-        public List<(Guid questionId, Guid optionId)> Answers { get; }
+        public List<QuizAnswer> Answers { get; }
 
-        public QuizAnsweredEvent(Guid quizId, List<(Guid questionId, Guid optionId)> answers) : base(quizId) 
+        public QuizAnsweredEvent(Guid quizId, List<QuizAnswer> answers) : base(quizId) 
             => Answers = answers;
     }
 }

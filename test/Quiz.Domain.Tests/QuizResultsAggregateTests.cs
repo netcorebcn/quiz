@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Quiz.Domain.Commands;
 using Quiz.Domain.Events;
 using Xunit;
 
@@ -24,7 +25,7 @@ namespace Quiz.Domain.Tests
             Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
             Assert.True(
                 aggregate.QuestionResults.All(
-                    q => q.Value.correctAnswers == 0 && q.Value.incorrectAnswers == 0));
+                    q => q.Value.CorrectAnswers == 0 && q.Value.IncorrectAnswers == 0));
         }
 
         [Fact]
@@ -39,18 +40,26 @@ namespace Quiz.Domain.Tests
             var events = new object[]
             {
                 new QuizStartedEvent(quizId, quizModel),
-                new QuizAnsweredEvent(quizId, new List<(Guid,Guid)> 
+                new QuizAnsweredEvent(quizId, new List<QuizAnswer> 
                     { 
-                        (firstQuestion.Id, firstQuestion.Options.First(o => o.IsCorrect).Id),
-                        (lastQuestion.Id, lastQuestion.Options.First(o => !o.IsCorrect).Id),
+                        new QuizAnswer 
+                        {
+                            QuestionId = firstQuestion.Id, 
+                            OptionId = firstQuestion.Options.First(o => o.IsCorrect).Id,
+                        },
+                        new QuizAnswer
+                        {
+                            QuestionId = lastQuestion.Id, 
+                            OptionId = lastQuestion.Options.First(o => !o.IsCorrect).Id,
+                        }    
                     }),
             };
 
             var aggregate = QuizResultsAggregate.Create(quizId, events);
 
             Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
-            Assert.Equal(1, aggregate.QuestionResults[firstQuestion.Id].correctAnswers);
-            Assert.Equal(1, aggregate.QuestionResults[lastQuestion.Id].incorrectAnswers);
+            Assert.Equal(1, aggregate.QuestionResults[firstQuestion.Id].CorrectAnswers);
+            Assert.Equal(1, aggregate.QuestionResults[lastQuestion.Id].IncorrectAnswers);
         }
 
         private QuizModel CreateQuiz() =>
