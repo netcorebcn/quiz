@@ -12,9 +12,13 @@ namespace Quiz.Domain.Tests
 {
     public class QuizAggregateTests
     {
+        private QuizModel model; 
+
+        public QuizAggregateTests() => model = CreateQuiz();
+
         [Fact]
         public void Given_New_Quiz_When_Start_Then_QuizStarted() => 
-            ExecuteCommand(quiz => quiz.Start(CreateQuiz()))
+            ExecuteCommand(quiz => quiz.Start(model))
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizStartedEvent>()
                 .WithTotalCount(1);
@@ -23,8 +27,8 @@ namespace Quiz.Domain.Tests
         public void Given_Started_Quiz_When_Start_Then_QuizStarted() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Start(CreateQuiz());
+                    quiz.Start(model);
+                    quiz.Start(model);
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizStartedEvent>()
@@ -34,8 +38,8 @@ namespace Quiz.Domain.Tests
         public void Given_Started_Quiz_When_Answer_Then_QuestionAnswered() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizAnsweredEvent>()
@@ -45,10 +49,10 @@ namespace Quiz.Domain.Tests
         public void Given_Started_Quiz_When_Multiple_Answer_Then_QuestionAnswered() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizAnsweredEvent>()
@@ -58,8 +62,8 @@ namespace Quiz.Domain.Tests
         public void Given_Started_Quiz_When_Closed_Then_QuizClosed() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                     quiz.Close();
                 })
                 .GetPendingEvents()
@@ -70,8 +74,8 @@ namespace Quiz.Domain.Tests
         public void Given_Closed_Quiz_When_Closed_Then_QuizClosed() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                     quiz.Close();
                     quiz.Close();
                     quiz.Close();
@@ -84,10 +88,10 @@ namespace Quiz.Domain.Tests
         public void Given_Closed_Quiz_When_Open_Then_QuizClosed() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                     quiz.Close();
-                    quiz.Start(CreateQuiz());
+                    quiz.Start(model);
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizClosedEvent>()
@@ -97,14 +101,36 @@ namespace Quiz.Domain.Tests
         public void Given_Closed_Quiz_When_Answer_Then_QuizClosed() => 
             ExecuteCommand(quiz => 
                 {
-                    quiz.Start(CreateQuiz());
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                     quiz.Close();
-                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateRandomQuizAnswers()));
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateQuizAnswers()));
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizClosedEvent>()
                 .WithTotalCount(3);
+
+        [Fact]
+        public void Given_Started_Quiz_When_Answer_With_Invalid_QuizId_Then_QuizAnswered_NotRaised() => 
+            ExecuteCommand(quiz => 
+                {
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(Guid.NewGuid(), CreateQuizAnswers()));
+                })
+                .GetPendingEvents()
+                .AssertLastEventOfType<QuizStartedEvent>()
+                .WithTotalCount(1);
+
+        [Fact]
+        public void Given_Started_Quiz_When_Answer_With_Invalid_Question_Then_QuizAnswered_NotRaised() => 
+            ExecuteCommand(quiz => 
+                {
+                    quiz.Start(model);
+                    quiz.Answer(new QuizAnswersCommand(quiz.QuizId, CreateInvalidQuizAnswers()));
+                })
+                .GetPendingEvents()
+                .AssertLastEventOfType<QuizStartedEvent>()
+                .WithTotalCount(1);
 
         private QuizAggregate ExecuteCommand(Action<QuizAggregate> command)
         {
@@ -117,11 +143,21 @@ namespace Quiz.Domain.Tests
         private QuizModel CreateQuiz() =>
             JsonConvert.DeserializeObject<QuizModel>(File.ReadAllText("quiz.json"));
 
-        private List<QuizAnswer> CreateRandomQuizAnswers() =>
-            new List<QuizAnswer> { 
-                new QuizAnswer { QuestionId = Guid.NewGuid(), OptionId = Guid.NewGuid() },
-                new QuizAnswer { QuestionId = Guid.NewGuid(), OptionId = Guid.NewGuid() }
-            };
+        private List<QuizAnswer> CreateQuizAnswers() => 
+            model.Questions.Select(q => new QuizAnswer
+            {
+                QuestionId = q.Id,
+                OptionId = q.Options.First().Id
+            })
+            .ToList();
+
+        private List<QuizAnswer> CreateInvalidQuizAnswers() => 
+            model.Questions.Select(q => new QuizAnswer
+            {
+                QuestionId = q.Id,
+                OptionId = Guid.NewGuid()
+            })
+            .ToList();
     }
 
     public static class AggregateTestsExtensions

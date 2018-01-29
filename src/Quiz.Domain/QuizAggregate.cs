@@ -27,8 +27,16 @@ namespace Quiz.Domain
         public void Close() =>  
             TryRaiseEvent(new QuizClosedEvent(QuizId));
 
-        public void Answer(QuizAnswersCommand command) => 
-            TryRaiseEvent(new QuizAnsweredEvent(QuizId, command.Answers));
+        public void Answer(QuizAnswersCommand command) 
+        {
+            if (command.QuizId == QuizId &&
+                command.Answers.All(a => _model.Questions
+                        .Any(q => q.Options
+                        .Any(o => q.Id == a.QuestionId && o.Id == a.OptionId))))
+            {
+                TryRaiseEvent(new QuizAnsweredEvent(QuizId, command.Answers));
+            }
+        } 
 
         public static QuizAggregate Reduce(QuizAggregate state, object @event)
         {

@@ -10,5 +10,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Quiz.Api\Quiz.Api.csproj" />
+    <Content Include="quiz.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInPackage>true</IncludeInPackage>
+      <BuildAction>Content</BuildAction>
+      <CopyToOutput>true</CopyToOutput>
+    </Content>
   </ItemGroup>
 </Project>
