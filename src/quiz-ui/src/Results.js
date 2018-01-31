@@ -16,7 +16,11 @@ class Results extends Component {
   }
 
   startHandler() {
-    this.props.startQuizHandler(JSON.parse(this.state.quizModel));
+    this.props.startHandler(JSON.parse(this.state.quizModel));
+  }
+
+  closeHandler() {
+    this.props.closeHandler(this.props.quizResults.quizId);
   }
 
   handleChange(event) {
@@ -25,50 +29,54 @@ class Results extends Component {
 
   render() {
     const {
-      questions,
-      quizId,
-      startQuizHandler
+      quizResults,
+      quizState
     } = this.props;
-    const correctScore = questions
-      .map(question => question.rightAnswersPercent)
-      .reduce((acc, val) => acc + val, 0) / questions.length;
-
-    const incorrectScore = questions
-      .map(question => question.wrongAnswersPercent)
-      .reduce((acc, val) => acc + val, 0) / questions.length;
+    const { quizId, questions } = quizResults;
+    const quizStarted = quizState === 'Started';
 
     return (
-      <div className="Results">
-        <h2>
-          Current quiz ID: <b>{quizId || 'No Quiz Available'}</b>
-        </h2>
-        <div className="Results-List">
-          {questions.map(question => (
-            <ResultListItem
-              key={question.id}
-              description={question.description}
-              correct={question.rightAnswersPercent || 0}
-              incorrect={question.wrongAnswersPercent || 0}
-            />
-          ))}
-        </div>
-        <div className="Results-List">
+      <div>
+      {quizStarted 
+      ? <div className="Results">
           <h2>
-            Overall Score
+            Current quiz ID: <b>{quizId}</b>
           </h2>
-          <ResultListItem
-            correct={correctScore || 0}
-            incorrect={incorrectScore || 0}
-          />
+          <div className="Results-List">
+            {questions.map(q => (
+              <ResultListItem
+                key={q.id}
+                description={q.description}
+                correct={q.correctAnswersPercent || 0}
+                incorrect={q.incorrectAnswersPercent || 0}
+              />
+            ))}
+          </div>
+          <div className="Results-List">
+            <h2>
+              Overall Score
+            </h2>
+            <ResultListItem
+              correct={0}
+              incorrect={0}
+            />
+          </div>
+          <div className="buttons">
+            <button className="submit-button button" onClick={this.closeHandler}>
+              Finish
+            </button>
+          </div>
         </div>
-        <div className="buttons">
-          <button className="start-button button" onClick={this.startHandler}>
-            Start New Quiz
-          </button>
-        </div>
-        <div className="buttons">
-          <textarea cols="150" rows="50" value={this.state.quizModel} onChange={this.handleChange} />
-        </div>
+      : <div className="Results">
+          <div className="buttons">
+            <button className="submit-button button" onClick={this.startHandler}>
+              Start
+            </button>
+          </div>
+          <div className="buttons">
+            <textarea cols="150" rows="50" value={this.state.quizModel} onChange={this.handleChange} />
+          </div>
+        </div>}
       </div>
     );
   }

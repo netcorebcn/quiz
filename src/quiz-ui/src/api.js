@@ -1,41 +1,39 @@
-const url = `http://${window.location.hostname}:81/quiz/`;
-const ws = `ws://${window.location.hostname}:82/ws`;
+  const apiUrl = (resource = 'quiz', id = '')  => 
+       `//${window.location.hostname}:5000/${resource}/${id}`;
+  
+  const post = (url, method, body) =>
+      fetch(url, { method, headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  
+  const get = () =>
+      fetch(apiUrl())
+      .then(r => r.json());
 
-export const getQuiz = () => fetch(url).then(response => {
-  if (response.status === 204) {
-    return null;
+  const getResults = () =>
+      fetch(apiUrl('quizResults'))
+      .then(r => r.json());
+        
+  const start = (quiz) =>
+      post(apiUrl(), 'POST', quiz)
+      .then(r => r.json());
+
+  const close = (quizId) =>
+      post(apiUrl('quiz', quizId), 'DELETE')
+      .then(r => r.json());
+
+  const answer = (quizId, answers) =>
+      post(apiUrl('quiz', quizId) , 'PUT', {quizId, answers})
+      .then(r => r.json());
+
+  const subscribe = (action) => {
+      const webSocket = new WebSocket(`ws://${window.location.host}/ws`);
+      webSocket.onmessage = ({ data }) => action(JSON.parse(data)); 
   }
-  if (response.status === 200) {
-    return response.json();
+  
+  export {
+      get,
+      getResults,
+      start,
+      close,
+      answer,
+      subscribe
   }
-});
-
-export const startNewQuiz = (quiz) =>
-  fetch(url, { 
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    }, 
-    body: JSON.stringify(quiz)
-  }).then(r => r.json());
-
-export const postQuizAnswers = (quizId, answers) => fetch(`${url}${quizId}`, {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ answers })
-}).catch(err => console.log(err));
-
-export const initWebsockets = cb => {
-  const webSocket = new WebSocket(ws);
-  webSocket.onopen = e => {
-    console.log(e);
-  };
-  webSocket.onmessage = e => {
-    console.log(e.data);
-    cb(JSON.parse(e.data));
-  };
-};
