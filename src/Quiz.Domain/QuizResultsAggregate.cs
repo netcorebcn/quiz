@@ -10,18 +10,14 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        public Dictionary<Guid,QuestionResult> QuestionResults 
-        { 
-            get; 
-            private set; 
-        }
+        public Dictionary<Guid,QuestionResult> QuestionResults { get; private set;} 
 
         private QuizResultsAggregate(Guid quizId) => QuizId = quizId;
 
         public static QuizResultsAggregate Create(Guid quizId, params object[] events) =>
             events.Aggregate(new QuizResultsAggregate(quizId), Reduce);
         
-        public static QuizResultsAggregate Reduce(QuizResultsAggregate state, object @event)
+        private static QuizResultsAggregate Reduce(QuizResultsAggregate state, object @event)
         {
             switch (@event)
             {
@@ -40,12 +36,7 @@ namespace Quiz.Domain
         {
             state.QuestionResults = @event.QuizModel.Questions.ToDictionary(
                 q => q.Id,
-                q => new QuestionResult {
-                    Description = q.Description,
-                    CorrectOption = q.Options.First(o => o.IsCorrect).Id, 
-                    CorrectAnswers = 0, 
-                    IncorrectAnswers = 0
-                }
+                q => new QuestionResult(q) 
             );
 
             return state;
@@ -53,25 +44,43 @@ namespace Quiz.Domain
 
         private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizAnsweredEvent @event)
         {
-            @event.Answers.ForEach(answer => state.QuestionResults[answer.QuestionId] = Reduce(state.QuestionResults[answer.QuestionId], answer.OptionId));
-
-            QuestionResult Reduce(QuestionResult questionResult, Guid optionId) =>
-                new QuestionResult {
-                    Description = questionResult.Description,
-                    CorrectOption = questionResult.CorrectOption, 
-                    CorrectAnswers = questionResult.CorrectOption == optionId ? questionResult.CorrectAnswers + 1 : questionResult.CorrectAnswers,
-                    IncorrectAnswers = questionResult.CorrectOption == optionId ? questionResult.IncorrectAnswers : questionResult.IncorrectAnswers + 1
-                };
-
+            @event.Answers.ForEach(answer => state.QuestionResults[answer.QuestionId].Reduce(answer.OptionId));
             return state;
         }
     }    
 
     public class QuestionResult
     {
-        public string Description { get; set; }
-        public Guid CorrectOption { get; set; }
-        public int CorrectAnswers { get; set; }
-        public int IncorrectAnswers { get; set; }
+        public string Description { get; }
+        private Guid _correctOption; 
+        private decimal _correctAnswers;
+        private decimal _incorrectAnswers; 
+
+        public decimal CorrectAnswersPercent { get; private set; }
+        public decimal IncorrectAnswersPercent { get; private set; }
+
+        public QuestionResult(Question question)
+        {
+            Description = question.Description;
+            _correctOption = question.Options.First(o => o.IsCorrect).Id; 
+        }
+
+        public void Reduce(Guid selectedOption)
+        {
+            if (_correctOption == selectedOption)
+            {
+                _correctAnswers =+ 1;
+            }
+            else
+            {
+                _incorrectAnswers =+ 1;
+            }
+
+            var total = _correctAnswers + _incorrectAnswers;
+            CorrectAnswersPercent = Percent(_correctAnswers);
+            IncorrectAnswersPercent = Percent(_incorrectAnswers);
+
+            decimal Percent(decimal answers) => (answers/total) * 100;
+        }
     }
 }

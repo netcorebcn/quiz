@@ -71,7 +71,7 @@ namespace Quiz.Domain
         {
             return new {
                 QuizId,
-                State = _state.ToString(),
+                QuizState = _state.ToString(),
                 Questions = _state == QuizState.Started ? _model.Questions : null
             };
         }

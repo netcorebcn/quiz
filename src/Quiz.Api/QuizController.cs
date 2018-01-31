@@ -48,7 +48,7 @@ namespace Quiz.Api
 
         [HttpDelete]
         [Route("{quizId}")]
-        public async Task Close(Guid quizId) =>
+        public async Task<object> Close(Guid quizId) =>
             await _quizAppService.Close(quizId);
     }
 }

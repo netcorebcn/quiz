@@ -14,6 +14,16 @@ namespace Quiz.Api
 
         public QuizResultsController(IDocumentStore documentStore) => _documentStore = documentStore;
 
+        [HttpGet]
+        public async Task<object> Get()
+        {
+            using(var session = _documentStore.OpenSession())
+            {
+                var currentQuiz = await session.Query<CurrentQuizAggregate>().FirstOrDefaultAsync();
+                return await Get(currentQuiz.Id);
+            }
+        }
+
         [HttpGet("{quizId}")]
         public async Task<object> Get(Guid quizId) 
         {

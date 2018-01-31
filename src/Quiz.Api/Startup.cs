@@ -16,16 +16,24 @@ namespace Quiz.Api
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) => 
-            services.AddSwaggerGen(c =>
+        public void ConfigureServices(IServiceCollection services) => services
+            .AddSwaggerGen(c =>
                 c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
             )
+            .AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            })
             .AddEventStore(Configuration)
             .AddTransient<QuizAppService>()
             .AddMvc();
 
-        public void Configure(IApplicationBuilder app) =>
-            app
+        public void Configure(IApplicationBuilder app) => app
+            .UseCors("CorsPolicy")
             .UseMvc()
             .UseSwagger()
             .UseSwaggerUI(c =>
