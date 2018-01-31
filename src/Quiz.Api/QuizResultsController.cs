@@ -8,7 +8,7 @@ using Quiz.Domain;
 namespace Quiz.Api
 {
     [Route("[controller]")]
-    public class QuizResultsController
+    public class QuizResultsController : Controller
     {
         private readonly IDocumentStore _documentStore;
 
@@ -20,6 +20,11 @@ namespace Quiz.Api
             using(var session = _documentStore.OpenSession())
             {
                 var currentQuiz = await session.Query<CurrentQuizAggregate>().FirstOrDefaultAsync();
+                if (currentQuiz == null)
+                {
+                    return NotFound();
+                }
+
                 return await Get(currentQuiz.Id);
             }
         }

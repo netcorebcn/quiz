@@ -12,14 +12,9 @@ namespace Quiz.Api
     [Route("[controller]")]
     public class QuizController : Controller
     {
-        private readonly IDocumentStore _eventStore;
         private readonly QuizAppService _quizAppService;
 
-        public QuizController(QuizAppService quizAppService, IDocumentStore eventStore) 
-        {
-            _eventStore = eventStore;
-            _quizAppService = quizAppService;
-        }
+        public QuizController(QuizAppService quizAppService) => _quizAppService = quizAppService;
 
         [HttpGet]
         public async Task<object> Get() 
