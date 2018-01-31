@@ -22,10 +22,10 @@ namespace Quiz.Domain.Tests
 
             var aggregate = QuizResultsAggregate.Create(Guid.NewGuid(), events);
 
-            Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
+            Assert.Equal(quizModel.Questions.Count, aggregate.Questions.Count);
             Assert.True(
-                aggregate.QuestionResults.All(
-                    q => q.Value.CorrectAnswersPercent == 0 && q.Value.IncorrectAnswersPercent == 0));
+                aggregate.Questions.All(
+                    q => q.CorrectAnswersPercent == 0 && q.IncorrectAnswersPercent == 0));
         }
 
         [Fact]
@@ -57,12 +57,12 @@ namespace Quiz.Domain.Tests
 
             var aggregate = QuizResultsAggregate.Create(quizId, events);
 
-            Assert.Equal(quizModel.Questions.Count, aggregate.QuestionResults.Count);
-            Assert.Equal(100, aggregate.QuestionResults[firstQuestion.Id].CorrectAnswersPercent);
-            Assert.Equal(100, aggregate.QuestionResults[lastQuestion.Id].IncorrectAnswersPercent);
+            Assert.Equal(quizModel.Questions.Count, aggregate.Questions.Count);
+            Assert.Equal(100, aggregate.Questions.First(q => q.Id == firstQuestion.Id).CorrectAnswersPercent);
+            Assert.Equal(100, aggregate.Questions.First(q => q.Id == lastQuestion.Id).IncorrectAnswersPercent);
 
-            Assert.True(aggregate.QuestionResults.Where(q => q.Key != firstQuestion.Id && q.Key != lastQuestion.Id)
-                    .All(q => q.Value.CorrectAnswersPercent == 0 && q.Value.IncorrectAnswersPercent == 0));
+            Assert.True(aggregate.Questions.Where(q => q.Id != firstQuestion.Id && q.Id != lastQuestion.Id)
+                    .All(q => q.CorrectAnswersPercent == 0 && q.IncorrectAnswersPercent == 0));
         }
 
         private QuizModel CreateQuiz() =>

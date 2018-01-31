@@ -10,7 +10,12 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        public Dictionary<Guid,QuestionResult> QuestionResults { get; private set;} 
+        private Dictionary<Guid,QuestionResult> _results; 
+
+        public List<QuestionResult> Questions 
+        {
+            get => _results.Values.ToList();
+        }
 
         private QuizResultsAggregate(Guid quizId) => QuizId = quizId;
 
@@ -34,7 +39,7 @@ namespace Quiz.Domain
         
         private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizStartedEvent @event)
         {
-            state.QuestionResults = @event.QuizModel.Questions.ToDictionary(
+            state._results = @event.QuizModel.Questions.ToDictionary(
                 q => q.Id,
                 q => new QuestionResult(q) 
             );
@@ -44,13 +49,14 @@ namespace Quiz.Domain
 
         private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizAnsweredEvent @event)
         {
-            @event.Answers.ForEach(answer => state.QuestionResults[answer.QuestionId].Reduce(answer.OptionId));
+            @event.Answers.ForEach(answer => state._results[answer.QuestionId].Reduce(answer.OptionId));
             return state;
         }
     }    
 
     public class QuestionResult
     {
+        public Guid Id { get; }
         public string Description { get; }
         private Guid _correctOption; 
         private decimal _correctAnswers;
@@ -61,6 +67,7 @@ namespace Quiz.Domain
 
         public QuestionResult(Question question)
         {
+            Id = question.Id;
             Description = question.Description;
             _correctOption = question.Options.First(o => o.IsCorrect).Id; 
         }
