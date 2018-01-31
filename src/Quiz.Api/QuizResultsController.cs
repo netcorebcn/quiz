@@ -22,7 +22,7 @@ namespace Quiz.Api
                 var currentQuiz = await session.Query<CurrentQuizAggregate>().FirstOrDefaultAsync();
                 if (currentQuiz == null)
                 {
-                    return NotFound();
+                    return QuizResultsAggregate.Empty;
                 }
 
                 return await Get(currentQuiz.Id);

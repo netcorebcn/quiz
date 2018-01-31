@@ -24,7 +24,7 @@ namespace Quiz.Api
                 }
             }
 
-            return null;
+            return QuizAggregate.Empty;
         }
 
         public async Task<object> GetState(Guid quizId)

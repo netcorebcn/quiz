@@ -17,16 +17,8 @@ namespace Quiz.Api
         public QuizController(QuizAppService quizAppService) => _quizAppService = quizAppService;
 
         [HttpGet]
-        public async Task<object> Get() 
-        {
-            var state = await _quizAppService.GetState();
-            if (state == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(state);
-        }
+        public async Task<object> Get() => 
+            await _quizAppService.GetState();
 
         [HttpGet("{quizId}")]
         public async Task<object> Get(Guid quizId) => 

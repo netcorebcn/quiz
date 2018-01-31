@@ -16,6 +16,15 @@ namespace Quiz.Domain
         {
             get => _results.Values.ToList();
         }
+        
+        public static object Empty 
+        { 
+            get => new  
+            {
+               QuizId = Guid.Empty,
+               Questions = new List<QuestionResult>()
+            };
+        }
 
         private QuizResultsAggregate(Guid quizId) => QuizId = quizId;
 

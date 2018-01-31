@@ -67,6 +67,16 @@ namespace Quiz.Domain
             }
         }
 
+        public static object Empty 
+        { 
+            get => new 
+            {
+                QuizId = Guid.Empty,
+                QuizState = QuizState.Created.ToString(),
+                Questions = new List<Question>()
+            }; 
+        }
+
         public object GetState()
         {
             return new {
