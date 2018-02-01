@@ -1,57 +1,89 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using EasyEventSourcing.Aggregate;
+using Quiz.Domain.Commands;
 using Quiz.Domain.Events;
 
 namespace Quiz.Domain
 {
-    public class QuizAggregate : AggregateRoot
+    public class QuizAggregate 
     {
-        public QuizAggregate() {}
-        public QuizAggregate(Guid id):base(id){}
+        private readonly List<object> _pendingEvents = new List<object>();
+
+        public Guid QuizId { get; }
+
+        private QuizState _state = QuizState.Created;
+
+        private QuizModel _model; 
+
+        private QuizAggregate(Guid quizId) => QuizId = quizId;
+
+        public static QuizAggregate Create(Guid quizId, params object[] events) =>
+            events.Aggregate(new QuizAggregate(quizId), Reduce);
         
-        public QuizModel QuizModel { get; private set; }
-
-        public int CorrectAnswers { get; private set; }
-
-        public int WrongAnswers { get; private set; }
-
-        public bool IsClosed { get; private set; }
-
         public void Start(QuizModel quizModel) => 
-            this.RaiseEvent(new QuizStartedEvent(Id, quizModel));
+            TryRaiseEvent(new QuizStartedEvent(QuizId, quizModel));
 
         public void Close() =>  
-            this.RaiseEvent(new QuizClosedEvent(CorrectAnswers, WrongAnswers));
+            TryRaiseEvent(new QuizClosedEvent(QuizId));
 
-        public void Vote(Guid questionId, Guid optionId)
+        public void Answer(QuizAnswersCommand command) 
         {
-            if (!IsClosed)
+            if (command.QuizId == QuizId &&
+                command.Answers.All(a => _model.Questions
+                        .Any(q => q.Options
+                        .Any(o => q.Id == a.QuestionId && o.Id == a.OptionId))))
             {
-                var option = QuizModel.Questions.FirstOrDefault(x => x.Id == questionId)?
-                    .Options.FirstOrDefault(x => x.Id == optionId);
-
-                if (option.IsCorrect)           
-                    this.RaiseEvent(new QuestionRightAnsweredEvent(questionId, optionId));
-                else
-                    this.RaiseEvent(new QuestionWrongAnsweredEvent(questionId, optionId));
+                TryRaiseEvent(new QuizAnsweredEvent(QuizId, command.Answers));
             }
+        } 
+
+        public static QuizAggregate Reduce(QuizAggregate state, object @event)
+        {
+            switch (@event)
+            {
+                case QuizStartedEvent started:
+                    state._model = started.QuizModel;
+                    state._state = QuizState.Started;
+                    break;
+                case QuizClosedEvent closed:
+                    state._state = QuizState.Closed;
+                    break;
+            }
+
+            return state;
         }
         
-        public void Apply(QuizStartedEvent @event) =>
-            QuizModel = @event.QuizModel;
+        public IReadOnlyList<object> GetPendingEvents() => _pendingEvents;
 
-        public void Apply(QuizClosedEvent @event)
+        public void ClearEvent() => _pendingEvents.Clear();
+
+        private void TryRaiseEvent(object @event) 
         {
-            CorrectAnswers = @event.RightAnswers;
-            WrongAnswers = @event.WrongAnswers;
-            IsClosed = true;
+            if (@event != null && _state.CanRaiseEvent(@event.GetType()))
+            {
+                _pendingEvents.Add(@event);
+                Reduce(this, @event);
+            }
         }
 
-        public void Apply(QuestionRightAnsweredEvent @event) => 
-            CorrectAnswers ++;
+        public static object Empty 
+        { 
+            get => new 
+            {
+                QuizId = Guid.Empty,
+                QuizState = QuizState.Created.ToString(),
+                Questions = new List<Question>()
+            }; 
+        }
 
-        public void Apply(QuestionWrongAnsweredEvent @event) => 
-            WrongAnswers ++;
+        public object GetState()
+        {
+            return new {
+                QuizId,
+                QuizState = _state.ToString(),
+                Questions = _state == QuizState.Started ? _model.Questions : null
+            };
+        }
     }    
 }

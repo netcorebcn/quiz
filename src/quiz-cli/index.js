@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const url = `http://${process.env.QUIZ_URL}:81/quiz/`;
+const url = `http://${process.env.QUIZ_URL || 'localhost'}/quiz/`;
 const iterations = process.env.ITERATIONS || 100;
 const interval = process.env.INTERVAL || 500;
 
@@ -14,7 +14,7 @@ const getQuiz = () => fetch(url).then(response => {
 });
 
 const postQuizAnswers = (quizId, answers) => fetch(`${url}${quizId}`, {
-  method: 'POST',
+  method: 'PUT',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
@@ -30,9 +30,9 @@ const random = max => {
 
 const randomOption = options => options[random(options.length - 1)];
 
-function vote(index, quizId, quizModel) {
+function vote(index, quizId, questions) {
   return new Promise((resolve, reject) => {
-    const answers = quizModel.questions.map(q => {
+    const answers = questions.map(q => {
       return {
         questionId: q.id,
         optionId: randomOption(q.options).id
@@ -59,7 +59,7 @@ getQuiz().then(data => {
   console.log('start voting...');
   const requests = [];
   for (let i = 0; i <= iterations; i++) {
-    requests.push(vote(i, data.quizId, data.quizModel));
+    requests.push(vote(i, data.quizId, data.questions));
   }
   Promise.all(requests);
   console.log('finished voting...');

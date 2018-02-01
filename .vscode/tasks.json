@@ -1,36 +1,35 @@
 {
-    "version": "0.1.0",
-    "command": "dotnet",
-    "isShellCommand": true,
-    "args": [],
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
-            "args": [
-                "${workspaceRoot}/quiz.sln"
-            ],
-            "isBuildCommand": false,
-            "problemMatcher": "$msCompile"
+            "label": "build",
+            "command": "dotnet build",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
-            "taskName": "publish",
-            "args": [
-                "${workspaceRoot}/quiz.sln",
-                "-c",
-                "Debug",
-                "-o",
-                "bin/PublishOutput"
-            ],
-            "isBuildCommand": true,
-            "problemMatcher": "$msCompile"
+            "label": "test",
+            "command": "dotnet test",
+            "type": "shell",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         },
         {
-            "taskName": "test",
-            "args": [
-                "${workspaceRoot}/quiz.sln"
-            ],
-            "isBuildCommand": false,
-            "problemMatcher": "$msCompile"
-        }
+            "label": "clean",
+            "type": "shell",
+            "command": "dotnet clean"
+        },
+        {
+            "label": "publish",
+            "type": "shell",
+            "command": "dotnet publish ./src/Quiz.Api -o bin/build -c Debug"
+        },
     ]
 }

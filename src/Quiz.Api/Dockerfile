@@ -1,28 +1,30 @@
-FROM microsoft/aspnetcore-build:2 AS build-image
+FROM microsoft/aspnetcore-build:2.0.3 AS builder
+ARG api
+ARG domain
+ARG unitTests
 
-# copy shared libraries
-COPY src/Quiz.Domain /src/Quiz.Domain
+# Restore packages
+COPY ${api}/*.csproj ${api}/
+COPY ${unitTests}/*.csproj ${unitTests}/
+COPY ${domain}/*.csproj ${domain}/
 
-# restore packages creating caching layer 
-WORKDIR /test/Quiz.Domain.Tests
-COPY test/Quiz.Domain.Tests/Quiz.Domain.Tests.csproj .
-RUN dotnet restore
+RUN dotnet restore /${api}
+RUN dotnet restore /${unitTests}
 
-# run units
-COPY test/Quiz.Domain.Tests .
-RUN dotnet test
+## Copy all sources
+COPY ${api} /${api}
+COPY ${unitTests} /${unitTests}
+COPY ${domain} /${domain}
 
-# restore packages creating caching layer 
-WORKDIR /src/Quiz.Api
-COPY src/Quiz.Api/Quiz.Api.csproj .
-RUN dotnet restore
+##### Run tests #####
+RUN dotnet test /${unitTests} --configuration Release
 
-# publish release
-COPY src/Quiz.Api .
-RUN dotnet publish  --output /build/ --configuration Release
+##### Publish project #####
+RUN dotnet publish /${api} --output /publish --configuration Release
+
 
 # build runtime image from published release
-FROM microsoft/aspnetcore:2
-WORKDIR /app
-COPY --from=build-image build/ .
+FROM microsoft/aspnetcore
+WORKDIR /publish
+COPY --from=builder /publish .
 ENTRYPOINT ["dotnet", "Quiz.Api.dll"]

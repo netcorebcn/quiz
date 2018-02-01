@@ -1,18 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <PackageReference Include="Marten" Version="2.5.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="../../src/Quiz.Domain/Quiz.Domain.csproj"/>
+    <ProjectReference Include="..\..\src\Quiz.Api\Quiz.Api.csproj" />
     <Content Include="quiz.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInPackage>true</IncludeInPackage>
@@ -20,5 +17,4 @@
       <CopyToOutput>true</CopyToOutput>
     </Content>
   </ItemGroup>
-
 </Project>

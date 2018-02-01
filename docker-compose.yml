@@ -1,34 +1,24 @@
-version: "3.1"
+version: "3.3"
 
 services:
   api:
     image: ${REGISTRY}quiz-api:${TAG}
-    ports:
-      - "81:80"
-    environment: 
-      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
-      - EVENT_STORE_API=admin:changeit@eventstore:2113
+    build:
+      context: .
+      dockerfile: ./src/Quiz.Api/Dockerfile
+      args:
+        api: ${QUIZ_API}
+        domain: ${QUIZ_DOMAIN}
+        unitTests: ${QUIZ_UNITTESTS}
   
-  results:
-    image: ${REGISTRY}quiz-results:${TAG}
-    ports:
-      - "82:80"
-    environment: 
-      - EVENT_STORE=tcp://admin:changeit@eventstore:1113
-      - EVENT_STORE_API=admin:changeit@eventstore:2113
-
   ui:
     image: ${REGISTRY}quiz-ui:${TAG}
     build:
       context: ${BUILD_CONTEXT}
       dockerfile: ./src/quiz-ui/Dockerfile
-    depends_on:
-      - api
-      - results
-    ports:
-      - "80:5000"
 
-  eventstore:
-    image: eventstore/eventstore
-    ports:
-      - "2113:2113"
+  cli:
+    image: ${REGISTRY}quiz-cli:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/quiz-cli/Dockerfile

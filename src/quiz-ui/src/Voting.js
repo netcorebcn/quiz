@@ -8,15 +8,16 @@ class Voting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: []
+      answers : []
     };
 
     bindClass(this);
   }
 
-  voteHandler() {
-    this.props.voteQuestionHandler(this.state.answers);
+  answerHandler() {
+    this.props.answerHandler(this.state.answers);
   }
+
   selectAnswer(questionId, optionId) {
     this.setState(prevState => {
       const answers = prevState.answers.filter(
@@ -31,6 +32,7 @@ class Voting extends Component {
       };
     });
   }
+
   getSelectedOption(questionId) {
     var answer = this.state.answers.find(_ => _.questionId === questionId);
     if (answer) {
@@ -38,12 +40,14 @@ class Voting extends Component {
     }
     return null;
   }
+
   render() {
-    const { questions, isSubmitted } = this.props;
+    const { quiz, isSubmitted } = this.props;
+    const quizStarted = quiz.quizState === 'Started';
     return (
       <div className="Voting">
-        <h2>Questions: </h2>
-        {questions.map(question => (
+        <h2>Questions: {!quizStarted && 'Not available'}</h2>
+        {quiz.questions.map(question => (
           <Question
             key={question.id}
             question={question}
@@ -52,9 +56,9 @@ class Voting extends Component {
             isSubmitted={isSubmitted}
           />
         ))}
-        {!isSubmitted &&
+        {!isSubmitted && quizStarted &&
           <div className="buttons">
-            <button className="submit-button button" onClick={this.voteHandler}>
+            <button className="submit-button button" onClick={this.answerHandler}>
               Submit
             </button>
           </div>}

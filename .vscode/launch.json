@@ -1,10 +1,14 @@
 {
+    // Use IntelliSense to find out which attributes exist for C# debugging
+    // Use hover for the description of the existing attributes
+    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Quiz.Api (Docker)",
+            "name": "QuizApi",
             "type": "coreclr",
             "request": "launch",
+            "preLaunchTask": "publish",
             "cwd": "/app",
             "program": "/app/Quiz.Api.dll",
             "sourceFileMap": {
@@ -12,32 +16,14 @@
             },
             "pipeTransport": {
                 "debuggerPath": "/vsdbg/vsdbg",
-                "pipeProgram": "/bin/bash",
                 "pipeCwd": "${workspaceRoot}",
+                "pipeProgram": "docker",
                 "pipeArgs": [
-                    "-c",
-                    "docker exec -i quiz_api_1 /vsdbg/vsdbg --interpreter=vscode"
-                ]
+                    "exec",
+                    "-i",
+                    "quiz-api"
+                ],
+                "quoteArgs": false
             }
-        },
-        {
-            "name": "Quiz.Results (Docker)",
-            "type": "coreclr",
-            "request": "launch",
-            "cwd": "/app",
-            "program": "/app/Quiz.Results.dll",
-            "sourceFileMap": {
-                "/app": "${workspaceRoot}/src/Quiz.Results"
-            },
-            "pipeTransport": {
-                "debuggerPath": "/vsdbg/vsdbg",
-                "pipeProgram": "/bin/bash",
-                "pipeCwd": "${workspaceRoot}",
-                "pipeArgs": [
-                    "-c",
-                    "docker exec -i quiz_results_1 /vsdbg/vsdbg --interpreter=vscode"
-                ]
-            }
-        }
-    ]
+        }]
 }

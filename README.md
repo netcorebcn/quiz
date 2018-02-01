@@ -1,28 +1,24 @@
 # Quiz voting and results application
-Example application with .NET Core, Event Store and Docker
+Simple EventSourcing example using .NET Core, React, Docker and K8s.
 
-* run with [**docker**](https://www.docker.com/products/docker)  
+* run with [**docker**](https://www.docker.com/products/docker) from bash with ``.\run.sh`` 
   
-  from MacOS ``.\run.sh`` or from Windows ``.\run.ps1``
+  Open <http://localhost:8080> for quiz voting
   
-  Open <http://localhost> for quiz voting
+  Open <http://localhost:8080?results> for quiz results
   
-  Open <http://localhost?results> for quiz results
+  Open <http://localhost/swagger> for quiz api
   
-  Open <http://localhost:81/swagger> for quiz api
-  
-  Open <http://localhost:2113> for manage event store
   
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
+
+* Marten Event Store library for .NET and postgresql
+  <https://github.com/JasperFx/marten>
 
 * Example architecture thanks to the popular  
   <https://github.com/docker/example-voting-app>
 
-* EventStore repository thanks to [ReactiveTraderCloud](https://github.com/AdaptiveConsulting/ReactiveTraderCloud)
-
 * WebSockets helper classes thanks to  
   <https://github.com/radu-matei/websocket-manager>
 
-* Docker swarm local cluster thanks to  
-  <https://codefresh.io/blog/deploy-docker-compose-v3-swarm-mode-cluster/>
   

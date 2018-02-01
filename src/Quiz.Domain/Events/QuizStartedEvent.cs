@@ -2,15 +2,12 @@ using System;
 
 namespace Quiz.Domain.Events
 {
-    public class QuizStartedEvent
+    public class QuizStartedEvent:QuizEvent
     {
-        public Guid QuizId { get; }
-
         public QuizModel QuizModel { get; }
 
-        public QuizStartedEvent(Guid quizId, QuizModel quizModel)
+        public QuizStartedEvent(Guid quizId, QuizModel quizModel):base(quizId)
         {
-            QuizId = quizId;
             QuizModel = quizModel;
         }
     }

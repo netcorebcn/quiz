@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Loader from './Loader';
 import Voting from './Voting';
 import Results from './Results';
-import { getQuiz, postQuizAnswers, startNewQuiz, initWebsockets } from './api';
+import { get, getResults, answer, start, close, subscribe} from './api';
 import { bindClass } from './utils';
 
 import './App.css';
@@ -11,8 +11,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quizId: 0,
-      questions: [],
+      quizResults: { quizId: 0, questions: []},
+      quiz: { quizId: 0, questions: []},
       isProcessing: true,
       isSubmitted: false,
       showResults: window.location.search.indexOf('results') !== -1
@@ -22,62 +22,41 @@ class App extends Component {
   }
 
   componentDidMount() {
-    getQuiz().then(json => {
-      if (json != null) {
-        this.setState({
-          quizId: json.quizId,
-          questions: json.quizModel.questions.map(q => ({
-            ...q,
-            ...json.questions.find(x => x.questionId === q.id)
-          })),
-          isProcessing: false
-        });
-      } else {
-        this.setState({
-          isProcessing: false
-        });
-      }
-    });
-
-    initWebsockets(questionStats => this.setState({
-      ...this.state,
-      questions: this.state.questions.map(
-        question => question.id === questionStats.questionId
-          ? {
-              ...question,
-              ...questionStats
-            }
-          : question
-      )
-    }));
+    get().then(quiz => this.setState({ isProcessing: false, quiz }));
+    getResults().then(quizResults =>  this.setState({ quizResults, isProcessing: false }));
+    subscribe(quizResults => this.setState({ quizResults }));
   }
 
-  startQuizHandler(quiz) {
-    startNewQuiz(quiz).then(json => this.setState({
-      ...json
-    }));
+  commandHandler(command){
+    this.setState({ isProcessing: true });
+    command
+      .then(quiz => {
+        this.setState({ quiz });
+        getResults().then(quizResults =>  
+          this.setState({ quizResults, isProcessing: false, isSubmitted: true })
+        )
+      })
+  }
+  
+  startHandler(quiz) {
+    this.commandHandler(start(quiz));
   }
 
-  voteQuestionHandler(answers) {
-    this.setState({
-      isProcessing: true
-    });
+  closeHandler(quizId) {
+    this.commandHandler(close(quizId));
+  }
 
-    postQuizAnswers(this.state.quizId, answers).then(json => {
-      this.setState({
-        isProcessing: false,
-        isSubmitted: true
-      });
-    });
+  answerHandler(answers) {
+    this.commandHandler(answer(this.state.quiz.quizId, answers));
   }
 
   render() {
     const {
-      isProcessing,
       showResults,
-      questions,
-      quizId,
-      isSubmitted
+      quiz,
+      quizResults,
+      isSubmitted,
+      isProcessing,
     } = this.state;
     return (
       <div className="Container">
@@ -90,13 +69,14 @@ class App extends Component {
             <h1>Welcome to Quiz App</h1>
             {showResults
               ? <Results
-                  questions={questions}
-                  quizId={quizId}
-                  startQuizHandler={this.startQuizHandler}
+                  quizResults={quizResults}
+                  quizState={quiz.quizState}
+                  startHandler={this.startHandler}
+                  closeHandler={this.closeHandler}
                 />
               : <Voting
-                  questions={questions}
-                  voteQuestionHandler={this.voteQuestionHandler}
+                  quiz={quiz}
+                  answerHandler={this.answerHandler}
                   isSubmitted={isSubmitted}
                 />}
           </div>

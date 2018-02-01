@@ -1,3 +1,9 @@
-#!/bin/bash
-dotnet publish -c Debug -o bin/PublishOutput
-docker-compose -f docker-compose.yml -f docker-compose.debug.yml up --force-recreate
+docker build -f docker/aspnetcore-debug/Dockerfile -t aspnetcore-debug .
+
+docker-compose stop
+
+docker-compose \
+    -f docker-compose.infra.yml \
+    -f docker-compose.override.yml \
+    -f docker-compose.debug.yml \
+    up -d --force-recreate --remove-orphans

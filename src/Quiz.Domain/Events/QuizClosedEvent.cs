@@ -1,14 +1,11 @@
+using System;
+
 namespace Quiz.Domain.Events
 {
-    public class QuizClosedEvent
+    public class QuizClosedEvent: QuizEvent
     {
-        public int RightAnswers { get; }
-        public int WrongAnswers { get; }
-
-        public QuizClosedEvent(int righAnswers, int wrongAnswers)
+        public QuizClosedEvent(Guid quizId) : base(quizId)
         {
-            RightAnswers = righAnswers;
-            WrongAnswers = wrongAnswers;
         }
     }
 }
