@@ -6,6 +6,9 @@ spec:
   type: LoadBalancer 
   ports: 
   - port: 80
+    name: api
+  - port: 8080
+    name: ui
   selector:
     app: quiz-api
 ---
@@ -28,12 +31,16 @@ spec:
     spec:
       containers:
       - name: quiz-api
-        image: paulopez/quiz-api:latest
+        image: paulopez/quiz-api
         ports:
         - containerPort: 80
         env:
         - name: dbconnection
           value: "Username=admin;Password=changeit;Host=db;Port=5432"
+      - name: quiz-ui
+        image: paulopez/quiz-ui
+        ports:
+        - containerPort: 8080
 ---
 apiVersion: apps/v1beta1
 kind: Deployment

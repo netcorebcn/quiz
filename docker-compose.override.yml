@@ -14,4 +14,4 @@ services:
       context: ${BUILD_CONTEXT}
       dockerfile: ./src/quiz-ui/Dockerfile
     ports:
-      - "8080:5000"
+      - "8080:8080"
