@@ -6,6 +6,7 @@ using Quiz.Api.EventStore;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
 using Swashbuckle.AspNetCore.Swagger;
+using EasyWebSockets;
 
 namespace Quiz.Api
 {
@@ -29,11 +30,14 @@ namespace Quiz.Api
                     .AllowCredentials());
             })
             .AddEventStore(Configuration)
+            .AddEasyWebSockets()
             .AddTransient<QuizAppService>()
+            .AddTransient<QuizResultsAppService>()
             .AddMvc();
 
         public void Configure(IApplicationBuilder app) => app
             .UseCors("CorsPolicy")
+            .UseEasyWebSockets()
             .UseMvc()
             .UseSwagger()
             .UseSwaggerUI(c =>

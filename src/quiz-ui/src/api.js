@@ -1,5 +1,6 @@
+  const apiGateway = `${window.location.hostname}:5000`
   const apiUrl = (resource = 'quiz', id = '')  => 
-       `//${window.location.hostname}:5000/${resource}/${id}`;
+       `//${apiGateway}/${resource}/${id}`;
   
   const post = (url, method, body) =>
       fetch(url, { method, headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -25,8 +26,9 @@
       .then(r => r.json());
 
   const subscribe = (action) => {
-      const webSocket = new WebSocket(`ws://${window.location.host}/ws`);
-      webSocket.onmessage = ({ data }) => action(JSON.parse(data)); 
+      const webSocket = new WebSocket(`ws://${apiGateway}/ws`);
+      webSocket.onmessage = ({ data }) => 
+      data.indexOf('Connected') === -1 && action(JSON.parse(data)); 
   }
   
   export {

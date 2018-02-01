@@ -85,11 +85,11 @@ namespace Quiz.Domain
         {
             if (_correctOption == selectedOption)
             {
-                _correctAnswers =+ 1;
+                _correctAnswers += 1;
             }
             else
             {
-                _incorrectAnswers =+ 1;
+                _incorrectAnswers += 1;
             }
 
             var total = _correctAnswers + _incorrectAnswers;

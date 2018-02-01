@@ -10,33 +10,14 @@ namespace Quiz.Api
     [Route("[controller]")]
     public class QuizResultsController : Controller
     {
-        private readonly IDocumentStore _documentStore;
+        private readonly QuizResultsAppService _appService;
 
-        public QuizResultsController(IDocumentStore documentStore) => _documentStore = documentStore;
+        public QuizResultsController(QuizResultsAppService appService) => _appService = appService;
 
         [HttpGet]
-        public async Task<object> Get()
-        {
-            using(var session = _documentStore.OpenSession())
-            {
-                var currentQuiz = await session.Query<CurrentQuizAggregate>().FirstOrDefaultAsync();
-                if (currentQuiz == null)
-                {
-                    return QuizResultsAggregate.Empty;
-                }
-
-                return await Get(currentQuiz.Id);
-            }
-        }
+        public async Task<object> Get() => await _appService.Get();
 
         [HttpGet("{quizId}")]
-        public async Task<object> Get(Guid quizId) 
-        {
-            using(var session = _documentStore.OpenSession())
-            {
-                var events = (await session.Events.FetchStreamAsync(quizId)).Select(@event => @event.Data).ToArray();
-                return QuizResultsAggregate.Create(quizId, events);
-            }
-        }
+        public async Task<object> Get(Guid quizId) => await _appService.Get(quizId);
     }
 }

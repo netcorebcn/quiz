@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EasyWebSockets;
 using Marten;
 using Quiz.Domain;
 using Quiz.Domain.Commands;
@@ -10,8 +11,15 @@ namespace Quiz.Api
     public class QuizAppService
     {
         private readonly IDocumentStore _eventStore;
+        private readonly IWebSocketPublisher _wsBus;
+        private readonly QuizResultsAppService _resultsService;
 
-        public QuizAppService(IDocumentStore eventStore) => _eventStore = eventStore;
+        public QuizAppService(IDocumentStore eventStore, IWebSocketPublisher wsBus, QuizResultsAppService resultsService) 
+        {
+            _eventStore = eventStore;
+            _wsBus = wsBus;
+            _resultsService = resultsService;
+        } 
 
         public async Task<object> GetState()
         {
@@ -58,7 +66,21 @@ namespace Quiz.Api
                 session.Events.Append(aggregate.QuizId, expectedVersion, aggregate.GetPendingEvents().ToArray());
                 await session.SaveChangesAsync();
 
+                await Publish();
                 return aggregate.GetState();
+            }
+
+            async Task Publish()
+            {
+                try
+                {
+                    var quizResults = await _resultsService.Get(quizId);
+                    await _wsBus.SendMessageToAllAsync(quizResults);
+                }
+                catch(Exception)
+                {
+                    // Log
+                }
             }
         }
 

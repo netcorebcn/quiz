@@ -22,7 +22,7 @@ namespace Quiz.Api.Tests
         {
             using(var session = _documentStore.OpenSession())
             {
-                var appService = new QuizAppService(_documentStore);
+                var appService = new QuizAppService(_documentStore,null, null);
                 var result = await appService.Start(CreateQuiz());
                 Assert.NotNull(result);
             }
