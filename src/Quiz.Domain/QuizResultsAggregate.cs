@@ -16,6 +16,10 @@ namespace Quiz.Domain
         {
             get => _results.Values.ToList();
         }
+
+        public decimal TotalCorrectAnswersPercent {get; private set; }
+
+        public decimal TotalIncorrectAnswersPercent {get; private set; }
         
         public static object Empty 
         { 
@@ -52,13 +56,14 @@ namespace Quiz.Domain
                 q => q.Id,
                 q => new QuestionResult(q) 
             );
-
             return state;
         }
 
         private static QuizResultsAggregate Reduce(QuizResultsAggregate state, QuizAnsweredEvent @event)
         {
             @event.Answers.ForEach(answer => state._results[answer.QuestionId].Reduce(answer.OptionId));
+            state.TotalCorrectAnswersPercent = state._results.Sum(r => r.Value.CorrectAnswersPercent) / state._results.Count;
+            state.TotalIncorrectAnswersPercent = Math.Abs(state.TotalCorrectAnswersPercent - 100);
             return state;
         }
     }    
@@ -92,11 +97,8 @@ namespace Quiz.Domain
                 _incorrectAnswers += 1;
             }
 
-            var total = _correctAnswers + _incorrectAnswers;
-            CorrectAnswersPercent = Percent(_correctAnswers);
-            IncorrectAnswersPercent = Percent(_incorrectAnswers);
-
-            decimal Percent(decimal answers) => (answers/total) * 100;
+            CorrectAnswersPercent = _correctAnswers/ (_correctAnswers + _incorrectAnswers) * 100;
+            IncorrectAnswersPercent = Math.Abs(CorrectAnswersPercent - 100);
         }
     }
 }

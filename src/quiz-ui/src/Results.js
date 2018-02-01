@@ -32,7 +32,7 @@ class Results extends Component {
       quizResults,
       quizState
     } = this.props;
-    const { quizId, questions } = quizResults;
+    const { quizId, questions, totalCorrectAnswersPercent, totalIncorrectAnswersPercent } = quizResults;
     const quizStarted = quizState === 'Started';
 
     return (
@@ -57,8 +57,8 @@ class Results extends Component {
               Overall Score
             </h2>
             <ResultListItem
-              correct={0}
-              incorrect={0}
+              correct={totalCorrectAnswersPercent || 0}
+              incorrect={totalIncorrectAnswersPercent || 0}
             />
           </div>
           <div className="buttons">
