@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const url = `http://${process.env.QUIZ_URL}/quiz/`;
+const url = `http://${process.env.QUIZ_URL || 'localhost'}/quiz/`;
 const iterations = process.env.ITERATIONS || 100;
 const interval = process.env.INTERVAL || 500;
 

@@ -1,4 +1,4 @@
-  const apiGateway = `${window.location.hostname}:5000`
+  const apiGateway = `${window.location.hostname}`
   const apiUrl = (resource = 'quiz', id = '')  => 
        `//${apiGateway}/${resource}/${id}`;
   

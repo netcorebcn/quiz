@@ -1,14 +1,9 @@
-version: "3.1"
+version: "3.3"
 
 services:
   api:
-    image: paulopez/aspnetcore-debug
+    image: aspnetcore-debug
+    container_name: quiz-api
     volumes: 
-      - ./src/Quiz.Api/bin/PublishOutput/:/app
-      - ~/.nuget/packages:/root/.nuget/packages:ro
+      - ./src/Quiz.Api/bin/build/:/app
   
-  results:
-    image: paulopez/aspnetcore-debug
-    volumes: 
-      - ./src/Quiz.Results/bin/PublishOutput/:/app
-      - ~/.nuget/packages:/root/.nuget/packages:ro

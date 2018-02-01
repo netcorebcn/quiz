@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  api:
+    image: quiz-api
+    ports:
+      - "80:80"
+    environment: 
+      dbconnection: ${DB_CONNECTION}
+  
+  ui:
+    image: ${REGISTRY}quiz-ui:${TAG}
+    build:
+      context: ${BUILD_CONTEXT}
+      dockerfile: ./src/quiz-ui/Dockerfile
+    ports:
+      - "8080:5000"

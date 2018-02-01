@@ -25,6 +25,11 @@
             "label": "clean",
             "type": "shell",
             "command": "dotnet clean"
-        }
+        },
+        {
+            "label": "publish",
+            "type": "shell",
+            "command": "dotnet publish ./src/Quiz.Api -o bin/build -c Debug"
+        },
     ]
 }
