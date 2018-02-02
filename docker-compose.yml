@@ -14,11 +14,17 @@ services:
   ui:
     image: ${REGISTRY}quiz-ui:${TAG}
     build:
-      context: ${BUILD_CONTEXT}
+      context: .
       dockerfile: ./src/quiz-ui/Dockerfile
 
   cli:
     image: ${REGISTRY}quiz-cli:${TAG}
     build:
-      context: ${BUILD_CONTEXT}
+      context: .
       dockerfile: ./src/quiz-cli/Dockerfile
+
+  ci:
+    image: ${REGISTRY}jenkins:${TAG}
+    build:
+      context: ./jenkins 
+      dockerfile: Dockerfile

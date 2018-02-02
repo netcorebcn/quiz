@@ -21,4 +21,5 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
 * WebSockets helper classes thanks to  
   <https://github.com/radu-matei/websocket-manager>
 
-  
+* Running Jenkins in Docker
+  <http://container-solutions.com/running-docker-in-jenkins-in-docker/>  
