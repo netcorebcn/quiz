@@ -11,7 +11,7 @@ services:
   ui:
     image: ${REGISTRY}quiz-ui:${TAG}
     build:
-      context: ${BUILD_CONTEXT}
+      context: .
       dockerfile: ./src/quiz-ui/Dockerfile
     ports:
-      - "8080:8080"
+      - "8080:80"
