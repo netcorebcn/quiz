@@ -19,7 +19,7 @@ namespace Quiz.Api
 
         public void ConfigureServices(IServiceCollection services) => services
             .AddSwaggerGen(c =>
-                c.SwaggerDoc("v1", new Info { Title = "Quiz Voting API", Version = "v1" })
+                c.SwaggerDoc("v1", new Info { Title = "Quiz API", Version = "v1" })
             )
             .AddCors(options =>
             {
@@ -37,11 +37,13 @@ namespace Quiz.Api
 
         public void Configure(IApplicationBuilder app) => app
             .UseCors("CorsPolicy")
-            .UseEasyWebSockets()
+            .UseEasyWebSockets("/api/ws")
             .UseMvc()
-            .UseSwagger()
-            .UseSwaggerUI(c =>
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
+            .UseSwagger(c => c.RouteTemplate = "api/swagger/{documentName}/swagger.json")
+            .UseSwaggerUI(c => {
+                c.RoutePrefix = "api/swagger";
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Quiz API v1");
+                }
             );
     }
 }
