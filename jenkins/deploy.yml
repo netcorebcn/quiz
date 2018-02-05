@@ -12,7 +12,7 @@ spec:
    containers:
    - name: jenkins-ci
      imagePullPolicy: Always
-     image: paulopez/jenkins:1.2
+     image: paulopez/jenkins:latest
      ports:
      - containerPort: 8080
      - containerPort: 50000
@@ -41,7 +41,7 @@ kind: Service
 metadata:
   name: jenkins-ci
 spec:
- type: LoadBalancer
+ type: NodePort
  ports:
    - name: jenkins
      port: 8080
@@ -51,3 +51,22 @@ spec:
      targetPort: 50000
  selector:
    name: jenkins-ci
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: jenkins-ci
+#  annotations:
+#   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: quiz-ci.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jenkins-ci 
+          servicePort: 8080

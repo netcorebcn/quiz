@@ -6,4 +6,7 @@ if [ -n "$2" ]; then
     export TAG=$2
 fi
 docker-compose -f docker-compose.yml build
-docker-compose -f docker-compose.yml push
+
+if [ -n "$REGISTRY" ]; then
+    docker-compose -f docker-compose.yml push
+fi

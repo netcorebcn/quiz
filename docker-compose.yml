@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   api:
-    image: ${REGISTRY}quiz-api:${TAG}
+    image: ${REGISTRY}/quiz-api:${TAG}
     build:
       context: .
       dockerfile: ./src/Quiz.Api/Dockerfile
@@ -12,19 +12,19 @@ services:
         unitTests: ${QUIZ_UNITTESTS}
   
   ui:
-    image: ${REGISTRY}quiz-ui:${TAG}
+    image: ${REGISTRY}/quiz-ui:${TAG}
     build:
       context: .
       dockerfile: ./src/quiz-ui/Dockerfile
 
   cli:
-    image: ${REGISTRY}quiz-cli:${TAG}
+    image: ${REGISTRY}/quiz-cli:${TAG}
     build:
       context: .
       dockerfile: ./src/quiz-cli/Dockerfile
 
   ci:
-    image: ${REGISTRY}jenkins:${TAG}
+    image: ${REGISTRY}/jenkins:${TAG}
     build:
       context: ./jenkins 
       dockerfile: Dockerfile
