@@ -74,7 +74,10 @@ spec:
         - containerPort: 80
         env:
         - name: dbconnection
-          value: "Username=admin;Password=changeit;Host=db;Port=5432"
+          valueFrom:
+            secretKeyRef:
+              name: connection-strings
+              key: db
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -95,9 +98,15 @@ spec:
           name: db
         env:
         - name: POSTGRES_USER
-          value: admin
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: db-user
         - name: POSTGRES_PASSWORD
-          value: changeit
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: db-pass
 ---
 apiVersion: v1
 kind: Service
