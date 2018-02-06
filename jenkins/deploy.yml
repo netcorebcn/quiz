@@ -28,6 +28,9 @@ spec:
          name: docker-sock 
        - mountPath: /var/jenkins_home
          name: jenkins-home 
+       - mountPath: /run/secrets
+         name: credentials
+         readOnly: true
    volumes: 
      - name: docker-sock
        hostPath: 
@@ -35,6 +38,14 @@ spec:
      - name: jenkins-home
        hostPath: 
          path: /var/jenkins_home
+     - name: credentials
+       secret:
+        secretName: jenkins-user-pass
+        items:
+         - key: jenkins-user
+           path: jenkins-user
+         - key: jenkins-pass
+           path: jenkins-pass
 ---
 apiVersion: v1
 kind: Service
