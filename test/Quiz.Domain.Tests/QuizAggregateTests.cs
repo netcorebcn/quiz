@@ -56,7 +56,7 @@ namespace Quiz.Domain.Tests
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizAnsweredEvent>()
-                .WithTotalCount(3);
+                .WithTotalCount(4);
 
         [Fact]
         public void Given_Started_Quiz_When_Closed_Then_QuizClosed() => 
@@ -108,7 +108,7 @@ namespace Quiz.Domain.Tests
                 })
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizClosedEvent>()
-                .WithTotalCount(4);
+                .WithTotalCount(3);
 
         [Fact]
         public void Given_Started_Quiz_When_Answer_With_Invalid_QuizId_Then_QuizAnswered_NotRaised() => 
