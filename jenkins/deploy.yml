@@ -23,6 +23,16 @@ spec:
       periodSeconds: 20
      securityContext: 
        privileged: true 
+     env:
+      - name: REGISTRY
+        value: paulopez
+      - name: DOCKER_USER
+        value: paulopez
+      - name: DOCKER_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: docker-credentials 
+            key: docker-pass
      volumeMounts: 
        - mountPath: /var/run
          name: docker-sock 
