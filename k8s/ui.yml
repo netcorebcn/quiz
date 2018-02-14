@@ -1,0 +1,43 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: quiz
+#  annotations:
+#   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: quiz.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: quiz-ui
+          servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-ui
+spec:
+  ports: 
+  - port: 80
+  selector:
+    app: quiz-ui
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: quiz-ui
+spec:
+  template:
+    metadata:
+      labels:
+        app: quiz-ui
+    spec:
+      containers:
+      - name: quiz-ui
+        imagePullPolicy: Always
+        image: ${REGISTRY}/quiz-ui:${TAG}
+        ports:
+        - containerPort: 80

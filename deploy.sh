@@ -1,3 +1,7 @@
 #!/bin/bash
 set -e
-sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g' ./k8s/deploy.yml | kubectl apply -f -
+
+for deploy in k8s/*.yml
+do
+    sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g' $deploy | kubectl apply -f -
+done

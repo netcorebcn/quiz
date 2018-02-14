@@ -1,0 +1,48 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: quiz-queries
+spec:
+  template:
+    metadata:
+      labels:
+        app: quiz-queries
+    spec:
+      containers:
+      - name: quiz-queries
+        imagePullPolicy: Always
+        image: ${REGISTRY}/quiz-queries:${TAG}
+        ports:
+        - containerPort: 80
+        env:
+        - name: messagebroker
+          valueFrom:
+            secretKeyRef:
+              name: messagebroker
+              key: messagebroker
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-queries
+spec:
+  ports: 
+  - port: 80
+  selector:
+    app: quiz-queries
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: quiz-queries
+#  annotations:
+#   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: quiz.io
+    http:
+      paths:
+      - path: /queries
+        backend:
+          serviceName: quiz-queries
+          servicePort: 80

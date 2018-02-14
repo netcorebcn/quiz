@@ -1,0 +1,71 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: db 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        ports:
+        - containerPort: 5432
+          name: db
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: db-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: db-pass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: messagebroker 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: messagebroker
+    spec:
+      containers:
+      - name: messagebroker
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 5672 
+          name: broker
+        - containerPort: 15672 
+          name: management
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: messagebroker
+spec:
+  ports:
+  - port: 5432
+    name: broker
+  - port: 15672
+    name: management
+  selector:
+    app: messagebroker
