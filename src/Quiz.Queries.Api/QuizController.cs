@@ -7,13 +7,13 @@ using Quiz.Domain;
 namespace Quiz.Results.Api
 {
     [Route("api/[controller]")]
-    public class QuizResultsController : Controller
+    public class QuizController : Controller
     {
         private readonly QuizResultsAppService _appService;
 
-        public QuizResultsController(QuizResultsAppService appService) => _appService = appService;
+        public QuizController(QuizResultsAppService appService) => _appService = appService;
 
         [HttpGet]
-        public async Task<object> Get() => await _appService.Get();
+        public object Get() => _appService.Get();
     }
 }

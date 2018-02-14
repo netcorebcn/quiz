@@ -27,7 +27,7 @@ namespace Quiz.Results.Api
             _wsBus = wsBus;
         }
 
-        public async Task<object> Get() => aggregate ?? QuizResultsAggregate.Empty;
+        public object Get() => aggregate ?? QuizResultsAggregate.Empty;
 
         public void Start()
         {

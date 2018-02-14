@@ -1,10 +1,15 @@
 version: "3.3"
 
 services:
+  gateway:
+    image: quiz-gateway
+    ports:
+      - "80:80"
+
   commands:
     image: quiz-commands
     ports:
-      - "80:80"
+      - "81:80"
     environment: 
       dbconnection: ${DB_CONNECTION}
       messagebroker: ${MESSAGE_BROKER}
@@ -12,7 +17,7 @@ services:
   queries:
     image: quiz-queries
     ports:
-      - "81:80"
+      - "82:80"
     environment: 
       messagebroker: ${MESSAGE_BROKER}
 
