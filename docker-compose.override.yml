@@ -1,17 +1,22 @@
 version: "3.3"
 
 services:
-  api:
-    image: quiz-api
+  commands:
+    image: quiz-commands
     ports:
       - "80:80"
     environment: 
       dbconnection: ${DB_CONNECTION}
+      messagebroker: ${MESSAGE_BROKER}
   
+  queries:
+    image: quiz-queries
+    ports:
+      - "81:80"
+    environment: 
+      messagebroker: ${MESSAGE_BROKER}
+
   ui:
     image: ${REGISTRY}quiz-ui:${TAG}
-    build:
-      context: .
-      dockerfile: ./src/quiz-ui/Dockerfile
     ports:
       - "8080:80"

@@ -1,27 +1,41 @@
 version: "3.3"
 
 services:
-  api:
-    image: ${REGISTRY}/quiz-api:${TAG}
+  commands:
+    image: ${REGISTRY}/quiz-commands:${TAG}
     build:
       context: .
-      dockerfile: ./src/Quiz.Api/Dockerfile
+      dockerfile: ${QUIZ_COMMANDS}/Dockerfile
       args:
-        api: ${QUIZ_API}
+        api: ${QUIZ_COMMANDS}
         domain: ${QUIZ_DOMAIN}
-        unitTests: ${QUIZ_UNITTESTS}
+        unitTests: ${QUIZ_COMMANDS_UNITTESTS}
   
+  queries:
+    image: ${REGISTRY}/quiz-queries:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_QUERIES}/Dockerfile
+      args:
+        api: ${QUIZ_QUERIES}
+        domain: ${QUIZ_DOMAIN}
+        unitTests: ${QUIZ_QUERIES_UNITTESTS}
+
   ui:
     image: ${REGISTRY}/quiz-ui:${TAG}
     build:
       context: .
-      dockerfile: ./src/quiz-ui/Dockerfile
+      dockerfile: ${QUIZ_UI}/Dockerfile
+      args:
+        api: ${QUIZ_UI}
 
   cli:
     image: ${REGISTRY}/quiz-cli:${TAG}
     build:
       context: .
-      dockerfile: ./src/quiz-cli/Dockerfile
+      dockerfile: ${QUIZ_CLI}/Dockerfile
+      args:
+        api: ${QUIZ_CLI}
 
   ci:
     image: ${REGISTRY}/jenkins:${TAG}
