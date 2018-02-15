@@ -73,14 +73,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
  name: messsagebroker
- annotations:
-  nginx.ingress.kubernetes.io/rewrite-target: /
+#  annotations:
+#   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: quiz.io
+  - host: quiz-rabbit.io
     http:
       paths:
-      - path: /messagebroker
+      - path: /
         backend:
           serviceName: messagebroker
           servicePort: 15672
