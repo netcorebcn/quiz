@@ -38,6 +38,6 @@ namespace Quiz.Api
             .UseCors("CorsPolicy")
             .UseMvc()
             .UseSwagger()
-            .UseSwaggerUI(c => c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Quiz API v1"));
+            .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quiz API v1"));
     }
 }

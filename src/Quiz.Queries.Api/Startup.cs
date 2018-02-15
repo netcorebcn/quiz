@@ -40,6 +40,6 @@ namespace Quiz.Results.Api
             .UseQuizResultsApp()
             .UseMvc()
             .UseSwagger()
-            .UseSwaggerUI(c => c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Quiz Results API v1"));
+            .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quiz Results API v1"));
     }
 }
