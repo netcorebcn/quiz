@@ -42,7 +42,7 @@ spec:
   - host: quiz.io
     http:
       paths:
-      - path: /queries
+      - path: /queries/api
         backend:
           serviceName: quiz-queries
           servicePort: 80

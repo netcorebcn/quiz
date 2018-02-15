@@ -47,7 +47,7 @@ spec:
   - host: quiz.io
     http:
       paths:
-      - path: /commands
+      - path: /commands/api
         backend:
           serviceName: quiz-commands
           servicePort: 80
