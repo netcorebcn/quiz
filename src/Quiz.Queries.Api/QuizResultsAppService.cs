@@ -64,7 +64,8 @@ namespace Quiz.Results.Api
     {
         public static IServiceCollection AddQuizResultsApp(this IServiceCollection services, IConfiguration configuration) => services
             .AddEasyWebSockets()
-            .AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"] ?? "amqp://guest:guest@localhost:5672"))
+            // .AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"] ?? "amqp://guest:guest@localhost:5672"))
+            .AddSingleton<IBus>(RabbitHutch.CreateBus("amqp://guest:guest@messagebroker:5672"))
             .AddSingleton<QuizResultsAppService>();
         
         public static IApplicationBuilder UseQuizResultsApp(this IApplicationBuilder app)
