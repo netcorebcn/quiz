@@ -1,5 +1,5 @@
   const apiGateway = (api) => `${window.location.hostname}/${api}`;
-  const apiUrl = (api, id = '') => `//${apiGateway(api)}/api/quiz/${id}`;
+  const apiUrl = (api, id = '') => `//${apiGateway(api)}/quiz/${id}`;
   const commandsApiUrl = (id) => apiUrl('commands', id);
  
   const post = (url, method, body) =>
