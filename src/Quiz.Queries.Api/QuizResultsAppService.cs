@@ -70,7 +70,7 @@ namespace Quiz.Results.Api
         
         public static IApplicationBuilder UseQuizResultsApp(this IApplicationBuilder app)
         {
-            app.UseEasyWebSockets("/api/ws");
+            app.UseEasyWebSockets();
             var quizResultsEventHandler = (QuizResultsAppService)app.ApplicationServices.GetService(typeof(QuizResultsAppService));
             Retry(quizResultsEventHandler.Start);
             return app;
