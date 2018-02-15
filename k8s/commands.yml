@@ -40,14 +40,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
  name: quiz-commands
-#  annotations:
-#   nginx.ingress.kubernetes.io/rewrite-target: /
+ annotations:
+  nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: quiz.io
     http:
       paths:
-      - path: /commands/api
+      - path: /commands
         backend:
           serviceName: quiz-commands
           servicePort: 80

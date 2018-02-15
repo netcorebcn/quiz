@@ -9,7 +9,7 @@ using Quiz.Domain.Commands;
 
 namespace Quiz.Api
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class QuizController : Controller
     {
         private readonly QuizAppService _quizAppService;

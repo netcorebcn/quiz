@@ -39,11 +39,7 @@ namespace Quiz.Results.Api
             .UseCors("CorsPolicy")
             .UseQuizResultsApp()
             .UseMvc()
-            .UseSwagger(c => c.RouteTemplate = "api/swagger/{documentName}/swagger.json")
-            .UseSwaggerUI(c => {
-                c.RoutePrefix = "api/swagger";
-                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Quiz Results API v1");
-                }
-            );
+            .UseSwagger()
+            .UseSwaggerUI(c => c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Quiz Results API v1"));
     }
 }

@@ -69,3 +69,19 @@ spec:
     name: management
   selector:
     app: messagebroker
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: messsagebroker
+ annotations:
+  nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: quiz.io
+    http:
+      paths:
+      - path: /messagebroker
+        backend:
+          serviceName: messagebroker
+          servicePort: 15672

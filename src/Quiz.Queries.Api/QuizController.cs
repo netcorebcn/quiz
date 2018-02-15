@@ -6,7 +6,7 @@ using Quiz.Domain;
 
 namespace Quiz.Results.Api
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class QuizController : Controller
     {
         private readonly QuizResultsAppService _appService;
