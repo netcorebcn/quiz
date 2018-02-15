@@ -17,21 +17,20 @@ spec:
           name: db
         env:
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-user-pass
-              key: db-user
+          value: admin
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-user-pass
-              key: db-pass
+          value: changeit
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-user-pass
+          #     key: db-pass
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: db
 spec:
+  type: NodePort
   ports:
   - port: 5432
   selector:
@@ -53,7 +52,7 @@ spec:
         image: rabbitmq:3-management
         ports:
         - containerPort: 5672 
-          name: broker
+          name: messagebroker
         - containerPort: 15672 
           name: management
 ---
@@ -64,7 +63,7 @@ metadata:
 spec:
   ports:
   - port: 5672
-    name: broker
+    name: messagebroker
   - port: 15672
     name: management
   selector:
