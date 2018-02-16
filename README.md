@@ -34,7 +34,9 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
 
   * Add ingress hosts to local host file
 
-  ``echo $(minikube ip) quiz{,-ci,-rabbit}.io | sudo tee -a /etc/hosts``
+  ```bash
+  echo $(minikube ip) quiz{,-ci,-rabbit}.io | sudo tee -a /etc/hosts
+  ```
 
   * Open <http://quiz-ci.io> for jenkins
 
@@ -42,18 +44,20 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
-* Marten Event Store library for .NET and postgresql
-  <https://github.com/JasperFx/marten>
-
-* Example architecture thanks to the popular  
-  <https://github.com/docker/example-voting-app>
-
-* WebSockets helper classes thanks to  
-  <https://github.com/radu-matei/websocket-manager>
-
 * Running Jenkins in Docker
+
   <http://container-solutions.com/running-docker-in-jenkins-in-docker/>  
 
 * K8s ingress configuration for ci cd with jenkins
+
   <https://github.com/kenzanlabs/kubernetes-ci-cd>
+  
   <https://medium.com/@Oskarr3/setting-up-ingress-on-minikube-6ae825e98f82>
+
+* Marten Event Store library for .NET and postgresql
+
+  <https://github.com/JasperFx/marten>
+
+* WebSockets helper classes thanks to  
+
+  <https://github.com/radu-matei/websocket-manager>
