@@ -18,7 +18,7 @@ spec:
         - name: messagebroker
           valueFrom:
             secretKeyRef:
-              name: messagebroker
+              name: quiz-secrets
               key: messagebroker
 ---
 apiVersion: v1

@@ -22,7 +22,7 @@ spec:
           value: changeit
           # valueFrom:
           #   secretKeyRef:
-          #     name: db-user-pass
+          #     name: quiz-secrets
           #     key: db-pass
 ---
 apiVersion: v1

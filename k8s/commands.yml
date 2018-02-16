@@ -18,12 +18,12 @@ spec:
         - name: dbconnection
           valueFrom:
             secretKeyRef:
-              name: connection-strings
+              name: quiz-secrets
               key: db
         - name: messagebroker
           valueFrom:
             secretKeyRef:
-              name: messagebroker
+              name: quiz-secrets
               key: messagebroker
 ---
 apiVersion: v1
