@@ -12,7 +12,7 @@ spec:
    containers:
    - name: jenkins-ci
      imagePullPolicy: Always
-     image: paulopez/jenkins:latest
+     image: ${REGISTRY}/jenkins:${TAG}
      ports:
      - containerPort: 8080
      - containerPort: 50000
@@ -25,13 +25,13 @@ spec:
        privileged: true 
      env:
       - name: REGISTRY
-        value: paulopez
+        value: ${REGISTRY}
       - name: DOCKER_USER
-        value: paulopez
+        value: ${DOCKER_USER}
       - name: DOCKER_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: docker-credentials 
+            name: quiz-secrets
             key: docker-pass
      volumeMounts: 
        - mountPath: /var/run
@@ -50,7 +50,7 @@ spec:
          path: /var/jenkins_home
      - name: credentials
        secret:
-        secretName: jenkins-user-pass
+        secretName: quiz-secrets
         items:
          - key: jenkins-user
            path: jenkins-user
