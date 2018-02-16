@@ -1,5 +1,5 @@
-# Quiz voting and results application
-Simple EventSourcing example using .NET Core, React, Docker and K8s.
+# Quiz App
+Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
 * run with [**docker**](https://www.docker.com/products/docker) from bash with ``.\run.sh`` 
   
@@ -22,7 +22,7 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
   ./secrets.sh
   ``` 
   
-  * Build, push and deploy jenkins to k8s
+  * Build, push and deploy jenkins to k8s cluster
   
   ```bash
   REGISTRY=myregistry \
@@ -42,6 +42,8 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
 
   * Open <http://quiz.io> for quiz voting
 
+  * Open <http://quiz.io?results> for quiz results
+
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
 * Running Jenkins in Docker
@@ -51,7 +53,7 @@ Simple EventSourcing example using .NET Core, React, Docker and K8s.
 * K8s ingress configuration for ci cd with jenkins
 
   <https://github.com/kenzanlabs/kubernetes-ci-cd>
-  
+
   <https://medium.com/@Oskarr3/setting-up-ingress-on-minikube-6ae825e98f82>
 
 * Marten Event Store library for .NET and postgresql
