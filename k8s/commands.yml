@@ -19,7 +19,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: quiz-secrets
-              key: db
+              key: dbconnection
         - name: messagebroker
           valueFrom:
             secretKeyRef:
