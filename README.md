@@ -25,6 +25,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   * Build, push and deploy jenkins to k8s cluster
   
   ```bash
+  eval $(minikube docker-env) && \
   REGISTRY=myregistry \
   TAG=latest \
   DOCKER_PASSWORD=$(cat secrets/docker-pass) \
