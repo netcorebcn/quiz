@@ -33,14 +33,21 @@ spec:
           secretKeyRef:
             name: quiz-secrets
             key: docker-pass
+      - name: JENKINS_USER
+        valueFrom:
+          secretKeyRef:
+            name: quiz-secrets
+            key: jenkins-user
+      - name: JENKINS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: quiz-secrets
+            key: jenkins-pass
      volumeMounts: 
        - mountPath: /var/run
          name: docker-sock 
        - mountPath: /var/jenkins_home
          name: jenkins-home 
-       - mountPath: /run/secrets
-         name: credentials
-         readOnly: true
    volumes: 
      - name: docker-sock
        hostPath: 
@@ -48,14 +55,6 @@ spec:
      - name: jenkins-home
        hostPath: 
          path: /var/jenkins_home
-     - name: credentials
-       secret:
-        secretName: quiz-secrets
-        items:
-         - key: jenkins-user
-           path: jenkins-user
-         - key: jenkins-pass
-           path: jenkins-pass
 ---
 apiVersion: v1
 kind: Service
