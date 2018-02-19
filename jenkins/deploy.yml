@@ -26,6 +26,8 @@ spec:
      env:
       - name: REGISTRY
         value: ${REGISTRY}
+      - name: GIT_REPO
+        value: ${GIT_REPO}
       - name: DOCKER_USER
         value: ${DOCKER_USER}
       - name: DOCKER_PASSWORD

@@ -3,7 +3,7 @@ pipelineJob('pipeline') {
   definition {
     cpsScm {
       scm {
-        github('netcorebcn/quiz')
+        github(System.getenv("GIT_REPO").trim())
       }
       scriptPath('Jenkinsfile')
     }
