@@ -19,11 +19,10 @@ spec:
         - name: POSTGRES_USER
           value: admin
         - name: POSTGRES_PASSWORD
-          value: changeit
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: quiz-secrets
-          #     key: db-pass
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: db-pass
 ---
 apiVersion: v1
 kind: Service
