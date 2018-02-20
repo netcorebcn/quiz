@@ -28,6 +28,8 @@ spec:
         value: ${REGISTRY}
       - name: GITHUB_REPO
         value: ${GITHUB_REPO}
+      - name: JENKINS_URL
+        value: ${JENKINS_URL}
       - name: GITHUB_TOKEN
         valueFrom:
           secretKeyRef:
