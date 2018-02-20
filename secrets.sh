@@ -5,6 +5,8 @@ pushd secrets
 echo ${DB_CONNECTION} > dbconnection
 echo ${MESSAGE_BROKER} > messagebroker
 echo ${DOCKER_PASS} > docker-pass
+echo ${DOCKER_USER} > docker-user
+echo ${GITHUB_TOKEN} > github-token
 echo ${JENKINS_PASS} > jenkins-pass
 echo ${JENKINS_USER} > jenkins-user
 echo ${DB_PASS} > db-pass
@@ -15,6 +17,8 @@ kubectl create secret generic quiz-secrets \
           --from-file=dbconnection \
           --from-file=messagebroker \
           --from-file=docker-pass \
+          --from-file=docker-user \
+          --from-file=github-token \
           --from-file=jenkins-pass \
           --from-file=jenkins-user \
           --from-file=db-pass \

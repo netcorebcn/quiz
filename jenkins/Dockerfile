@@ -29,6 +29,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
 COPY security.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
+COPY ghprb_auth.groovy /usr/share/jenkins/ref/init.groovy.d/ghprb_auth.groovy
 COPY seedJob.groovy /usr/share/jenkins/ref/init.groovy.d/seedJob.groovy
 
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt

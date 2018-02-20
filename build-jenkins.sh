@@ -7,4 +7,4 @@ if [ -n "$REGISTRY" ]; then
     docker-compose -f ./jenkins/docker-compose.yml push
 fi
 
-sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g;s/${DOCKER_USER}/'$DOCKER_USER'/g;s/${GIT_REPO}/'$GIT_REPO'/g' ./jenkins/deploy.yml | kubectl apply -f -
+sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g;s/${DOCKER_USER}/'$DOCKER_USER'/g;s/${GITHUB_REPO}/'$GITHUB_REPO'/g' ./jenkins/deploy.yml | kubectl apply -f -

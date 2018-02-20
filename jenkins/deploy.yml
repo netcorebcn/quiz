@@ -26,10 +26,18 @@ spec:
      env:
       - name: REGISTRY
         value: ${REGISTRY}
-      - name: GIT_REPO
-        value: ${GIT_REPO}
+      - name: GITHUB_REPO
+        value: ${GITHUB_REPO}
+      - name: GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: quiz-secrets
+            key: github-token
       - name: DOCKER_USER
-        value: ${DOCKER_USER}
+        valueFrom:
+          secretKeyRef:
+            name: quiz-secrets
+            key: docker-user
       - name: DOCKER_PASSWORD
         valueFrom:
           secretKeyRef:
