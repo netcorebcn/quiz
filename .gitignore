@@ -9,3 +9,4 @@ npm-debug.log
 secrets
 create-secrets.sh
 create-jenkins.sh
+create-quiz.sh
