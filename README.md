@@ -79,4 +79,3 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 * WebSockets helper classes thanks to  
 
   <https://github.com/radu-matei/websocket-manager>
-  
