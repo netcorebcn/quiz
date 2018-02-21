@@ -7,7 +7,7 @@ import jenkins.security.s2m.AdminWhitelistRule
 def instance = Jenkins.getInstance()
 
 def user = System.env["JENKINS_USER"].trim()
-def pass = System.env["JENKINS_PASSWORD"].trim()
+def pass = System.env["JENKINS_PASS"].trim()
 
 println "Creating user " + user
 

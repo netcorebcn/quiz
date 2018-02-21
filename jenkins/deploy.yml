@@ -37,22 +37,22 @@ spec:
             key: github-token
       - name: GITHUB_ADMINS
         value: ${GITHUB_ADMINS}
-      - name: DOCKER_USER
+      - name: REGISTRY_USER
         valueFrom:
           secretKeyRef:
             name: quiz-secrets
-            key: docker-user
-      - name: DOCKER_PASSWORD
+            key: registry-user
+      - name: REGISTRY_PASS
         valueFrom:
           secretKeyRef:
             name: quiz-secrets
-            key: docker-pass
+            key: registry-pass
       - name: JENKINS_USER
         valueFrom:
           secretKeyRef:
             name: quiz-secrets
             key: jenkins-user
-      - name: JENKINS_PASSWORD
+      - name: JENKINS_PASS
         valueFrom:
           secretKeyRef:
             name: quiz-secrets

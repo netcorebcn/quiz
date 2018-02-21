@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 if [ -n "$REGISTRY" ]; then
-    docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+    if [ -n "$REGISTRY_USER" ]; then
+        docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASS}
+    fi
     docker-compose -f docker-compose.yml push
 fi

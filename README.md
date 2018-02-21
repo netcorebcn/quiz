@@ -15,8 +15,8 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   DB_PASS=changeit \
   DB_USER=admin \
   DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432" \
-  DOCKER_PASS=mydockerhubpass \
-  DOCKER_USER=mydockerhubuser \
+  REGISTRY_PASS=registrypass \
+  REGISTRY_USER=registryuser \
   GITHUB_TOKEN=1111111111111111111111 \
   JENKINS_PASS=changeit \
   JENKINS_USER=admin \
@@ -29,11 +29,11 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   ```bash
   eval $(minikube docker-env) && \
   REGISTRY=myregistry \
-  GITHUB_REPO=netcorebcn\/quiz \
+  REGISTRY_PASS=$(cat secrets/registry-pass) \
+  REGISTRY_USER=$(cat secrets/registry-user) \
   TAG=latest \
-  DOCKER_PASSWORD=$(cat secrets/docker-pass) \
-  DOCKER_USER=myuser \
   JENKINS_URL=jenkins-url.com \
+  GITHUB_REPO=netcorebcn\/quiz \
   GITHUB_ADMINS=mygithubuser \
   ./build-jenkins.sh
   ```

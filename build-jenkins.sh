@@ -3,11 +3,15 @@ set -e
 docker-compose -f ./jenkins/docker-compose.yml build
 
 if [ -n "$REGISTRY" ]; then
-    docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+
+    if [ -n "$REGISTRY_USER" ]; then
+        docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASS}
+    fi
+
     docker-compose -f ./jenkins/docker-compose.yml push
 fi
 
-for env in REGISTRY TAG DOCKER_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS
+for env in REGISTRY TAG REGISTRY_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS
 do
     pattern+='s/${'$env'}/'${!env}'/g;'
 done
