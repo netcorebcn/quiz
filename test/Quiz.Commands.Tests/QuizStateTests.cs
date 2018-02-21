@@ -9,7 +9,7 @@ namespace Quiz.Domain.Tests
         [Theory]
         [InlineData(typeof(QuizStartedEvent))]
         public void Given_QuizState_When_Empty_Then_CanRaiseEvent(Type eventType) => 
-            Assert.True(QuizState.Created.CanRaiseEvent(eventType));
+            Assert.False(QuizState.Created.CanRaiseEvent(eventType));
 
         [Theory]
         [InlineData(typeof(QuizClosedEvent))]
