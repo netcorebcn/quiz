@@ -59,6 +59,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Open <http://quiz.io?results> for quiz results
 
+
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
 * Running Jenkins in Docker
