@@ -1,5 +1,5 @@
 // Jenkinsfile pipeline:
-pipelineJob('pipeline') {
+pipelineJob('quiz-pullrequest'){
   definition {
     cpsScm {
       scm {
@@ -9,7 +9,7 @@ pipelineJob('pipeline') {
                 name('origin')
                 refspec('+refs/pull/*:refs/remotes/origin/pr/*')
             }
-            branch('${sha1}')
+            branch('${ghprbActualCommit}')
         }
       }
       triggers {
@@ -17,7 +17,20 @@ pipelineJob('pipeline') {
             admins(['paulopez78'])
             useGitHubHooks()
         }
+      }
+      scriptPath('Jenkinsfile.pr')
     }
+  }
+}
+pipelineJob('quiz-merge') {
+  definition {
+    cpsScm {
+      scm {
+          github(System.getenv("GITHUB_REPO").trim())
+      }
+      triggers {
+        githubPush()
+      }
       scriptPath('Jenkinsfile')
     }
   }
