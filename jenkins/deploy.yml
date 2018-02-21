@@ -35,6 +35,8 @@ spec:
           secretKeyRef:
             name: quiz-secrets
             key: github-token
+      - name: GITHUB_ADMINS
+        value: ${GITHUB_ADMINS}
       - name: DOCKER_USER
         valueFrom:
           secretKeyRef:

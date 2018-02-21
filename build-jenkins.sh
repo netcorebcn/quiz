@@ -7,4 +7,9 @@ if [ -n "$REGISTRY" ]; then
     docker-compose -f ./jenkins/docker-compose.yml push
 fi
 
-sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g;s/${DOCKER_USER}/'$DOCKER_USER'/g;s/${GITHUB_REPO}/'$GITHUB_REPO'/g;s/${JENKINS_URL}/'$JENKINS_URL'/g' ./jenkins/deploy.yml | kubectl apply -f -
+for env in REGISTRY TAG DOCKER_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS
+do
+    pattern+='s/${'$env'}/'${!env}'/g;'
+done
+
+sed $pattern ./jenkins/deploy.yml | kubectl apply -f - 

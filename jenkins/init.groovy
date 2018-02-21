@@ -31,7 +31,7 @@ Field auth = descriptor.class.getDeclaredField("githubAuth")
 auth.setAccessible(true)
 
 githubAuth = new ArrayList<GhprbGitHubAuth>()
-githubAuth.add(new GhprbGitHubAuth("", "http://" + System.getenv("JENKINS_URL"),"github-token", "quiz-github", null, null))
+githubAuth.add(new GhprbGitHubAuth("", "http://" + System.getenv("JENKINS_URL") + "/","github-token", "quiz-github", null, null))
 
 auth.set(descriptor, githubAuth)
 

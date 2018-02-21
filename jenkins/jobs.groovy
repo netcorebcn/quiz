@@ -14,7 +14,7 @@ pipelineJob('quiz-pullrequest'){
       }
       triggers {
         githubPullRequest {
-            admins(['paulopez78'])
+            admins([System.getenv("GITHUB_ADMINS").trim()])
             useGitHubHooks()
         }
       }
