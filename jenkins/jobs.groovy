@@ -26,7 +26,12 @@ pipelineJob('quiz-merge') {
   definition {
     cpsScm {
       scm {
-          github(System.getenv("GITHUB_REPO").trim())
+        git {
+            remote {
+                github(System.getenv("GITHUB_REPO").trim())
+            }
+            branch('*/master')
+        }
       }
       triggers {
         githubPush()
