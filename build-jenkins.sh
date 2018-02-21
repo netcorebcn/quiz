@@ -9,3 +9,10 @@ fi
 docker-compose -f ./jenkins/docker-compose.yml build
 docker-compose -f ./jenkins/docker-compose.yml push
 sed 's/${REGISTRY}/'$REGISTRY'/g;s/${TAG}/'$TAG'/g;s/${DOCKER_USER}/'$DOCKER_USER'/g' ./jenkins/deploy.yml | kubectl apply -f -
+
+for env in REGISTRY TAG DOCKER_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS
+do
+    pattern+='s/${'$env'}/'${!env}'/g;'
+done
+
+sed $pattern ./jenkins/deploy.yml | kubectl apply -f - 

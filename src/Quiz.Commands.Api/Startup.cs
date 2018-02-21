@@ -30,8 +30,7 @@ namespace Quiz.Api
                     .AllowCredentials());
             })
             .AddEventStore(Configuration)
-            // .AddSingleton<IBus>(RabbitHutch.CreateBus(Configuration["messagebroker"] ?? "amqp://guest:guest@localhost:5672"))
-            .AddSingleton<IBus>(RabbitHutch.CreateBus("amqp://guest:guest@messagebroker:5672"))
+            .AddSingleton<IBus>(RabbitHutch.CreateBus(Configuration["messagebroker"].Trim() ?? "amqp://guest:guest@localhost:5672"))
             .AddTransient<QuizAppService>()
             .AddMvc();
 

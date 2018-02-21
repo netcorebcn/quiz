@@ -15,7 +15,9 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   DB_PASS=changeit \
   DB_USER=admin \
   DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432" \
-  DOCKER_PASS=changeit \
+  DOCKER_PASS=mydockerhubpass \
+  DOCKER_USER=mydockerhubuser \
+  GITHUB_TOKEN=1111111111111111111111 \
   JENKINS_PASS=changeit \
   JENKINS_USER=admin \
   MESSAGE_BROKER="amqp://guest:guest@messagebroker:5672" \
@@ -26,7 +28,10 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
   ```bash
   eval $(minikube docker-env) && \
+  GITHUB_REPO=netcorebcn\/quiz \
   TAG=latest \
+  JENKINS_URL=jenkins-url.com \
+  GITHUB_ADMINS=mygithubuser \
   ./build-jenkins.sh
   ```
 
@@ -36,11 +41,21 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   echo $(minikube ip) quiz{,-ci,-rabbit}.io | sudo tee -a /etc/hosts
   ```
 
+  * Github integration
+
+    * Add Integration & Service: Manage Jenkins (GitHub plugin) http://jenkins-url/github-webhook/
+
+    * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
+    ```bash 
+    ./ngrok http quiz-ci.io:80 -host-header=quiz-ci.io
+    ```
+
   * Open <http://quiz-ci.io> for jenkins
 
   * Open <http://quiz.io> for quiz voting
 
   * Open <http://quiz.io?results> for quiz results
+
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
@@ -61,3 +76,4 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 * WebSockets helper classes thanks to  
 
   <https://github.com/radu-matei/websocket-manager>
+  

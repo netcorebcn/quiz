@@ -1,6 +1,4 @@
 node {
-    properties([pipelineTriggers([githubPush()])])
- 
     stage "Checkout"
         checkout scm
 
@@ -9,10 +7,4 @@ node {
 
     stage "Build"
         sh "./build.sh"
-
-    stage "Push"
-        sh "./push.sh"
-        
-    stage "Deploy"
-        sh "./deploy.sh"
 }

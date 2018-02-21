@@ -8,3 +8,4 @@ github
 github-oauth
 blueocean
 job-dsl
+ghprb
