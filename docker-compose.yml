@@ -36,3 +36,11 @@ services:
       dockerfile: ${QUIZ_UI}/Dockerfile
       args:
         api: ${QUIZ_UI}
+
+  cli:
+    image: ${REGISTRY}/quiz-cli:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_CLI}/Dockerfile
+      args:
+        api: ${QUIZ_CLI}
