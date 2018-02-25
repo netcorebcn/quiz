@@ -9,7 +9,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
-  * Create namespaces and context configurations
+  * Create k8s namespaces and kubectl context configurations
 
   ```bash
   ./namespaces.sh
@@ -21,7 +21,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   ./registry.sh
   ```
 
-  * Create secrets for jenkins, database, docker registry and messagebroker .
+  * Create secrets for jenkins, database, image registry and messagebroker .
 
   ```bash
   DB_PASS=changeit \
@@ -56,7 +56,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   echo $(minikube ip) quiz{,-ci,-rabbit,-rabbitstaging,staging}.io | sudo tee -a /etc/hosts
   ```
 
-  * Github integration
+  * Github integration for Pull Request workflow
 
     * Add Integration & Service: Manage Jenkins (GitHub plugin) 
 
