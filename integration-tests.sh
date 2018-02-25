@@ -1,3 +1,4 @@
 #!/bin/bash
-echo "Running integration tests"
-echo "Integration tests pass!"
+set -e
+
+kubectl run integration-tests --image=${REGISTRY}/quiz-cli:${TAG} 
