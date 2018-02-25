@@ -70,9 +70,9 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Open <http://quiz-ci.io> for jenkins
 
-  * Open <http://quiz.io> for quiz voting
+  * Open <http://quiz.io> or <http://quizstaging.io> for quiz voting
 
-  * Open <http://quiz.io?results> for quiz results
+  * Open <http://quiz.io?results> or <http://quizstaging.io?results> for quiz results
 
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
