@@ -76,7 +76,7 @@ metadata:
 #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: quiz-rabbit.io
+  - host: quiz-rabbit${ENVIRONMENT}.io
     http:
       paths:
       - path: /

@@ -12,15 +12,23 @@ echo -n ${JENKINS_USER} > jenkins-user
 echo -n ${DB_PASS} > db-pass
 echo -n ${DB_USER} > db-user
 
-kubectl delete secret quiz-secrets
+for env in staging production
+do
+    kubectl config use-context $env 
+    kubectl delete secret quiz-secrets 
+    kubectl create secret generic quiz-secrets \
+            --from-file=dbconnection \
+            --from-file=messagebroker \
+            --from-file=db-pass \
+            --from-file=db-user
+done
+
+kubectl config use-context ci 
+kubectl delete secret quiz-secrets 
 kubectl create secret generic quiz-secrets \
-          --from-file=dbconnection \
-          --from-file=messagebroker \
           --from-file=registry-pass \
           --from-file=registry-user \
           --from-file=github-token \
           --from-file=jenkins-pass \
-          --from-file=jenkins-user \
-          --from-file=db-pass \
-          --from-file=db-user
+          --from-file=jenkins-user
 popd

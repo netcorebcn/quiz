@@ -44,7 +44,7 @@ metadata:
   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: quiz.io
+  - host: quiz${ENVIRONMENT}.io
     http:
       paths:
       - path: /commands

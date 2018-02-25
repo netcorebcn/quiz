@@ -9,6 +9,18 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
+  * Create namespaces and context configurations
+
+  ```bash
+  ./namespaces.sh
+  ```
+
+  * Deploy local registry 
+
+  ```bash
+  ./registry.sh
+  ```
+
   * Create secrets for jenkins, database, docker registry and messagebroker .
 
   ```bash
@@ -28,7 +40,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
   ```bash
   eval $(minikube docker-env) && \
-  REGISTRY=myregistry \
+  REGISTRY=localhost:30400 \
   REGISTRY_PASS=$(cat secrets/registry-pass) \
   REGISTRY_USER=$(cat secrets/registry-user) \
   TAG=latest \
@@ -49,6 +61,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
     * Add Integration & Service: Manage Jenkins (GitHub plugin) http://jenkins-url/github-webhook/
 
     * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
+    
     ```bash 
     ./ngrok http quiz-ci.io:80 -host-header=quiz-ci.io
     ```
@@ -79,5 +92,4 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 * WebSockets helper classes thanks to  
 
   <https://github.com/radu-matei/websocket-manager>
-  
   

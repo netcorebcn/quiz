@@ -16,4 +16,5 @@ do
     pattern+='s/${'$env'}/'${!env}'/g;'
 done
 
+kubectl config use-context ci && \
 sed $pattern ./jenkins/deploy.yml | kubectl apply -f - 
