@@ -53,12 +53,14 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   * Add ingress hosts to local host file
 
   ```bash
-  echo $(minikube ip) quiz{,-ci,-rabbit}.io | sudo tee -a /etc/hosts
+  echo $(minikube ip) quiz{,-ci,-rabbit,-rabbitstaging,staging}.io | sudo tee -a /etc/hosts
   ```
 
   * Github integration
 
-    * Add Integration & Service: Manage Jenkins (GitHub plugin) http://jenkins-url/github-webhook/
+    * Add Integration & Service: Manage Jenkins (GitHub plugin) 
+
+      http://jenkins-url/github-webhook/
 
     * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
     
