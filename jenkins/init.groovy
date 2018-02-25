@@ -44,3 +44,10 @@ def workspace = new File('.')
 def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
 
 new DslScriptLoader(jobManagement).runScript(jobDslScript.text)
+
+// configure kubectl contexts for each environment
+command = "kubectl config set-context staging --namespace=staging"
+println command.execute().text
+
+command = "kubectl config set-context production --namespace=production"
+println command.execute().text
