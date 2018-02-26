@@ -63,4 +63,7 @@ getQuiz().then(data => {
   }
   Promise.all(requests);
   console.log('finished voting...');
+}).catch(err => {
+  console.log(err);
+  process.exit(1);
 });
