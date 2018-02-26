@@ -1,10 +1,12 @@
 #!/bin/bash
+kubectl delete pod integration-tests
+
 set -e
-
-kubectl delete deployment integration-tests 2>&1
-
 kubectl run --attach integration-tests \
 --image=${REGISTRY}/quiz-cli:${TAG} \
---env="QUIZ_URL=quiz-commands"
+--restart=Never \
+--env="QUIZ_URL=quiz-commands" \
+--env="ITERATIONS=5" 
 
-kubectl delete deployment integration-tests
+set +e
+kubectl delete pod integration-tests
