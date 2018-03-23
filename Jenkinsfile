@@ -17,6 +17,6 @@ node {
         sh "./integration-tests.sh"
         
     stage "Deploy to production"
-        env.ENVIRONMENT="production"
+        env.ENVIRONMENT=""
         sh "./deploy.sh"
 }
