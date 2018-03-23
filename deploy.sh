@@ -6,7 +6,9 @@ do
     pattern+='s/${'$env'}/'${!env}'/g;'
 done
 
-for deploy in k8s/*.yml
+kubectl config use-context ${ENVIRONMENT}  
+
+for deploy in ./k8s/services/*.yml
 do
     sed $pattern $deploy | kubectl apply -f - 
 done

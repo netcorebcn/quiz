@@ -6,7 +6,5 @@ build
 node_modules
 npm-debug.log
 *.sln
-secrets
-create-secrets.sh
-create-jenkins.sh
-create-quiz.sh
+**/secrets/
+**/local*.sh

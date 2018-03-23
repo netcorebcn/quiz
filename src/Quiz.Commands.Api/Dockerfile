@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore-build:2.0.3 AS builder
+FROM microsoft/aspnetcore-build AS builder
 ARG api
 ARG domain
 ARG unitTests
@@ -20,8 +20,7 @@ COPY ${domain} /${domain}
 RUN dotnet test /${unitTests} --configuration Release
 
 ##### Publish project #####
-RUN dotnet publish /${api} --output /publish --configuration Release
-
+RUN dotnet publish /${api} --output /publish --configuration Release /p:MvcRazorCompileOnPublish=false
 
 # build runtime image from published release
 FROM microsoft/aspnetcore

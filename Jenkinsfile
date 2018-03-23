@@ -9,17 +9,14 @@ node {
     stage "Build"
         sh "./build.sh"
 
-    stage "Push"
-        sh "./push.sh"
-        
     stage "Deploy to staging"
         env.ENVIRONMENT="staging"
-        sh "kubectl config use-context staging && ./deploy.sh"
+        sh "./deploy.sh"
 
     stage "Integration Tests"
         sh "./integration-tests.sh"
         
     stage "Deploy to production"
         env.ENVIRONMENT=""
-        sh "kubectl config use-context production && ./deploy.sh"
+        sh "./deploy.sh"
 }

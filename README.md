@@ -9,45 +9,32 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
-  * Create k8s namespaces and kubectl context configurations
+  * Setup namespaces, secrets, jenkins and private registry
 
   ```bash
-  ./namespaces.sh
-  ```
+  export CLUSTER=minikube
+  export CLUSTER_USER=minikube
 
-  * Deploy local registry 
+  export DB_PASS=changeit
+  export DB_USER=admin
+  export DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432"
+  export MESSAGE_BROKER="host=messagebroker:5672;username=guest;password=guest"
 
-  ```bash
-  ./registry.sh
-  ```
+  export REGISTRY_PASS=
+  export REGISTRY_USER=
+  export REGISTRY=localhost:30400
+  export TAG=latest
 
-  * Create secrets for jenkins, database, image registry and messagebroker .
+  export JENKINS_USER=admin
+  export JENKINS_PASS=changeit
+  export JENKINS_URL=jenkins-url.com
 
-  ```bash
-  DB_PASS=changeit \
-  DB_USER=admin \
-  DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432" \
-  REGISTRY_PASS=registrypass \
-  REGISTRY_USER=registryuser \
-  GITHUB_TOKEN=1111111111111111111111 \
-  JENKINS_PASS=changeit \
-  JENKINS_USER=admin \
-  MESSAGE_BROKER="amqp://guest:guest@messagebroker:5672" \
-  ./secrets.sh
-  ``` 
+  export GITHUB_REPO=netcorebcn/quiz
+  export GITHUB_ADMINS=mygithubuser
+  export GITHUB_TOKEN='<github repo token>'
   
-  * Build, push and deploy jenkins to k8s cluster
-  
-  ```bash
-  eval $(minikube docker-env) && \
-  REGISTRY=localhost:30400 \
-  REGISTRY_PASS=$(cat secrets/registry-pass) \
-  REGISTRY_USER=$(cat secrets/registry-user) \
-  TAG=latest \
-  JENKINS_URL=jenkins-url.com \
-  GITHUB_REPO=netcorebcn\/quiz \
-  GITHUB_ADMINS=mygithubuser \
-  ./build-jenkins.sh
+  eval $(minikube docker-env)
+  ./setup.sh
   ```
 
   * Add ingress hosts to local host file
@@ -55,6 +42,13 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   ```bash
   echo $(minikube ip) quiz{,-ci,-rabbit,-rabbitstaging,staging}.io | sudo tee -a /etc/hosts
   ```
+
+  * Open <http://quiz-ci.io/job/quiz-merge/> and Build!
+
+  * Open <http://quiz.io> or <http://quizstaging.io> for quiz voting
+
+  * Open <http://quiz.io?results> or <http://quizstaging.io?results> for quiz results
+
 
   * Github integration for Pull Request workflow
 
@@ -67,13 +61,6 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
     ```bash 
     ./ngrok http quiz-ci.io:80 -host-header=quiz-ci.io
     ```
-
-  * Open <http://quiz-ci.io> for jenkins
-
-  * Open <http://quiz.io> or <http://quizstaging.io> for quiz voting
-
-  * Open <http://quiz.io?results> or <http://quizstaging.io?results> for quiz results
-
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
