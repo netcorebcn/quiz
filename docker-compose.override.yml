@@ -2,12 +2,10 @@ version: "3.3"
 
 services:
   gateway:
-    image: quiz-gateway
     ports:
       - "80:80"
 
   commands:
-    image: quiz-commands
     ports:
       - "81:80"
     environment: 
@@ -15,13 +13,11 @@ services:
       messagebroker: ${MESSAGE_BROKER}
   
   queries:
-    image: quiz-queries
     ports:
       - "82:80"
     environment: 
       messagebroker: ${MESSAGE_BROKER}
 
   ui:
-    image: ${REGISTRY}quiz-ui:${TAG}
     ports:
       - "8080:80"
