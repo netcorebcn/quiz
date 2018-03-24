@@ -1,5 +1,3 @@
-echo $(minikube ip)
-
 pushd k8s 
 ./setup.sh
 popd
