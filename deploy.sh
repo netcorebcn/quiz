@@ -11,7 +11,7 @@ do
     pattern+='s/${'$env'}/'${!env}'/g;'
 done
 
-for deploy in commands.yml queries.yml ui.yml infra.yml
+for deploy in commands.yml queries.yml ui.yml
 do
     sed $pattern k8s/quizapp/$deploy | kubectl apply -f - --namespace=$namespace
 done
