@@ -13,5 +13,5 @@ done
 
 for deploy in commands.yml queries.yml ui.yml infra.yml
 do
-    sed $pattern $deploy | kubectl apply -f - --namespace=$namespace
+    sed $pattern k8s/quizapp/$deploy | kubectl apply -f - --namespace=$namespace
 done
