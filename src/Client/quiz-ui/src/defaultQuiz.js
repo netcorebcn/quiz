@@ -1,107 +1,92 @@
 export const defaultQuiz = {
     "questions": [
       {
-        "description": "Which is the most awesome cloud provider?",
+        "description": "What is the local development k8s tool?",
         "options": [
           {
-            "description": "AWS"
+            "description": "superkube"
           },
           {
-            "description": "Azure",
+            "description": "minikube",
             "isCorrect": true
           },
           {
-            "description": "Google Cloud"
+            "description": "dockerkube"
           }
         ]
       },
       {
-        "description": "Which is the Docker native built-in orchestrator?",
+        "description": "Which feature enables splitting a k8s cluster?",
         "options": [
           {
-            "description": "DC/OS"
+            "description": "virtualvolumes"
           },
           {
-            "description": "Kubernetes"
+            "description": "virtualhosts"
           },
           {
-            "description": "Swarm",
-            "isCorrect": true
-          }
-        ]
-      },
-      {
-        "description": "Which is the managed option for using Swarm in Azure?",
-        "options": [
-          {
-            "description": "Azure Container Service",
-            "isCorrect": true
-          },
-          {
-            "description": "Docker for Azure"
-          },
-          {
-            "description": "Docker VM Extension for Microsoft Azure"
-          }
-        ]
-      },
-      {
-        "description": "What is the average size of the ASP.NET Core build image?",
-        "options": [
-          {
-            "description": "1.3 GB",
-            "isCorrect": true
-          },
-          {
-            "description": "1 GB"
-          },
-          {
-            "description": "400 MB"
-          }
-        ]
-      },
-      {
-        "description": "What is the average size of a .NET Core runtime image?",
-        "options": [
-          {
-            "description": "1 GB"
-          },
-          {
-            "description": "100 MB"
-          },
-          {
-            "description": "300 MB",
+            "description": "namespaces",
             "isCorrect": true
           }
         ]
       },
       {
-        "description": "What is the average size of the Linux Alpine docker image?",
+        "description": "Which is the managed option for using k8s in Azure?",
         "options": [
           {
-            "description": "100 MB"
-          },
-          {
-            "description": "5 MB",
+            "description": "AKS",
             "isCorrect": true
           },
           {
-            "description": "600 MB"
+            "description": "EKS"
+          },
+          {
+            "description": "AK8s"
           }
         ]
       },
       {
-        "description": "Which docker command is used to deploy an stack to Swarm?",
+        "description": "Which files defines the whole CI/CD process?",
         "options": [
           {
-            "description": "docker-compose deploy"
-          },
-          {
-            "description": "docker deploy docker-compose.yml stack",
+            "description": "Jenkinsfile, docker-compose and Dockerfile",
             "isCorrect": true
           },
           {
-            "description": "docker docker-compose deploy stack"
+            "description": ""
+          },
+          {
+            "description": ""
+          }
+        ]
+      },
+      {
+        "description": "Which docker feature enables building CI pipelines?",
+        "options": [
+          {
+            "description": "Jenkinsfile"
+          },
+          {
+            "description": "docker compose pipelines"
+          },
+          {
+            "description": "multistage builds",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "description": "Wich CLI clients Jenkins needs to run the CI/CD pipeline?",
+        "options": [
+          {
+            "description": "docker and minikube"
+          },
+          {
+            "description": "docker and az"
+          },
+          {
+            "description": "docker and kubectl",
+            "isCorrect": true
           }
         ]
       }
