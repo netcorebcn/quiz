@@ -90,13 +90,20 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
  name: jenkins-ci
-#  annotations:
-#   nginx.ingress.kubernetes.io/rewrite-target: /
+ annotations:
+  nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   backend:
     serviceName: default-http-backend
     servicePort: 80
   rules:
+  - host: quiz.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - path: /jenkins
+        backend:
+          serviceName: jenkins-ci 
+          servicePort: 8080
   - host: quiz-ci.io
     http:
       paths:
