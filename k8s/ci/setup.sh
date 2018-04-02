@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Create Secrets
 rm -rf secrets
@@ -23,9 +22,6 @@ kubectl create secret generic quiz-secrets \
 popd
 rm -rf secrets
 
-for env in REGISTRY TAG REGISTRY_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS
-do
-    pattern+='s,${'$env'},'${!env}',g;'
-done
-
-sed $pattern jenkins.yml | kubectl apply -f - --namespace=ci
+# Create ci namespace and deploy private registry
+kubectl apply -f ci.yml
+kubectl apply -f registry.yml --namespace=ci

@@ -7,6 +7,13 @@ metadata:
 #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
+  - host: quiz.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: quiz-ui
+          servicePort: 80
   - host: quiz${ENVIRONMENT}.io
     http:
       paths:

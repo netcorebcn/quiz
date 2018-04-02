@@ -45,7 +45,14 @@ metadata:
 spec:
   rules:
   - host: quiz${ENVIRONMENT}.io
-    http:
+    http: 
+      paths:
+      - path: /commands
+        backend:
+          serviceName: quiz-commands
+          servicePort: 80
+  - host: quiz.westeurope.cloudapp.azure.com
+    http: 
       paths:
       - path: /commands
         backend:

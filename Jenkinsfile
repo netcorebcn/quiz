@@ -11,12 +11,12 @@ node {
 
     stage "Deploy to staging"
         env.ENVIRONMENT="staging"
-        sh "./deploy.sh"
+        sh "./k8s/quizapp/deploy.sh"
 
     stage "Integration Tests"
-        sh "./integration-tests.sh"
+        sh "./k8s/quizapp/integration-tests.sh"
         
     stage "Deploy to production"
         env.ENVIRONMENT=""
-        sh "./deploy.sh"
+        sh "./k8s/quizapp/deploy.sh"
 }

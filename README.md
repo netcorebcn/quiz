@@ -12,9 +12,6 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   * Setup namespaces, secrets, jenkins and private registry
 
   ```bash
-  export CLUSTER=minikube
-  export CLUSTER_USER=minikube
-
   export DB_PASS=changeit
   export DB_USER=admin
   export DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432"

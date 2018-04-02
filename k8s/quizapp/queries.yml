@@ -46,3 +46,10 @@ spec:
         backend:
           serviceName: quiz-queries
           servicePort: 80
+  - host: quiz.westeurope.cloudapp.azure.com
+    http: 
+      paths:
+      - path: /queries
+        backend:
+          serviceName: quiz-queries
+          servicePort: 80
