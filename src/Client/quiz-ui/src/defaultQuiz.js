@@ -1,7 +1,7 @@
 export const defaultQuiz = {
     "questions": [
       {
-        "description": "What is the local development k8s tool?",
+        "description": "What is the local k8s development?",
         "options": [
           {
             "description": "superkube"
@@ -46,17 +46,17 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Which files defines the whole CI/CD process?",
+        "description": "Which file defines the whole CI/CD process?",
         "options": [
           {
-            "description": "Jenkinsfile, docker-compose and Dockerfile",
+            "description": "Jenkinsfile",
             "isCorrect": true
           },
           {
-            "description": ""
+            "description": "Dockerfile"
           },
           {
-            "description": ""
+            "description": "docker-compose.yml"
           }
         ]
       },
@@ -76,7 +76,7 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Wich CLI clients Jenkins needs to run the CI/CD pipeline?",
+        "description": "Which CLI clients Jenkins needs to run the CI/CD pipeline?",
         "options": [
           {
             "description": "docker and minikube"
