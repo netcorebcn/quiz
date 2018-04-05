@@ -23,8 +23,6 @@ do
             --from-file=db-pass \
             --from-file=db-user \
             --namespace=$env
-    kubectl apply -f infra.yml --namespace=$env
 done
 popd
 rm -rf secrets
-
