@@ -1,7 +1,7 @@
 export const defaultQuiz = {
     "questions": [
       {
-        "description": "What is the local k8s development?",
+        "description": "What is the tool for running k8s locally?",
         "options": [
           {
             "description": "superkube"
@@ -76,7 +76,7 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Which CLI clients Jenkins needs to run the CI/CD pipeline?",
+        "description": "Which CLI tools Jenkins needs to run the CI/CD pipeline?",
         "options": [
           {
             "description": "docker and minikube"
@@ -91,4 +91,4 @@ export const defaultQuiz = {
         ]
       }
     ]
-};
+}
