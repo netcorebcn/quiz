@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 namespace=${ENVIRONMENT:-production}
 
 for env in ENVIRONMENT REGISTRY TAG 

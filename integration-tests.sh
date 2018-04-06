@@ -1,6 +1,6 @@
 #!/bin/bash
 
-namespace=${ENVIRONMENT}
+namespace=${ENVIRONMENT:-production}
 
 kubectl delete pod integration-tests --namespace=$namespace
 
