@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Create Secrets
 rm -rf secrets
