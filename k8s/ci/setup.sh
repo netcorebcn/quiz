@@ -25,3 +25,4 @@ rm -rf secrets
 # Create ci namespace and deploy private registry
 kubectl apply -f ci.yml
 kubectl apply -f registry.yml --namespace=ci
+kubectl rollout status deployment/registry -n ci

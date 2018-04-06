@@ -1,43 +1,6 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: db 
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: db
-    spec:
-      containers:
-      - name: db
-        image: postgres
-        ports:
-        - containerPort: 5432
-          name: db
-        env:
-        - name: POSTGRES_USER
-          value: admin
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: quiz-secrets
-              key: db-pass
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: db
-spec:
-  type: NodePort
-  ports:
-  - port: 5432
-  selector:
-    app: db
----
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
   name: messagebroker 
 spec:
   replicas: 1

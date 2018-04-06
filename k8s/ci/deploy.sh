@@ -28,4 +28,5 @@ do
     pattern+='s,${'$env'},'${!env}',g;'
 done
 
-sed $pattern jenkins.yml | kubectl apply -f - --namespace=ci
+sed $pattern jenkins-ci.yml | kubectl apply -f - --namespace=ci
+kubectl rollout status deployment/jenkins-ci -n ci
