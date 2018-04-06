@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if [ -n "$ENVIRONMENT" ]; then
-    namespace=${ENVIRONMENT}
-else
-    namespace='production'
-fi
+namespace=${ENVIRONMENT:-production}
 
 for env in ENVIRONMENT REGISTRY TAG 
 do

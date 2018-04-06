@@ -3,7 +3,7 @@ pushd k8s/ci
 popd
 
 pushd jenkins
-./build.sh
+../build.sh
 popd
 
 pushd k8s/ci
