@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Quiz.Results.Api.EventStore;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Quiz.Results.Api
@@ -32,6 +33,7 @@ namespace Quiz.Results.Api
                     .AllowAnyHeader()
                     .AllowCredentials());
             })
+            .AddEventStore(Configuration)
             .AddQuizResultsApp(Configuration)
             .AddMvc();
 

@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using EasyNetQ;
 using EasyWebSockets;
+using Marten;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using Polly;
 using Quiz.Domain;
 using Quiz.Domain.Events;
@@ -18,19 +21,21 @@ namespace Quiz.Results.Api
         private readonly IBus _bus;
 
         private readonly IWebSocketPublisher _wsBus;
+        private readonly IDocumentStore _eventStore;
+        private QuizResultsAggregate aggregate = QuizResultsAggregate.Empty; 
 
-        private QuizResultsAggregate aggregate; 
-
-        public QuizResultsAppService(IBus bus, IWebSocketPublisher wsBus)
+        public QuizResultsAppService(IDocumentStore eventStore, IBus bus, IWebSocketPublisher wsBus)
         {
             _bus = bus;
             _wsBus = wsBus;
+            _eventStore = eventStore;
         }
 
-        public object Get() => aggregate ?? QuizResultsAggregate.Empty;
+        public object Get() => aggregate;
 
         public void Start()
         {
+            aggregate = StartAggregate();
             _bus.SubscribeAsync<QuizEvent>("QuizEvents", async @event => {
                 switch (@event)
                 {
@@ -58,13 +63,28 @@ namespace Quiz.Results.Api
                 }
             }
         }
+
+        private QuizResultsAggregate StartAggregate()
+        {
+            using (var session = _eventStore.OpenSession())
+            {
+                var currentQuiz = session.Query<CurrentQuizAggregate>().FirstOrDefault();
+                if (currentQuiz == null)
+                {
+                    return QuizResultsAggregate.Empty;
+                }
+
+                var events = session.Events.FetchStream(currentQuiz.Id);
+                return Create(currentQuiz.Id, events.Select(x => x.Data).ToArray());
+            }
+        }
     }
 
     public static class QuizResultsAppServiceExtensions
     {
         public static IServiceCollection AddQuizResultsApp(this IServiceCollection services, IConfiguration configuration) => services
             .AddEasyWebSockets()
-            .AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"].Trim() ?? "amqp://guest:guest@localhost:5672"))
+            .AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"]?.Trim() ?? "amqp://guest:guest@localhost:5672"))
             .AddSingleton<QuizResultsAppService>();
         
         public static IApplicationBuilder UseQuizResultsApp(this IApplicationBuilder app)

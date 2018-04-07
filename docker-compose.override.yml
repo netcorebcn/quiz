@@ -16,6 +16,7 @@ services:
     ports:
       - "82:80"
     environment: 
+      dbconnection: ${DB_CONNECTION}
       messagebroker: ${MESSAGE_BROKER}
 
   ui:

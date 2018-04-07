@@ -9,7 +9,7 @@ namespace Quiz.Domain
     {
         public Guid QuizId { get; }
 
-        private Dictionary<Guid,QuestionResult> _results; 
+        private Dictionary<Guid,QuestionResult> _results = new Dictionary<Guid, QuestionResult>(); 
 
         public List<QuestionResult> Questions 
         {
@@ -20,13 +20,9 @@ namespace Quiz.Domain
 
         public decimal TotalIncorrectAnswersPercent {get; private set; }
         
-        public static object Empty 
+        public static QuizResultsAggregate Empty 
         { 
-            get => new  
-            {
-               QuizId = Guid.Empty,
-               Questions = new List<QuestionResult>()
-            };
+            get => new QuizResultsAggregate(Guid.Empty);
         }
 
         private QuizResultsAggregate(Guid quizId) => QuizId = quizId;
