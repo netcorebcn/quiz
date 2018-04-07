@@ -15,6 +15,11 @@ spec:
         ports:
         - containerPort: 80
         env:
+        - name: dbconnection
+          valueFrom:
+            secretKeyRef:
+              name: quiz-secrets
+              key: dbconnection
         - name: messagebroker
           valueFrom:
             secretKeyRef:
