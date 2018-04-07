@@ -15,7 +15,7 @@ namespace Quiz.Results.Api.EventStore
             Retry(() => services.AddSingleton<IDocumentStore>(
                     DocumentStore.For(_ =>
                     {
-                        _.Connection(configuration["dbconnection"]?.Trim() ?? "Host=localhost;Username=admin;Password=changeit;");
+                        _.Connection(configuration["dbconnection"]?.Trim() ?? "Host=db;Username=admin;Password=changeit;");
                         _.Events.DatabaseSchemaName = databaseSchema;
                         _.DatabaseSchemaName = databaseSchema;
                     })));
