@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-namespace=$1
+namespace=${1:-production}
 deployments=$2
 path=${3:-$namespace}
 environment=${4:-'REGISTRY TAG ENVIRONMENT REGISTRY_USER GITHUB_REPO JENKINS_URL GITHUB_ADMINS'}
