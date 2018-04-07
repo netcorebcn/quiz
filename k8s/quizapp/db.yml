@@ -29,8 +29,8 @@ kind: Service
 metadata:
   name: db
 spec:
-  type: NodePort
   ports:
   - port: 5432
+    name: db
   selector:
     app: db
