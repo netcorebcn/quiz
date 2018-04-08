@@ -3,18 +3,18 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
  name: quiz
-#  annotations:
-#   nginx.ingress.kubernetes.io/rewrite-target: /
+ annotations:
+  nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: quiz.westeurope.cloudapp.azure.com
+  - host: quiz${ENVIRONMENT}.io
     http:
       paths:
       - path: /
         backend:
           serviceName: quiz-ui
           servicePort: 80
-  - host: quiz${ENVIRONMENT}.io
+  - host: quiz.westeurope.cloudapp.azure.com
     http:
       paths:
       - path: /
