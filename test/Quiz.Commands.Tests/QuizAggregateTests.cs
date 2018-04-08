@@ -21,7 +21,7 @@ namespace Quiz.Domain.Tests
             ExecuteCommand(quiz => quiz.Start(model))
                 .GetPendingEvents()
                 .AssertLastEventOfType<QuizStartedEvent>()
-                .WithTotalCount(1);
+                .WithTotalCount(2);
 
         [Fact]
         public void Given_Started_Quiz_When_Start_Then_QuizStarted() => 
