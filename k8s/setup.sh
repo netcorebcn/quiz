@@ -13,8 +13,6 @@ kubectl create secret generic quiz-secrets \
           --from-literal=jenkins-user=${JENKINS_USER} \
           --namespace=$namespace
 
-./deploy.sh $namespace registry
-
 # Setup staging and production
 for env in staging production
 do
