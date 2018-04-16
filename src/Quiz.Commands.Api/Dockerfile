@@ -8,8 +8,8 @@ COPY ${api}/*.csproj ${api}/
 COPY ${unitTests}/*.csproj ${unitTests}/
 COPY ${domain}/*.csproj ${domain}/
 
-RUN dotnet restore /${api}
-RUN dotnet restore /${unitTests}
+RUN dotnet restore /${api} --disable-parallel
+RUN dotnet restore /${unitTests} --disable-parallel
 
 ## Copy all sources
 COPY ${api} /${api}
