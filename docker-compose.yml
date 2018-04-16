@@ -1,33 +1,33 @@
 version: "3.3"
 
 services:
-  # gateway:
-  #   image: ${REGISTRY}/quiz-gateway:${TAG}
-  #   build:
-  #     context: .
-  #     dockerfile: ${QUIZ_GATEWAY}/Dockerfile
-  #     args:
-  #       api: ${QUIZ_GATEWAY}
+  gateway:
+    image: ${REGISTRY}/quiz-gateway:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_GATEWAY}/Dockerfile
+      args:
+        api: ${QUIZ_GATEWAY}
 
-  # commands:
-  #   image: ${REGISTRY}/quiz-commands:${TAG}
-  #   build:
-  #     context: .
-  #     dockerfile: ${QUIZ_COMMANDS}/Dockerfile
-  #     args:
-  #       api: ${QUIZ_COMMANDS}
-  #       domain: ${QUIZ_DOMAIN}
-  #       unitTests: ${QUIZ_COMMANDS_UNITTESTS}
+  commands:
+    image: ${REGISTRY}/quiz-commands:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_COMMANDS}/Dockerfile
+      args:
+        api: ${QUIZ_COMMANDS}
+        domain: ${QUIZ_DOMAIN}
+        unitTests: ${QUIZ_COMMANDS_UNITTESTS}
   
-  # queries:
-  #   image: ${REGISTRY}/quiz-queries:${TAG}
-  #   build:
-  #     context: .
-  #     dockerfile: ${QUIZ_QUERIES}/Dockerfile
-  #     args:
-  #       api: ${QUIZ_QUERIES}
-  #       domain: ${QUIZ_DOMAIN}
-  #       unitTests: ${QUIZ_QUERIES_UNITTESTS}
+  queries:
+    image: ${REGISTRY}/quiz-queries:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_QUERIES}/Dockerfile
+      args:
+        api: ${QUIZ_QUERIES}
+        domain: ${QUIZ_DOMAIN}
+        unitTests: ${QUIZ_QUERIES_UNITTESTS}
 
   ui:
     image: ${REGISTRY}/quiz-ui:${TAG}
