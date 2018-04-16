@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-sdk-alpine AS builder
+FROM microsoft/dotnet:2.1-sdk AS builder
 ARG api
 ARG domain
 ARG unitTests
