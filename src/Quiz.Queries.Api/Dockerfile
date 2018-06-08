@@ -4,23 +4,23 @@ ARG domain
 ARG unitTests
 
 # Restore packages
-COPY ${api}/*.csproj ${api}/
-COPY ${unitTests}/*.csproj ${unitTests}/
-COPY ${domain}/*.csproj ${domain}/
+COPY ${api}*.csproj ${api}
+COPY ${unitTests}*.csproj ${unitTests}
+COPY ${domain}*.csproj ${domain}
 
-RUN dotnet restore /${api} --disable-parallel
-RUN dotnet restore /${unitTests} --disable-parallel
+RUN dotnet restore ${api} 
+RUN dotnet restore ${unitTests} 
 
 ## Copy all sources
-COPY ${api} /${api}
-COPY ${unitTests} /${unitTests}
-COPY ${domain} /${domain}
+COPY ${api} ${api}
+COPY ${unitTests} ${unitTests}
+COPY ${domain} ${domain}
 
 ##### Run tests #####
-RUN dotnet test /${unitTests} --configuration Release
+RUN dotnet test ${unitTests} 
 
 ##### Publish project #####
-RUN dotnet publish /${api} --output /publish --configuration Release /p:MvcRazorCompileOnPublish=false
+RUN dotnet publish ${api} --output /publish --configuration Release 
 
 # build runtime image from published release
 FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine

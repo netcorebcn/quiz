@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore-build:2.0.3
+FROM microsoft/dotnet:2.1-sdk-alpine
 ENV NUGET_XMLDOC_MODE skip
 WORKDIR /vsdbg
 RUN apt-get update \
