@@ -1,0 +1,5 @@
+apiVersion: v1
+appVersion: "1.0"
+description: Quiz ci cd custom jenkins chart
+name: quiz-ci
+version: 0.1.0
