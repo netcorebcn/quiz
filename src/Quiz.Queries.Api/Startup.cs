@@ -21,20 +21,11 @@ namespace Quiz.Results.Api
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) => services
-            .AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            })
             .AddEventStore(Configuration)
             .AddQuizResultsApp(Configuration)
             .AddMvc();
 
         public void Configure(IApplicationBuilder app) => app
-            .UseCors("CorsPolicy")
             .UseQuizResultsApp()
             .UseMvc();
     }
