@@ -1,0 +1,34 @@
+{{- $fullName := include "quiz.fullname" . -}}
+{{- $name := include "quiz.name" . -}}
+{{- $chart := include "quiz.chart" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+{{- range .Values.services }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ $name }}
+    chart: {{ $chart }}
+    release: {{ $releaseName }}
+    heritage: {{ $releaseService }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: {{ .name }}
+      image: "{{ printf "%s/%s:%s" $imageRegistry .name $imageTag }}"
+        {{- if .env }}
+      env:
+      {{- range .env }}
+      - name: {{ . }} 
+        valueFrom:
+          secretKeyRef:
+            name: {{ $fullName }}
+            key: {{ . }} 
+    {{- end }}
+  {{- end }}
+  restartPolicy: Never
+---
+{{- end }}

@@ -7,4 +7,7 @@ node_modules
 npm-debug.log
 *.sln
 **/secrets/
-**/local*.sh
+.DS_Store
+**/.idea/
+*.tgz
+*.lock

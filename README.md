@@ -3,32 +3,27 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
 * run with [**docker**](https://www.docker.com/products/docker) from bash with ``.\run.sh`` 
   
-  Open <http://localhost> for quiz voting
-  
-  Open <http://localhost?results> for quiz results
+  Open <http://localhost> for quiz voting and <http://localhost?results> for quiz results
   
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
-  * Setup namespaces, secrets, jenkins and private registry
+  * Start   
+  
+  ```minikube start --bootstrapper=kubeadm --memory=4096 --cpus=4 --vm-driver=hyperkit```
+
+  * Install jenkins chart
 
   ```bash
-  export DB_PASS=changeit
-  export DB_USER=admin
-  export DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432"
-  export MESSAGE_BROKER="host=messagebroker:5672;username=guest;password=guest"
-
-  export REGISTRY_PASS=
-  export REGISTRY_USER=
   export REGISTRY=localhost:30400
   export TAG=latest
 
-  export JENKINS_USER=admin
-  export JENKINS_PASS=changeit
-  export JENKINS_URL=jenkins-url.com
+  export RABBIT_PASSWORD=changeit
+  export POSTGRES_PASSWORD=changeit
+  export JENKINS_PASSWORD=changeit
 
   export GITHUB_REPO=netcorebcn/quiz
   export GITHUB_ADMINS=mygithubuser
-  export GITHUB_TOKEN='<github repo token>'
+  export GITHUB_TOKEN='<TOKEN>'
   
   eval $(minikube docker-env)
   ./setup.sh
@@ -37,14 +32,12 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   * Add ingress hosts to local host file
 
   ```bash
-  echo $(minikube ip) quiz{,-ci,-rabbit,-rabbitstaging,staging}.io | sudo tee -a /etc/hosts
+  echo $(minikube ip) quiz{-ci,-rabbit}.io | sudo tee -a /etc/hosts
   ```
 
   * Open <http://quiz-ci.io/job/quiz-merge/> and Build!
 
-  * Open <http://quiz.io> or <http://quizstaging.io> for quiz voting
-
-  * Open <http://quiz.io?results> or <http://quizstaging.io?results> for quiz results
+  * Once its build Open <http://quiz.io> and <http://quiz.io?results> 
 
 
   * Github integration for Pull Request workflow

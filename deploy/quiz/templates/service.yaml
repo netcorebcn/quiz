@@ -1,0 +1,27 @@
+{{- $fullName := include "quiz.fullname" . -}}
+{{- $name := include "quiz.name" . -}}
+{{- $chart := include "quiz.chart" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+
+{{- range .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-%s" $fullName .name }}
+  labels:
+    app: {{ $name }}
+    chart: {{ $chart }}
+    release: {{ $releaseName }}
+    heritage: {{ $releaseService }}
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ printf "%s-%s" $name .name }}
+    release: {{ $releaseName }}
+---
+{{- end }}

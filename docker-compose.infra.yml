@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.4'
 
 services:
   db:
@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admin
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: changeit
 
   messagebroker:

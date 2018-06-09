@@ -1,4 +1,11 @@
-./.git
-**/bin/
-**/obj/
 **/node_modules
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+docker-compose.*.yml
+*/bin
+*/obj
