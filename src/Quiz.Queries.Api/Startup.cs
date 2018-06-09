@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quiz.Results.Api.EventStore;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Quiz.Results.Api
 {
@@ -22,26 +21,12 @@ namespace Quiz.Results.Api
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) => services
-            .AddSwaggerGen(c =>
-                c.SwaggerDoc("v1", new Info { Title = "Quiz Results API", Version = "v1" })
-            )
-            .AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            })
             .AddEventStore(Configuration)
             .AddQuizResultsApp(Configuration)
             .AddMvc();
 
         public void Configure(IApplicationBuilder app) => app
-            .UseCors("CorsPolicy")
             .UseQuizResultsApp()
-            .UseMvc()
-            .UseSwagger()
-            .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quiz Results API v1"));
+            .UseMvc();
     }
 }
