@@ -1,5 +1,7 @@
 FROM jenkins/jnlp-slave:3.19-1
 
+USER root
+
 # INSTALL DOCKER
 RUN apt-get update && \
     apt-get install \

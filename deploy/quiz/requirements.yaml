@@ -1,0 +1,7 @@
+dependencies:
+- name: rabbitmq
+  version: ~1.1.5
+  repository: '@stable'
+- name: postgresql
+  version: ~0.13.1
+  repository: '@stable'

@@ -1,7 +1,7 @@
 global:
-  gitHub:
+  github:
     name: quiz-github
-    repo: https://github.com/netcorebcn/quiz
+    repo: netcorebcn/quiz
     admin: admin
     token: <SECRET>
 
@@ -28,7 +28,7 @@ jenkins:
 
     ServicePort: 8080
     ServiceType: ClusterIP
-    HostName: quiz-ci.io
+    HostName: jenkins.quiz.io
     ContainerPort: 8080
 
     CustomConfigMap: true

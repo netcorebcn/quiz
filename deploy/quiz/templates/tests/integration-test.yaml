@@ -3,6 +3,8 @@
 {{- $chart := include "quiz.chart" . -}}
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
+{{- $imageRegistry := .Values.imageRegistry -}}
+{{- $imageTag := .Values.imageTag -}}
 {{- range .Values.services }}
 apiVersion: v1
 kind: Pod

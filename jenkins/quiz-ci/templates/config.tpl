@@ -198,31 +198,19 @@ data:
     cp -n /var/jenkins_config/initplugins.groovy /var/jenkins_home/init.groovy.d/
 
   initplugins.groovy: |-
-    import java.lang.reflect.Field
     import jenkins.model.*
     import hudson.util.*
     import java.net.URL
-    import org.jenkinsci.plugins.ghprb.*
     import org.jenkinsci.plugins.github.config.*
 
     // configure github plugin
-    url = new URL('http','{{ .Values.jenkins.Master.HostName }}', 80, '/github-webhook/')
+    url = new URL('http','{{ .Values.Master.HostName }}', 80, '/github-webhook/')
     def pluginConfig = Jenkins.instance.getExtensionList(GitHubPluginConfig.class)[0]
     GitHubServerConfig serverConfig = new GitHubServerConfig('github-token')
     pluginConfig.setConfigs([serverConfig])
     pluginConfig.setOverrideHookUrl(true)
     pluginConfig.setHookUrl(url)
     pluginConfig.save()
-
-    // configure github pull request builder plugin
-    def descriptor = Jenkins.instance.getDescriptorByType(org.jenkinsci.plugins.ghprb.GhprbTrigger.DescriptorImpl.class)
-    Field auth = descriptor.class.getDeclaredField("githubAuth")
-    auth.setAccessible(true)
-
-    githubAuth = new ArrayList<GhprbGitHubAuth>()
-    githubAuth.add(new GhprbGitHubAuth("", "http://{{ .Values.jenkins.Master.HostName }}/","github-token", "{{ .Values.github.name }}", null, null))
-    auth.set(descriptor, githubAuth)
-    descriptor.save()
 
   initjobs.groovy: |-
     import jenkins.model.*
@@ -249,16 +237,13 @@ data:
             git {
                 remote {
                     github('{{ $repo }}')
+                    credentials('github-username')
                 }
                 branch('*/master')
             }
           }
           triggers {
             githubPush()
-            githubPullRequest {
-                admins([{{ $admin }}])
-                useGitHubHooks()
-            }
           }
           scriptPath('{{ $val.jenkinsFile }}')
         }

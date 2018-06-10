@@ -6,7 +6,7 @@ build
 node_modules
 npm-debug.log
 *.sln
-**/secrets/
+*secrets
 .DS_Store
 **/.idea/
 *.tgz

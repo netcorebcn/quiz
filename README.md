@@ -9,33 +9,26 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Start   
   
-  ```minikube start --bootstrapper=kubeadm --memory=4096 --cpus=4 --vm-driver=hyperkit```
+  ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
 
-  * Install jenkins chart
-
-  ```bash
-  export REGISTRY=localhost:30400
-  export TAG=latest
-
-  export RABBIT_PASSWORD=changeit
-  export POSTGRES_PASSWORD=changeit
-  export JENKINS_PASSWORD=changeit
-
-  export GITHUB_REPO=netcorebcn/quiz
-  export GITHUB_ADMINS=mygithubuser
-  export GITHUB_TOKEN='<TOKEN>'
-  
-  eval $(minikube docker-env)
-  ./setup.sh
-  ```
-
-  * Add ingress hosts to local host file
+  * Create a ```./secrets``` file with following contents: 
 
   ```bash
-  echo $(minikube ip) quiz{-ci,-rabbit}.io | sudo tee -a /etc/hosts
+  REGISTRY=localhost:30400
+  TAG=latest
+  RABBIT_PASSWORD=changeit
+  POSTGRES_PASSWORD=changeit
+  JENKINS_PASSWORD=changeit
+  GITHUB_REPO=netcorebcn/quiz
+  GITHUB_USER=mygithubuser
+  GITHUB_TOKEN='<TOKEN>'
   ```
 
-  * Open <http://quiz-ci.io/job/quiz-merge/> and Build!
+  * Execute bash script ```./setup.sh```
+
+  * Add ingress hosts to local host file ```echo $(minikube ip) {jenkins,rabbit}.quiz.io quiz.io | sudo tee -a /etc/hosts```
+
+  * Open <http://jenkins.quiz.io/job/quiz/> and Build!
 
   * Once its build Open <http://quiz.io> and <http://quiz.io?results> 
 
@@ -44,12 +37,12 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
     * Add Integration & Service: Manage Jenkins (GitHub plugin) 
 
-      http://jenkins-url/github-webhook/
+      http://jenkins.quiz.io/github-webhook/
 
     * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
     
     ```bash 
-    ./ngrok http quiz-ci.io:80 -host-header=quiz-ci.io
+    ./ngrok http jenkins.quiz.io:80 -host-header=jenkins.quiz.io
     ```
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.

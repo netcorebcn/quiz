@@ -43,11 +43,3 @@ rabbitmq:
 
 postgresql:
     postgresUser: postgres
-
-ingress-ingress:
-  controller:
-    kind: DaemonSet
-    daemonset:
-      useHostPort: true
-    service:
-      type: ClusterIP
