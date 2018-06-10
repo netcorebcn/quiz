@@ -1,0 +1,49 @@
+{{- $fullName := include "quiz.fullname" . -}}
+{{- $name := include "quiz.name" . -}}
+{{- $chart := include "quiz.chart" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+{{- $imageRegistry := .Values.imageRegistry }}
+{{- $imageTag := .Values.imageTag }}
+
+{{- range .Values.services }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ printf "%s-%s" $fullName .name }}
+  labels:
+    app: {{ $name }}
+    chart: {{ $chart }}
+    release: {{ $releaseName }}
+    heritage: {{ $releaseService }}
+spec:
+  replicas: {{ .replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ printf "%s-%s" $name .name }}
+      release: {{ $releaseName }}
+  template:
+    metadata:
+      labels:
+        app: {{ printf "%s-%s" $name .name }}
+        release: {{ $releaseName }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: "{{ printf "%s/%s:%s" $imageRegistry .image $imageTag }}"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+        {{- if .env }}
+          env:
+          {{- range .env }}
+          - name: {{ . }} 
+            valueFrom:
+              secretKeyRef:
+                name: {{ $fullName }}
+                key: {{ . }} 
+        {{- end }}
+      {{- end }}
+---
+{{- end }}

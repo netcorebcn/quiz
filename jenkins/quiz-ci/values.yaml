@@ -1,0 +1,70 @@
+global:
+  github:
+    name: quiz-github
+    repo: netcorebcn/quiz
+    admin: admin
+    token: <SECRET>
+
+  jobs:
+  - name: quiz
+    repo : https://github.com/netcorebcn/quiz
+    branch: '*/master'
+    jenkinsFile: 'Jenkinsfile'
+
+registryUrl: locahost:30400
+
+jenkins:
+  Master:
+    Name: jenkins-master
+    Image: "jenkins/jenkins"
+    ImageTag: "lts"
+    ImagePullPolicy: "Always"
+    Component: "jenkins-master"
+
+    UseSecurity: true
+    AdminUser: admin
+    Cpu: "200m"
+    Memory: "512Mi"
+
+    ServicePort: 8080
+    ServiceType: ClusterIP
+    HostName: jenkins.quiz.io
+    ContainerPort: 8080
+
+    CustomConfigMap: true
+    CredentialsXmlSecret: quiz-ci-credentials
+    InstallPlugins:
+      - kubernetes:1.7.1
+      - workflow-aggregator:2.5
+      - workflow-job:2.21
+      - credentials-binding:1.16
+      - git:3.9.1
+      - github:1.29.1
+      - github-oauth:0.29
+      - ghprb:1.9
+      - blueocean:1.5.0
+      - job-dsl:1.69
+    
+  Agent:
+    Enabled: true
+    Image: localhost:30400/jenkins-slave
+    ImageTag: latest
+    Component: "jenkins-slave"
+    Privileged: true
+    Cpu: "200m"
+    Memory: "256Mi"
+    AlwaysPullImage: false
+    volumes:
+    - type: HostPath
+      hostPath: /var/run/docker.sock
+      mountPath: /var/run/docker.sock
+
+  Persistence:
+    Enabled: true
+    AccessMode: ReadWriteOnce
+    Size: 16Gi
+
+  rbac:
+    install: true
+    serviceAccountName: default
+    roleRef: cluster-admin

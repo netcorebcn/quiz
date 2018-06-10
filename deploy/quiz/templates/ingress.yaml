@@ -1,0 +1,34 @@
+{{- $fullName := include "quiz.fullname" . -}}
+{{- $name := include "quiz.name" . -}}
+{{- $chart := include "quiz.chart" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+{{- $ingressHost := .Values.ingressHost}}
+
+{{- range .Values.services }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-%s" $fullName .name }}
+  labels:
+    app: {{ $name }}
+    chart: {{ $chart }}
+    release: {{ $releaseName }}
+    heritage: {{ $releaseService }}
+{{- if .ingress.annotations }}
+{{- with .ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
+spec:
+  rules:
+    - host: {{ $ingressHost }}
+      http:
+        paths:
+          - path: {{ .ingress.path | default "/" }}
+            backend:
+              serviceName: {{ printf "%s-%s" $fullName .name }}
+              servicePort: http
+---
+{{- end }}

@@ -52,12 +52,25 @@ metadata:
 spec:
   ports:
     - port: 8080
-      targetPort: 8080
       name: registry
   selector:
     app: registry
     tier: registry
-  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: registry-ui
+spec:
+  rules:
+  - host: registry.quiz.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: registry-ui 
+          servicePort: 8080
 ---
 
 apiVersion: extensions/v1beta1

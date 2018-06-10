@@ -1,0 +1,45 @@
+imageRegistry: localhost:30400
+imageTag: latest
+ingressHost: quiz.io
+
+services:
+- name: ui
+  image: quiz-ui
+  ingress:
+    annotations: {}
+
+- name: commands
+  image: quiz-commands
+  env:
+    - messagebroker
+    - dbconnection
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: /commands
+
+- name: queries
+  image: quiz-queries
+  env:
+    - messagebroker
+    - dbconnection
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: /queries
+
+tests:
+- name: integration-tests
+  image: quiz-integration-tests
+  env:
+    - messagebroker
+    - dbconnection
+
+rabbitmq:
+    ingress:
+        enabled: true
+    rabbitmq:
+        username: guest
+
+postgresql:
+    postgresUser: postgres

@@ -1,0 +1,4 @@
+dependencies:
+- name: jenkins
+  version: ~0.16.1
+  repository: '@stable'

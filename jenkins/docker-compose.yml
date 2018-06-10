@@ -1,8 +1,0 @@
-version: "3.3"
-
-services:
-  ci:
-    image: ${REGISTRY}/jenkins:${TAG}
-    build:
-      context: . 
-      dockerfile: Dockerfile

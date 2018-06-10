@@ -1,15 +1,22 @@
-pushd k8s
-./setup.sh
-popd
+#!/bin/bash
 
-k8s
-./deploy.sh ci registry
-popd
+# export as env all the needed secrets
+export $(cat secrets)
+# connect to minikube docker engine
+eval $(minikube docker-env)
 
+# deploy heapster monitoring and nginx ingress as addons
+minikube addons enable ingress 
+minikube addons enable heapster
+
+# install tiller
+helm init --wait
+
+# install local registry and jenkins chart
 pushd jenkins
-../build.sh
+./install.sh
 popd
 
-pushd k8s
-./deploy.sh ci jenkins-ci
-popd
+# build and install quiz app
+./build.sh
+./deploy.sh

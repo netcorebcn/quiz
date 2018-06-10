@@ -3,60 +3,46 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
 * run with [**docker**](https://www.docker.com/products/docker) from bash with ``.\run.sh`` 
   
-  Open <http://localhost> for quiz voting
-  
-  Open <http://localhost?results> for quiz results
+  Open <http://localhost> for quiz voting and <http://localhost?results> for quiz results
   
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
-  * Setup namespaces, secrets, jenkins and private registry
-
-  ```bash
-  export DB_PASS=changeit
-  export DB_USER=admin
-  export DB_CONNECTION="Username=admin;Password=changeit;Host=db;Port=5432"
-  export MESSAGE_BROKER="host=messagebroker:5672;username=guest;password=guest"
-
-  export REGISTRY_PASS=
-  export REGISTRY_USER=
-  export REGISTRY=localhost:30400
-  export TAG=latest
-
-  export JENKINS_USER=admin
-  export JENKINS_PASS=changeit
-  export JENKINS_URL=jenkins-url.com
-
-  export GITHUB_REPO=netcorebcn/quiz
-  export GITHUB_ADMINS=mygithubuser
-  export GITHUB_TOKEN='<github repo token>'
+  * Start   
   
-  eval $(minikube docker-env)
-  ./setup.sh
-  ```
+  ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
 
-  * Add ingress hosts to local host file
+  * Create a ```./secrets``` file with following contents: 
 
   ```bash
-  echo $(minikube ip) quiz{,-ci,-rabbit,-rabbitstaging,staging}.io | sudo tee -a /etc/hosts
+  REGISTRY=localhost:30400
+  TAG=latest
+  RABBIT_PASSWORD=changeit
+  POSTGRES_PASSWORD=changeit
+  JENKINS_PASSWORD=changeit
+  GITHUB_REPO=netcorebcn/quiz
+  GITHUB_USER=mygithubuser
+  GITHUB_TOKEN='<TOKEN>'
   ```
 
-  * Open <http://quiz-ci.io/job/quiz-merge/> and Build!
+  * Execute bash script ```./setup.sh```
 
-  * Open <http://quiz.io> or <http://quizstaging.io> for quiz voting
+  * Add ingress hosts to local host file ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
 
-  * Open <http://quiz.io?results> or <http://quizstaging.io?results> for quiz results
+  * Open <http://jenkins.quiz.io/job/quiz/> and Build!
+
+  * Once its build Open <http://quiz.io> and <http://quiz.io?results> 
 
 
   * Github integration for Pull Request workflow
 
     * Add Integration & Service: Manage Jenkins (GitHub plugin) 
 
-      http://jenkins-url/github-webhook/
+      http://jenkins.quiz.io/github-webhook/
 
     * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
     
     ```bash 
-    ./ngrok http quiz-ci.io:80 -host-header=quiz-ci.io
+    ./ngrok http jenkins.quiz.io:80 -host-header=jenkins.quiz.io
     ```
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.

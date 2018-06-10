@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jnlp-slave:3.19-1
 
 USER root
 
@@ -8,6 +8,7 @@ RUN apt-get update && \
         apt-transport-https \
         ca-certificates \
         curl \
+        python-pip \
         software-properties-common -y && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
     add-apt-repository \
@@ -16,8 +17,9 @@ RUN apt-get update && \
         stable" && \ 
     apt-get update && \
     apt-get install docker-ce -y
-    
-RUN curl -L --fail https://github.com/docker/compose/releases/download/1.18.0/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
+
+# INSTALL DOCKER-COMPOSE
+RUN curl -L --fail https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
     
 ## INSTALL KUBECTL
@@ -25,12 +27,7 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
-# Whether to skip setup wizard
-ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
-
-COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-
-COPY security.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
-COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/init.groovy
-COPY jobs.groovy /usr/share/jenkins/jobs.groovy
+## INSTALL HELM
+RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+RUN chmod 700 get_helm.sh
+RUN ./get_helm.sh
