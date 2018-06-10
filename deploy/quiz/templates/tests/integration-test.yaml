@@ -20,7 +20,7 @@ metadata:
 spec:
   containers:
     - name: {{ .name }}
-      image: "{{ printf "%s/%s:%s" $imageRegistry .name $imageTag }}"
+      image: "{{ printf "%s/%s:%s" $imageRegistry .image $imageTag }}"
         {{- if .env }}
       env:
       {{- range .env }}
