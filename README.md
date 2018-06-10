@@ -26,7 +26,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Execute bash script ```./setup.sh```
 
-  * Add ingress hosts to local host file ```echo $(minikube ip) {jenkins,rabbit}.quiz.io quiz.io | sudo tee -a /etc/hosts```
+  * Add ingress hosts to local host file ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
 
   * Open <http://jenkins.quiz.io/job/quiz/> and Build!
 
