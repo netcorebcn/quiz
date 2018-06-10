@@ -1,22 +1,21 @@
-node {
-    properties([pipelineTriggers([githubPush()])])
- 
-    stage "Checkout"
-        checkout scm
-        sh "git rev-parse --short HEAD > commit-id"
-        env.TAG = readFile('commit-id').replace("\n", "").replace("\r", "")
+pipeline {
+    agent any
+    environment {
+        REGISTRY = credentials('registry')
+        RABBIT_PASSWORD = credentials('postgres-password')
+        POSTGRES_PASSWORD = credentials('rabbit-password')
+    }
 
-    stage "Build"
-        sh "./build.sh"
-
-    stage "Deploy to staging"
-        env.ENVIRONMENT="staging"
-        sh "./deploy.sh"
-
-    stage "Integration Tests"
-        sh "./integration-tests.sh"
-        
-    stage "Deploy to production"
-        env.ENVIRONMENT=""
-        sh "./deploy.sh"
+    stages {
+        stage('checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('build') {
+            steps {
+                sh './build.sh'
+            }
+        }
+    }
 }
