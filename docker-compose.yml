@@ -37,10 +37,12 @@ services:
       args:
         api: ${QUIZ_UI}
 
-  cli:
-    image: ${REGISTRY}/quiz-cli:${TAG}
+  integration-tests:
+    image: ${REGISTRY}/quiz-integration-tests:${TAG}
     build:
       context: .
-      dockerfile: ${QUIZ_CLI}/Dockerfile
+      dockerfile: ${QUIZ_INTEGRATION_TESTS}/Dockerfile
       args:
-        api: ${QUIZ_CLI}
+        tests: ${QUIZ_INTEGRATION_TESTS}
+        commands: ${QUIZ_COMMANDS}
+        domain: ${QUIZ_DOMAIN}

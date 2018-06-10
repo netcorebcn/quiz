@@ -5,11 +5,11 @@
 {{- $releaseService := .Release.Service -}}
 {{- $imageRegistry := .Values.imageRegistry -}}
 {{- $imageTag := .Values.imageTag -}}
-{{- range .Values.services }}
+{{- range .Values.tests }}
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ $fullName }}
+  name: {{ printf "%s-%s" $fullName .name }}
   labels:
     app: {{ $name }}
     chart: {{ $chart }}
