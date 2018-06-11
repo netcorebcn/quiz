@@ -11,8 +11,8 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   
   ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
 
-  * Create a ```./secrets``` file with following contents: 
-
+  * Create a ```./secrets``` file with following contents:
+  
   ```bash
   REGISTRY=localhost:30400
   TAG=latest
@@ -26,7 +26,9 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Execute bash script ```./setup.sh```
 
-  * Add ingress hosts to local host file ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
+  * Add ingress hosts to local host file 
+  
+  ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
 
   * Open <http://jenkins.quiz.io/job/quiz/> and Build!
 
