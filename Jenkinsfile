@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        REGISTRY = credentials('registry')
+        REGISTRY = 'localhost:30400'
         RABBIT_PASSWORD = credentials('postgres-password')
         POSTGRES_PASSWORD = credentials('rabbit-password')
     }
@@ -9,8 +9,18 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                github('netcorebcn/quiz')
-                credentials('github-username')
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    extensions: [
+                        [$class: 'PruneStaleBranch'],
+                        [$class: 'CleanCheckout'],
+                    ],
+                    userRemoteConfigs: [[
+                        credentialsId: 'github-username', 
+                        name: 'origin', 
+                        url: 'https://github.com/netcorebcn/quiz']]
+                ])
             }
         }
         stage('build') {

@@ -4,6 +4,8 @@ chart='quiz'
 chartPath='./deploy/'$chart
 deploy=$chart-${BRANCH} 
 
+helm init --client-only
+
 # cleanup previous execution
 helm delete $deploy --purge > /dev/null 2>&1 || true
 

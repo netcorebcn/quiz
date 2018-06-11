@@ -9,7 +9,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Start   
   
-  ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
+  ```minikube start --memory=4096 --cpus=2 --vm-driver=hyperkit```
 
   * Create a ```./secrets``` file with following contents:
   

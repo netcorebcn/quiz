@@ -4,8 +4,8 @@ chart='quiz'
 chartPath='./deploy/'$chart
 deploy=$chart'-production'
 
+helm init --client-only
 helm dep update $chartPath
-
 helm upgrade --install \
     $deploy \
     $chartPath \
