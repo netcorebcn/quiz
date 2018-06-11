@@ -40,7 +40,6 @@ rabbitmq:
         enabled: true
     rabbitmq:
         username: guest
-    rbacEnabled: false
 
 postgresql:
     postgresUser: postgres
