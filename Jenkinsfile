@@ -9,12 +9,23 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                checkout scm
+                github('netcorebcn/quiz')
+                credentials('github-username')
             }
         }
         stage('build') {
             steps {
                 sh './build.sh'
+            }
+        }
+        stage('integration tests') {
+            steps {
+                sh './integration-tests.sh'
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh './deploy.sh'
             }
         }
     }
