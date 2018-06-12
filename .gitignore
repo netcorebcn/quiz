@@ -11,3 +11,4 @@ npm-debug.log
 **/.idea/
 *.tgz
 *.lock
+ngrok
