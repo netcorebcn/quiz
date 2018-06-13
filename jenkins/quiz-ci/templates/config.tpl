@@ -202,7 +202,9 @@ data:
     import jenkins.model.*
     import hudson.util.*
     import java.net.URL
+    import java.lang.reflect.Field
     import org.jenkinsci.plugins.github.config.*
+    import org.jenkinsci.plugins.ghprb.*
 
     // configure github plugin
     url = new URL('http','{{ .Values.Master.HostName }}', 80, '/github-webhook/')
@@ -213,11 +215,21 @@ data:
     pluginConfig.setHookUrl(url)
     pluginConfig.save()
 
+    // configure github pull request builder plugin
+    def descriptor = Jenkins.instance.getDescriptorByType(org.jenkinsci.plugins.ghprb.GhprbTrigger.DescriptorImpl.class)
+    Field auth = descriptor.class.getDeclaredField("githubAuth")
+    auth.setAccessible(true)
+    githubAuth = new ArrayList<GhprbGitHubAuth>()
+    githubAuth.add(new GhprbGitHubAuth("", "http://{{ .Values.Master.HostName }}/","github-token", "quiz-github", null, null))
+    auth.set(descriptor, githubAuth)
+    descriptor.save()
+
   initjobs.groovy: |-
     import jenkins.model.*
     import hudson.util.*
     import javaposse.jobdsl.dsl.DslScriptLoader
     import javaposse.jobdsl.plugin.JenkinsJobManagement
+    import java.lang.reflect.Field
 
     def pattern = ~/job.*\.groovy/
     new File("/var/jenkins_config/").eachDirRecurse { dir ->
@@ -229,15 +241,38 @@ data:
 
 {{ $repo := .Values.global.github.repo }}
 {{ $admin := .Values.global.github.admin }}
-{{- range $val := .Values.global.jobs}}
-  job.{{ $val.name }}.groovy: |-
-    pipelineJob('{{ $val.name }}') {
+  job.quiz-pr.groovy: |-
+    pipelineJob('quiz-pr') {
       definition {
         cpsScm {
           scm {
             git {
                 remote {
-                    url('{{ $repo }}')
+                    github('{{ $repo }}')
+                    name('origin')
+                    refspec('+refs/pull/*:refs/remotes/origin/pr/*')
+                }
+                branch('${ghprbActualCommit}')
+            }
+          }
+          triggers {
+            githubPullRequest {
+                admins(['{{ $admin }}'])
+                useGitHubHooks()
+            }
+          }
+          scriptPath('Jenkinsfile')
+        }
+      }
+    }
+  job.quiz.groovy: |-
+    pipelineJob('quiz') {
+      definition {
+        cpsScm {
+          scm {
+            git {
+                remote {
+                    github('{{ $repo }}')
                     credentials('github-username')
                 }
                 branch('*/master')
@@ -246,11 +281,10 @@ data:
           triggers {
             githubPush()
           }
-          scriptPath('{{ $val.jenkinsFile }}')
+          scriptPath('Jenkinsfile')
         }
       }
     }
-{{- end }}
 
 {{- range $key, $val := .Values.Master.InitScripts }}
   init{{ $key }}.groovy: |-
