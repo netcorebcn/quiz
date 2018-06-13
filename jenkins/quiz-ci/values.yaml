@@ -64,5 +64,3 @@ jenkins:
 
   rbac:
     install: true
-    serviceAccountName: default
-    roleRef: cluster-admin

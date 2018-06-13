@@ -1,9 +1,9 @@
 {{- define "override_config_map" }}
-
+{{- $fullName := include "quiz-ci.fullname" . -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "quiz-ci.fullname" . }}
+  name: {{ $fullName }}
 data:
   config.xml: |-
     <?xml version='1.0' encoding='UTF-8'?>
@@ -36,6 +36,7 @@ data:
               <instanceCap>2147483647</instanceCap>
               <idleMinutes>0</idleMinutes>
               <label>{{ .Release.Name }}-{{ .Values.Agent.Component }}</label>
+              <serviceAccount>{{ $fullName }}</serviceAccount>
               <nodeSelector>
                 {{- $local := dict "first" true }}
                 {{- range $key, $value := .Values.Agent.NodeSelector }}
@@ -236,7 +237,7 @@ data:
           scm {
             git {
                 remote {
-                    github('{{ $repo }}')
+                    url('{{ $repo }}')
                     credentials('github-username')
                 }
                 branch('*/master')
