@@ -9,16 +9,20 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Start   
   
-  ```minikube start --bootstrapper=kubeadm --memory=4096 --cpus=2 --vm-driver=hyperkit```
+  ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
 
-  * Create a ```./secrets``` file with following contents:
+  * Export the following environment variables:
   
   ```bash
+  QUIZ_ENVIRONMENT='pro'
   REGISTRY=localhost:30400
   TAG=latest
+  INGRESS_DOMAIN='quiz.internal'
+
   RABBIT_PASSWORD=changeit
   POSTGRES_PASSWORD=changeit
   JENKINS_PASSWORD=changeit
+
   GITHUB_REPO=netcorebcn/quiz
   GITHUB_USER=mygithubuser
   GITHUB_TOKEN='<TOKEN>'
@@ -29,6 +33,9 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   * Add ingress hosts to local host file 
   
   ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
+
+  **__Notes__**:
+    For automatic dns wilcards resolution use [dnsmasq](https://blog.thesparktree.com/local-development-with-wildcard-dns)
 
   * Open <http://jenkins.quiz.io/job/quiz/> and Build!
 
@@ -67,3 +74,5 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   <https://github.com/radu-matei/websocket-manager>
   
+* dnsmasq integrate with minikube
+  <https://github.com/superbrothers/minikube-ingress-dns>

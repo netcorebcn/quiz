@@ -1,6 +1,6 @@
 imageRegistry: localhost:30400
 imageTag: latest
-ingressHost: quiz.io
+ingressHost: quiz.internal
 
 services:
 - name: ui
@@ -34,6 +34,7 @@ tests:
   env:
     - messagebroker
     - dbconnection
+  command: "dotnet test --no-build"
 
 rabbitmq:
     ingress:

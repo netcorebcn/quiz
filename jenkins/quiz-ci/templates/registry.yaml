@@ -64,7 +64,7 @@ metadata:
  name: registry-ui
 spec:
   rules:
-  - host: registry.quiz.io
+  - host: {{ .Values.registryHostName }}
     http:
       paths:
       - path: /

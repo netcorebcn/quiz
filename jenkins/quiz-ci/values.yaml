@@ -6,6 +6,7 @@ global:
     token: <SECRET>
 
 registryUrl: locahost:30400
+registryHostName: registry.quiz.internal
 
 jenkins:
   Master:
@@ -22,7 +23,7 @@ jenkins:
 
     ServicePort: 8080
     ServiceType: ClusterIP
-    HostName: jenkins.quiz.io
+    HostName: jenkins.quiz.internal
     ContainerPort: 8080
 
     CustomConfigMap: true
