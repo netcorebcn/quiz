@@ -34,7 +34,7 @@ tests:
   env:
     - messagebroker
     - dbconnection
-  command: "dotnet test --no-build"
+  command: "sleep 30;dotnet test --no-build"
 
 rabbitmq:
     ingress:
