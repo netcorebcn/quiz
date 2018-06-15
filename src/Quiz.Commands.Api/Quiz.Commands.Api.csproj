@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Easynetq" Version="3.0.0" />
-    <PackageReference Include="Marten" Version="2.8.0" />
+    <PackageReference Include="Marten" Version="2.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Polly" Version="6.0.1" />
     <ProjectReference Include="../Quiz.Domain.Events/Quiz.Domain.Events.csproj" />
