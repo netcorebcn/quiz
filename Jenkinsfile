@@ -8,10 +8,14 @@ pipeline {
     }
 
     stages {
-        stage('build') {
-            script {
-                checkout()
+        stage('checkout') {
+            steps {
+                script {
+                    checkout()
+                }
             }
+        }
+        stage('build') {
             steps {
                 sh './build.sh'
             }
