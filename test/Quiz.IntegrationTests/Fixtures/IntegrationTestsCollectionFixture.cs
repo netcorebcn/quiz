@@ -6,7 +6,7 @@ using Xunit;
 namespace Quiz.Api.Tests
 {
     [CollectionDefinition("IntegrationTests")]
-    public class IntegrationTestsCollectionFixture : ICollectionFixture<DocumentStoreFixture>
+    public class IntegrationTestsCollectionFixture : ICollectionFixture<DocumentStoreFixture>, ICollectionFixture<BusFixture>
     {
     }
 }

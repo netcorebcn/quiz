@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EasyNetQ;
 using Marten;
 using Newtonsoft.Json;
 using Quiz.Domain;
@@ -12,17 +13,21 @@ namespace Quiz.Api.Tests
     [Collection("IntegrationTests")]
     public class IntegrationTests
     {
+        private readonly IBus _bus;
         private readonly IDocumentStore _documentStore;
 
-        public IntegrationTests(DocumentStoreFixture documentStoreFixture) => 
+        public IntegrationTests(DocumentStoreFixture documentStoreFixture, BusFixture busFixture)
+        {
+            _bus = busFixture.Bus;
             _documentStore = documentStoreFixture.DocumentStore;
+        } 
 
         [Fact]
         public async Task QuizAppService_Test_Start()
         {
             using(var session = _documentStore.OpenSession())
             {
-                var appService = new QuizAppService(_documentStore, null);
+                var appService = new QuizAppService(_documentStore, _bus);
                 var result = await appService.Start(CreateQuiz());
                 Assert.NotNull(result);
             }
