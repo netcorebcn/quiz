@@ -32,26 +32,26 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Add ingress hosts to local host file 
   
-  ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.io quiz.io | sudo tee -a /etc/hosts```
+  ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.internal quiz.internal | sudo tee -a /etc/hosts```
 
   **__Notes__**:
     For automatic dns wilcards resolution use [dnsmasq](https://blog.thesparktree.com/local-development-with-wildcard-dns)
 
-  * Open <http://jenkins.quiz.io/job/quiz/> and Build!
+  * Open <http://jenkins.quiz.internal/job/quiz/> and Build!
 
-  * Once its build Open <http://quiz.io> and <http://quiz.io?results> 
+  * Once its build Open <http://quiz.internal> and <http://quiz.internal?results> 
 
 
   * Github integration for Pull Request workflow
 
     * Add Integration & Service: Manage Jenkins (GitHub plugin) 
 
-      http://jenkins.quiz.io/github-webhook/
+      http://jenkins.quiz.internal/github-webhook/
 
     * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
     
     ```bash 
-    ./ngrok http jenkins.quiz.io:80 -host-header=jenkins.quiz.io
+    ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
     ```
 
 **Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
@@ -75,4 +75,5 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   <https://github.com/radu-matei/websocket-manager>
   
 * dnsmasq integrate with minikube
+
   <https://github.com/superbrothers/minikube-ingress-dns>
