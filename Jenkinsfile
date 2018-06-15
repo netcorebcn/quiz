@@ -4,39 +4,46 @@ pipeline {
         REGISTRY = 'localhost:30400'
         RABBIT_PASSWORD = credentials('postgres-password')
         POSTGRES_PASSWORD = credentials('rabbit-password')
+        INGRESS_DOMAIN = 'quiz.internal'
     }
 
     stages {
-        stage('checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/master']],
-                    extensions: [
-                        [$class: 'PruneStaleBranch'],
-                        [$class: 'CleanCheckout'],
-                    ],
-                    userRemoteConfigs: [[
-                        credentialsId: 'github-username', 
-                        name: 'origin', 
-                        url: 'https://github.com/netcorebcn/quiz']]
-                ])
-            }
-        }
         stage('build') {
+            script {
+                checkout()
+            }
             steps {
                 sh './build.sh'
             }
         }
         stage('integration tests') {
             steps {
-                sh './integration-tests.sh'
+                sh 'cd deploy && ./tests.sh'
             }
         }
         stage('deploy') {
             steps {
-                sh './deploy.sh'
+                sh 'cd deploy && ./install.sh'
             }
         }
     }
+}
+
+def checkout = {
+    tagBranch = 'master'
+    repo = 'https://github.com/netcorebcn/quiz.git'
+
+    tagBranch = env.BRANCH_NAME ?: tagBranch
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: tagBranch]],
+        extensions: [
+            [$class: 'CleanCheckout'],
+        ],
+        userRemoteConfigs: [[name: 'origin', url: "${repo}"]]
+    ])
+
+    env.TAG_COMMIT = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+    env.TAG_BRANCH = tagBranch
+    env.TAG = "${env.TAG_BRANCH}-${env.TAG_COMMIT}"
 }
