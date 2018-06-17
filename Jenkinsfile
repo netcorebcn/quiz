@@ -37,8 +37,6 @@ pipeline {
             }
             steps {
                 sh 'cd deploy && ./install.sh'
-            }
-            steps {
                 sh 'cd deploy && ./tests.sh'
             }
         }
@@ -52,12 +50,7 @@ pipeline {
             }
             steps {
                 input 'Deploy to production?'
-            }
-            steps {
                 sh 'cd deploy && ./install.sh'
-            }
-            steps {
-                sh './e2eTests.sh'
             }
         }
     }
