@@ -39,7 +39,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
     * Execute ```./install.sh```
 
-    * Add ingress hosts to local host file 
+    * Add ingress hosts to local host file (only if dnsmasq is not setup)
   
       ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.internal quiz.internal | sudo tee -a /etc/hosts```
 
