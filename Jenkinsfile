@@ -8,16 +8,11 @@ pipeline {
     }
 
     stages {
-        stage('checkout') {
+        stage('build') {
             steps {
                 script {
                     checkout()
                 }
-            }
-        }
-
-        stage('build') {
-            steps {
                 sh './build.sh'
             }
         }
@@ -57,20 +52,9 @@ pipeline {
 }
 
 def checkout = {
-    tagBranch = 'master'
-    repo = 'https://github.com/netcorebcn/quiz.git'
+    def scmVars = checkout scm
 
-    tagBranch = env.BRANCH_NAME ?: tagBranch
-    checkout([
-        $class: 'GitSCM',
-        branches: [[name: tagBranch]],
-        extensions: [
-            [$class: 'CleanCheckout'],
-        ],
-        userRemoteConfigs: [[name: 'origin', url: "${repo}"]]
-    ])
-
-    env.TAG_COMMIT = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-    env.TAG_BRANCH = tagBranch
-    env.TAG = "${env.TAG_BRANCH}-${env.TAG_COMMIT}"
+    env.TAG_COMMIT = smcVars.GIT_COMMIT
+    env.TAG_BRANCH = scmVars.GIT_BRANCH
+    env.TAG = "${scmVars.GIT_BRANCH}-${scmVars.GIT_COMMIT}"
 }
