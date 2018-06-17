@@ -4,7 +4,7 @@
 
 # MINIKUBE SETUP
 minikube delete
-minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit
+minikube start --memory=8192 --cpus=4 --vm-driver=hyperkit
 minikube addons enable ingress 
 minikube addons enable heapster
 sleep 60
