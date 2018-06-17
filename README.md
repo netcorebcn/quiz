@@ -1,60 +1,68 @@
 # Quiz App
 Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
+## Docker 
 * run with [**docker**](https://www.docker.com/products/docker) from bash with ``.\run.sh`` 
   
   Open <http://localhost> for quiz voting and <http://localhost?results> for quiz results
   
+## Minikube 
 * run with [**minikube**](https://github.com/kubernetes/minikube)
 
-  * Start   
+  * Setup minikube   
   
-  ```minikube start --memory=4096 --cpus=4 --vm-driver=hyperkit```
+    ```./setupkube.sh```
 
-  * Export the following environment variables:
-  
-  ```bash
-  QUIZ_ENVIRONMENT='pro'
-  REGISTRY=localhost:30400
-  TAG=latest
-  INGRESS_DOMAIN='quiz.internal'
+  * Setup dnsmasq (optional)
 
-  RABBIT_PASSWORD=changeit
-  POSTGRES_PASSWORD=changeit
-  JENKINS_PASSWORD=changeit
+    ```sudo INGRESS_DOMAIN=quiz.internal ./setupdns.sh```
 
-  GITHUB_REPO=netcorebcn/quiz
-  GITHUB_USER=mygithubuser
-  GITHUB_TOKEN='<TOKEN>'
-  ```
+    **__Notes__**: For automatic dns wilcards resolution use [dnsmasq](https://blog.thesparktree.com/local-development-with-wildcard-dns)
 
-  * Execute bash script ```./setup.sh```
-
-  * Add ingress hosts to local host file 
-  
-  ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.internal quiz.internal | sudo tee -a /etc/hosts```
-
-  **__Notes__**:
-    For automatic dns wilcards resolution use [dnsmasq](https://blog.thesparktree.com/local-development-with-wildcard-dns)
-
-  * Open <http://jenkins.quiz.internal/job/quiz/> and Build!
-
-  * Once its build Open <http://quiz.internal> and <http://quiz.internal?results> 
-
-
-  * Github integration for Pull Request workflow
-
-    * Add Integration & Service: Manage Jenkins (GitHub plugin) 
-
-      http://jenkins.quiz.internal/github-webhook/
-
-    * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
+  * Install jenkins and quiz app
+    * Export the following environment variables:
     
-    ```bash 
-    ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
-    ```
+      ```bash
+      export QUIZ_ENVIRONMENT='pro'
+      export REGISTRY=localhost:30400
+      export TAG=latest
+      export INGRESS_DOMAIN='quiz.internal'
 
-**Notes**: We aren't starting from the scratch. We are using ideas and code from other awesome repos.
+      export RABBIT_PASSWORD=changeit
+      export POSTGRES_PASSWORD=changeit
+      export JENKINS_PASSWORD=changeit
+
+      export GITHUB_REPO=netcorebcn/quiz
+      export GITHUB_USER=mygithubuser
+      export GITHUB_TOKEN='<TOKEN>'
+      ```
+
+    * Execute ```./install.sh```
+
+    * Add ingress hosts to local host file 
+  
+      ```echo $(minikube ip) {jenkins,rabbit,registry}.quiz.internal quiz.internal | sudo tee -a /etc/hosts```
+
+
+    * Open <http://jenkins.quiz.internal/job/quiz/> and Build!
+
+    * Once its build Open <http://quiz.internal> and <http://quiz.internal?results> 
+
+
+    * Github integration for Pull Request workflow
+
+      * Add Integration & Service: Manage Jenkins (GitHub plugin) 
+
+        http://jenkins.quiz.internal/github-webhook/
+
+      * For local jenkins integration you can use [ngrok](https://ngrok.com/) 
+      
+      ```bash 
+      ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
+      ```
+
+## Notes
+We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
 * Running Jenkins in Docker
 
