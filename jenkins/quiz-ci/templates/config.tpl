@@ -273,7 +273,6 @@ data:
             git {
                 remote {
                     github('{{ $repo }}')
-                    credentials('github-username')
                 }
                 branch('*/master')
             }

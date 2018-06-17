@@ -15,19 +15,49 @@ pipeline {
                 }
             }
         }
+
         stage('build') {
             steps {
                 sh './build.sh'
             }
         }
+
         stage('integration tests') {
             steps {
                 sh 'cd deploy && ./tests.sh'
             }
         }
-        stage('deploy') {
+
+        stage('deploy to staging') {
+            when {
+                expression { env.TAG_BRANCH = 'master' }
+            }
+            environment {
+                QUIZ_ENVIRONMENT = 'staging'
+            }
             steps {
                 sh 'cd deploy && ./install.sh'
+            }
+            steps {
+                sh 'cd deploy && ./tests.sh'
+            }
+        }
+
+        stage('deploy to production') {
+            when {
+                expression { env.TAG_BRANCH = 'master' }
+            }
+            environment {
+                QUIZ_ENVIRONMENT = 'pro'
+            }
+            steps {
+                input 'Deploy to production?'
+            }
+            steps {
+                sh 'cd deploy && ./install.sh'
+            }
+            steps {
+                sh './e2eTests.sh'
             }
         }
     }
