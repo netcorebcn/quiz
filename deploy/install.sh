@@ -19,3 +19,6 @@ helm upgrade --install \
     --set rabbitmq.ingress.hostName=$ingressPrefix'rabbit.'${INGRESS_DOMAIN} \
     --debug \
     --wait
+
+helm test $deploy
+kubectl delete pod $integrationPod -n $deploy 

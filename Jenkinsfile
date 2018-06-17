@@ -34,7 +34,6 @@ pipeline {
             }
             steps {
                 sh 'cd deploy && ./install.sh'
-                sh 'cd deploy && ./tests.sh'
             }
         }
 
