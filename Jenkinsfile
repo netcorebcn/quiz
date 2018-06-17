@@ -11,7 +11,9 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    checkout()
+                    env.TAG_BRANCH = 'master'
+                    env.TAG_COMMIT = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                    env.TAG = "${env.TAG_BRANCH}-${env.TAG_COMMIT}"
                 }
                 sh './build.sh'
             }
@@ -25,7 +27,7 @@ pipeline {
 
         stage('deploy to staging') {
             when {
-                expression { env.TAG_BRANCH = 'master' }
+                expression { env.TAG_BRANCH == 'master' }
             }
             environment {
                 QUIZ_ENVIRONMENT = 'staging'
@@ -38,7 +40,7 @@ pipeline {
 
         stage('deploy to production') {
             when {
-                expression { env.TAG_BRANCH = 'master' }
+                expression { env.TAG_BRANCH == 'master' }
             }
             environment {
                 QUIZ_ENVIRONMENT = 'pro'
@@ -49,12 +51,4 @@ pipeline {
             }
         }
     }
-}
-
-def checkout = {
-    def scmVars = checkout scm
-
-    env.TAG_COMMIT = smcVars.GIT_COMMIT
-    env.TAG_BRANCH = scmVars.GIT_BRANCH
-    env.TAG = "${scmVars.GIT_BRANCH}-${scmVars.GIT_COMMIT}"
 }
