@@ -3,6 +3,7 @@ set -e
 chart='quiz'
 deploy=$chart-${QUIZ_ENVIRONMENT:-'pro'}
 ingressPrefix=$([ "${QUIZ_ENVIRONMENT}" == 'pro' ] && echo "" || echo "${QUIZ_ENVIRONMENT}.")
+integrationPod=$deploy-integration-tests
 
 echo 'Installing deploy '$deploy' with ingressPrefix '$ingressPrefix
 helm init --client-only
