@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# export as env all the needed secrets
-export $(cat secrets)
 eval $(minikube docker-env)
 helm init --client-only
 
