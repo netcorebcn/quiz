@@ -12,3 +12,4 @@ npm-debug.log
 *.tgz
 *.lock
 ngrok
+local*.sh

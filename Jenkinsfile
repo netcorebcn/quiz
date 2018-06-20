@@ -2,8 +2,6 @@ pipeline {
     agent any
     environment {
         REGISTRY = 'localhost:30400'
-        RABBIT_PASSWORD = credentials('postgres-password')
-        POSTGRES_PASSWORD = credentials('rabbit-password')
         INGRESS_DOMAIN = 'quiz.internal'
     }
 

@@ -23,10 +23,11 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
     * Export the following environment variables:
     
       ```bash
-      export QUIZ_ENVIRONMENT='pro'
+      export INGRESS_DOMAIN='quiz.internal'
+      export QUIZ_ENVIRONMENT='production'
+      export TAG_BRANCH=master
       export REGISTRY=localhost:30400
       export TAG=latest
-      export INGRESS_DOMAIN='quiz.internal'
 
       export RABBIT_PASSWORD=changeit
       export POSTGRES_PASSWORD=changeit

@@ -1,31 +1,23 @@
 #!/bin/bash
 set -e
-chart='quiz'
-deploy=$chart-${TAG_BRANCH} 
-integrationPod=$deploy-integration-tests
+. common.sh
 
-helm init --client-only
-# cleanup previous execution
-helm delete $deploy --purge > /dev/null 2>&1 || true
-kubectl delete pod $integrationPod -n $deploy > /dev/null 2>&1 || true
+branch=$(getBranch)
+deploy=$chart-$branch
+branchDomain=$(getDomain $branch)
 
-helm dep update $chart
+cleanUp $deploy
 helm upgrade --install \
     $deploy \
     $chart \
     --namespace $deploy \
     --set imageRegistry=${REGISTRY} \
     --set imageTag=${TAG} \
-    --set ingressHost=${TAG_BRANCH}.${INGRESS_DOMAIN} \
-    --set postgresql.postgresPassword=${POSTGRES_PASSWORD} \
+    --set ingressHost=$branchDomain \
     --set postgresql.persistence.enabled=false \
-    --set rabbitmq.rabbitmq.password=${RABBIT_PASSWORD} \
-    --set rabbitmq.ingress.hostName=${TAG_BRANCH}.rabbit.${INGRESS_DOMAIN} \
+    --set rabbitmq.ingress.hostName='rabbit.'$branchDomain \
     --debug \
     --wait
 
-helm test $deploy
-
-# cleanup
-helm delete $deploy --purge
-kubectl delete ns $deploy
+runTests $deploy
+cleanUp $deploy

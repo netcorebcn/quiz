@@ -41,6 +41,8 @@ rabbitmq:
         enabled: true
     rabbitmq:
         username: guest
+        password: changeit
 
 postgresql:
     postgresUser: postgres
+    postgresPassword: changeit
