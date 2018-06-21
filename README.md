@@ -58,7 +58,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
       ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
       ```
   ### Setup script example 
-  There is an example of full setup script ```./fullsetup.sh```, it requires to store the enviroment variables in a secrets file.
+  Full example setup with ngrok and dnsmasq integration: ```./fullsetup.sh```, it requires to store the enviroment variables in a secrets file.
 
 ## Notes
 We aren't starting from the scratch. We are using ideas and code from other awesome repos.
