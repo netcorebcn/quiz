@@ -29,10 +29,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
       export REGISTRY=localhost:30400
       export TAG=latest
 
-      export RABBIT_PASSWORD=changeit
-      export POSTGRES_PASSWORD=changeit
       export JENKINS_PASSWORD=changeit
-
       export GITHUB_REPO=netcorebcn/quiz
       export GITHUB_USER=mygithubuser
       export GITHUB_TOKEN='<TOKEN>'
@@ -49,7 +46,6 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
     * Once its build Open <http://quiz.internal> and <http://quiz.internal?results> 
 
-
     * Github integration for Pull Request workflow
 
       * Add Integration & Service: Manage Jenkins (GitHub plugin) 
@@ -61,6 +57,8 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
       ```bash 
       ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
       ```
+  ### Setup script example 
+  There is an example of full setup script ```./fullsetup.sh```, it requires to store the enviroment variables in a secrets file.
 
 ## Notes
 We aren't starting from the scratch. We are using ideas and code from other awesome repos.
