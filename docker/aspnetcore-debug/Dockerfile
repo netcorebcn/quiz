@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-sdk-alpine
+FROM microsoft/dotnet:2.1.301-sdk-alpine
 ENV NUGET_XMLDOC_MODE skip
 WORKDIR /vsdbg
 RUN apt-get update \

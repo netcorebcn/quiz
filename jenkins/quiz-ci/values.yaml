@@ -29,7 +29,7 @@ jenkins:
     CustomConfigMap: true
     CredentialsXmlSecret: quiz-ci-credentials
     InstallPlugins:
-      - kubernetes:1.8.2
+      - kubernetes:1.8.4
       - workflow-aggregator:2.5
       - workflow-job:2.21
       - credentials-binding:1.16
