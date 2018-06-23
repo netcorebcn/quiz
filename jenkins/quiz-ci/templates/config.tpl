@@ -207,7 +207,7 @@ data:
     import org.jenkinsci.plugins.ghprb.*
 
     // configure github plugin
-    url = new URL('http','{{ .Values.global.jenkinsHostName }}', 80, '/github-webhook/')
+    url = new URL('https','{{ .Values.global.jenkinsHostName }}', 80, '/github-webhook/')
     def pluginConfig = Jenkins.instance.getExtensionList(GitHubPluginConfig.class)[0]
     GitHubServerConfig serverConfig = new GitHubServerConfig('github-token')
     pluginConfig.setConfigs([serverConfig])
@@ -220,7 +220,7 @@ data:
     Field auth = descriptor.class.getDeclaredField("githubAuth")
     auth.setAccessible(true)
     githubAuth = new ArrayList<GhprbGitHubAuth>()
-    githubAuth.add(new GhprbGitHubAuth("", "http://{{ .Values.global.jenkinsHostName }}/","github-token", "quiz-github", null, null))
+    githubAuth.add(new GhprbGitHubAuth("", "https://{{ .Values.global.jenkinsHostName }}/","github-token", "quiz-github", null, null))
     auth.set(descriptor, githubAuth)
     descriptor.save()
 

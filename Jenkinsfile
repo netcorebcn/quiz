@@ -13,7 +13,6 @@ pipeline {
                     env.TAG_COMMIT = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
                     env.TAG = "${env.TAG_BRANCH}-${env.TAG_COMMIT}"
                 }
-                sh 'printenv'
                 sh './build.sh'
             }
         }
