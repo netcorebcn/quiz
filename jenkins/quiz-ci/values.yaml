@@ -19,7 +19,7 @@ jenkins:
     UseSecurity: true
     AdminUser: admin
     Cpu: "200m"
-    Memory: "512Mi"
+    Memory: "1024Mi"
 
     ServicePort: 8080
     ServiceType: ClusterIP
@@ -46,7 +46,7 @@ jenkins:
     Component: "jenkins-slave"
     Privileged: true
     Cpu: "200m"
-    Memory: "256Mi"
+    Memory: "1024Mi"
     AlwaysPullImage: false
     volumes:
     - type: HostPath
