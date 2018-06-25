@@ -15,7 +15,7 @@ namespace Quiz.Api.Tests
                 .Build();
             
             var services = new ServiceCollection();
-            services.AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"].Trim() ?? "amqp://guest:guest@localhost:5672"));
+            services.AddSingleton<IBus>(RabbitHutch.CreateBus(configuration["messagebroker"]?.Trim() ?? "amqp://guest:guest@localhost:5672"));
             Bus = services.BuildServiceProvider().GetService<IBus>();
         }
 

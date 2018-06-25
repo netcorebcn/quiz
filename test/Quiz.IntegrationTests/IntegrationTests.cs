@@ -6,6 +6,7 @@ using EasyNetQ;
 using Marten;
 using Newtonsoft.Json;
 using Quiz.Domain;
+using Quiz.Domain.Commands;
 using Xunit;
 
 namespace Quiz.Api.Tests
@@ -25,12 +26,9 @@ namespace Quiz.Api.Tests
         [Fact]
         public async Task QuizAppService_Test_Start()
         {
-            using(var session = _documentStore.OpenSession())
-            {
-                var appService = new QuizAppService(_documentStore, _bus);
-                var result = await appService.Start(CreateQuiz());
-                Assert.NotNull(result);
-            }
+            var appService = new QuizAppService(_documentStore, _bus);
+            var result = await appService.Start(CreateQuiz());
+            Assert.NotNull(result);
         }
 
         private QuizModel CreateQuiz() =>
