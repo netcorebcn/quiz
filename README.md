@@ -11,11 +11,11 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
 
   * Setup minikube   
   
-    ```./setupkube.sh```
+    ```./k8s/hack/setupkube.sh```
 
   * Setup dnsmasq (optional)
 
-    ```sudo INGRESS_DOMAIN=quiz.internal ./setupdns.sh```
+    ```sudo INGRESS_DOMAIN=quiz.internal ./k8s/hack/setupdns.sh```
 
     **__Notes__**: For automatic dns wilcards resolution use [dnsmasq](https://blog.thesparktree.com/local-development-with-wildcard-dns)
 
@@ -35,7 +35,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
       export GITHUB_TOKEN='<TOKEN>'
       ```
 
-    * Execute ```./install.sh```
+    * Execute ```./k8s/hack/install.sh```
 
     * Add ingress hosts to local host file (only if dnsmasq is not setup)
   
@@ -58,7 +58,7 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
       ./ngrok http jenkins.quiz.internal:80 -host-header=jenkins.quiz.internal
       ```
   ### Setup script example 
-  Full example setup with ngrok and dnsmasq integration: ```./fullsetup.sh```, it requires to store the enviroment variables in a secrets file.
+  You can use full example setup with ngrok and dnsmasq integration: ```./k8s/hack/setup.sh```, it requires to store the enviroment variables in a secrets file.
 
 ## Notes
 We aren't starting from the scratch. We are using ideas and code from other awesome repos.

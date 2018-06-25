@@ -24,7 +24,7 @@ getEnvironment() {
 }
 
 getBranch() {
-    echo ${TAG_BRANCH:-'master'}
+    echo ${TAG:-'master'}
 }
 
 getDomain() {

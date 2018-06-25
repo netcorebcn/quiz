@@ -1,6 +1,6 @@
 
 #!/bin/bash
-export $(cat secrets)
+export $(cat ../secrets)
 
 kill  $(ps aux | grep ngrok | awk '{print $2}') 2> /dev/null 
 ./ngrok http jenkins.${INGRESS_DOMAIN}:80 -host-header=jenkins.${INGRESS_DOMAIN} -log=stdout > /dev/null & 
