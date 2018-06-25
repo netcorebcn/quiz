@@ -40,7 +40,7 @@ pipeline {
                 expression { env.TAG_BRANCH == 'master' }
             }
             environment {
-                QUIZ_ENVIRONMENT = 'pro'
+                QUIZ_ENVIRONMENT = 'production'
             }
             steps {
                 input 'Deploy to production?'
