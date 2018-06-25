@@ -84,4 +84,4 @@ We aren't starting from the scratch. We are using ideas and code from other awes
 * dnsmasq integrate with minikube
 
   <https://github.com/superbrothers/minikube-ingress-dns>
-  
+ 
