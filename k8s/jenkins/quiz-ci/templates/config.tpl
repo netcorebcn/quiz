@@ -207,7 +207,7 @@ data:
     import org.jenkinsci.plugins.ghprb.*
 
     // configure github plugin
-    url = new URL('https','{{ .Values.global.jenkinsHostName }}', 80, '/github-webhook/')
+    url = new URL('http','{{ .Values.global.jenkinsHostName }}', 80, '/github-webhook/')
     def pluginConfig = Jenkins.instance.getExtensionList(GitHubPluginConfig.class)[0]
     GitHubServerConfig serverConfig = new GitHubServerConfig('github-token')
     pluginConfig.setConfigs([serverConfig])
