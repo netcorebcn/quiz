@@ -34,9 +34,9 @@ jenkins:
       - workflow-job:2.21
       - credentials-binding:1.16
       - git:3.9.1
-      - github:1.29.1
+      - github:1.29.2
       - ghprb:1.42.0
-      - blueocean:1.6.0
+      - blueocean:1.6.1
       - job-dsl:1.69
     
   Agent:
