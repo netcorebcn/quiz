@@ -40,9 +40,21 @@ namespace Quiz.Api.Tests
             Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
         }
 
+        private async Task CleanUp()
+        {
+            var commandService = new QuizAppService(_documentStore, _bus);
+            var state = await commandService.Start(CreateQuiz());
+
+            var queryService = new QuizResultsAppService(_documentStore, _bus, null);
+            queryService.Start();
+            var result = queryService.Get();
+            await commandService.Close(result.QuizId);
+        }
+
         [Fact]
         public async Task QuizAppService_Test_CorrectAnswers()
         {
+            await CleanUp();
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
@@ -74,6 +86,7 @@ namespace Quiz.Api.Tests
         [Fact]
         public async Task QuizAppService_Test_WrongAnswers()
         {
+            await CleanUp();
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
