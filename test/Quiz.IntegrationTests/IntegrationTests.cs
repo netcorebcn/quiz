@@ -29,20 +29,18 @@ namespace Quiz.Api.Tests
         [Fact]
         public async Task QuizAppService_Test_Start()
         {
-            await CleanUp();
-
             var appService = new QuizAppService(_documentStore, _bus);
             var result = await appService.Start(CreateQuiz());
             Assert.NotNull(result);
             Assert.Equal(QuizState.Started.ToString(), result.QuizState);
             Assert.Equal(2, result.Questions.Count);
+
+            await CleanUp();
         }
 
         [Fact]
         public async Task QuizAppService_Test_CorrectAnswers()
         {
-            await CleanUp();
-
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
@@ -64,13 +62,13 @@ namespace Quiz.Api.Tests
             Assert.NotNull(result);
             Assert.Equal(100.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(0.0M, result.TotalIncorrectAnswersPercent);
+
+            await CleanUp();
         }
 
         [Fact]
         public async Task QuizAppService_Test_WrongAnswers()
         {
-            await CleanUp();
-
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
@@ -93,6 +91,8 @@ namespace Quiz.Api.Tests
             Assert.Equal(50.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(50.0M, result.TotalIncorrectAnswersPercent);
             Assert.Equal(2, result.Questions.Count);
+
+            await CleanUp();
         }
 
         private async Task CleanUp()
