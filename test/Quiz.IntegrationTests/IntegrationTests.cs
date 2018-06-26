@@ -35,9 +35,7 @@ namespace Quiz.Api.Tests
             Assert.Equal(QuizState.Started.ToString(), result.QuizState);
             Assert.Equal(2, result.Questions.Count);
 
-            var resultState = await appService.Close(result.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
+            await CleanUp();
         }
 
         [Fact]
@@ -64,11 +62,8 @@ namespace Quiz.Api.Tests
             Assert.NotNull(result);
             Assert.Equal(100.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(0.0M, result.TotalIncorrectAnswersPercent);
-            Assert.Equal(2, result.Questions.Count);
 
-            var resultState = await appService.Close(state.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
+            await CleanUp();
         }
 
         [Fact]
@@ -97,9 +92,17 @@ namespace Quiz.Api.Tests
             Assert.Equal(50.0M, result.TotalIncorrectAnswersPercent);
             Assert.Equal(2, result.Questions.Count);
 
-            var resultState = await appService.Close(state.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
+            await CleanUp();
+        }
+
+        private async Task CleanUp()
+        {
+            var queryService = new QuizResultsAppService(_documentStore, _bus, null);
+            queryService.Start();
+            var result = queryService.Get();
+
+            var commandService = new QuizAppService(_documentStore, _bus);
+            await commandService.Close(result.QuizId);
         }
 
         private QuizModel CreateQuiz() =>
