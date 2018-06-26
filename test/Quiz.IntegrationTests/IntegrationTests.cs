@@ -97,12 +97,11 @@ namespace Quiz.Api.Tests
 
         private async Task CleanUp()
         {
-            var commandService = new QuizAppService(_documentStore, _bus);
-            var state = await commandService.Start(CreateQuiz());
-
             var queryService = new QuizResultsAppService(_documentStore, _bus, null);
             queryService.Start();
             var result = queryService.Get();
+
+            var commandService = new QuizAppService(_documentStore, _bus);
             await commandService.Close(result.QuizId);
         }
 
