@@ -9,7 +9,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ printf "%s-%s" $fullName .name }}
+  name: {{ printf "%s-%s" $fullName .Values.end2end.name }}
   labels:
     app: {{ $name }}
     chart: {{ $chart }}
