@@ -23,6 +23,6 @@ spec:
       image: "{{ printf "%s/%s:%s" $imageRegistry .Values.end2end.image $imageTag }}"
       env:
       - name: QUIZ_URL
-        value: {{ .Values.end2end.quizHost | quote }} 
+        value: {{ .Values.ingressHost | quote }} 
   restartPolicy: Never
 {{- end }}

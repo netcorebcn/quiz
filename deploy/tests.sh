@@ -16,7 +16,6 @@ helm upgrade --install \
     --set ingressHost=$branchDomain \
     --set postgresql.persistence.enabled=false \
     --set rabbitmq.ingress.hostName='rabbit.'$branchDomain \
-    --set end2end.quizHost='quiz.'$branchDomain \
     --debug \
     --wait
 

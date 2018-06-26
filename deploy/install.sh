@@ -14,7 +14,6 @@ helm upgrade --install \
     --set ingressHost=$environmentDomain \
     --set rabbitmq.ingress.hostName='rabbit.'$environmentDomain \
     --set testsEnabled=false \
-    --set end2end.quizHost='quiz.'$environmentDomain \
     --debug \
     --wait
     
