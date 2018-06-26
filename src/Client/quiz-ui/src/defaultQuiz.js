@@ -1,7 +1,7 @@
 export const defaultQuiz = {
     "questions": [
       {
-        "description": "What is the tool for running k8s locally?",
+        "description": "What is the most popular tool for running local k8s?",
         "options": [
           {
             "description": "superkube"
@@ -16,7 +16,7 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Which feature enables splitting a k8s cluster?",
+        "description": "Which resource enables a virtual split of the k8s cluster?",
         "options": [
           {
             "description": "virtualvolumes"
@@ -31,17 +31,17 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Which is the managed option for using k8s in Azure?",
+        "description": "What is the package manager for k8s?",
         "options": [
           {
-            "description": "AKS",
+            "description": "Helm",
             "isCorrect": true
           },
           {
-            "description": "EKS"
+            "description": "Nuget"
           },
           {
-            "description": "AK8s"
+            "description": "kubeadm"
           }
         ]
       },
@@ -76,16 +76,16 @@ export const defaultQuiz = {
         ]
       },
       {
-        "description": "Which CLI tools Jenkins needs to run the CI/CD pipeline?",
+        "description": "Which CLI tools the Jenkins slave needs to run the CI/CD pipeline?",
         "options": [
           {
             "description": "docker and minikube"
           },
           {
-            "description": "docker and az"
+            "description": "docker and dotnet"
           },
           {
-            "description": "docker and kubectl",
+            "description": "docker, kubectl and helm",
             "isCorrect": true
           }
         ]
