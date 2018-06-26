@@ -5,7 +5,7 @@
 {{- $releaseService := .Release.Service -}}
 {{- $imageRegistry := .Values.imageRegistry -}}
 {{- $imageTag := .Values.imageTag -}}
-{{- if .Values.tests.enabled }}
+{{- if .Values.testsEnabled }}
 {{- range .Values.tests }}
 apiVersion: v1
 kind: Pod

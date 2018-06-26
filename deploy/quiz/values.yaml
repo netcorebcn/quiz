@@ -28,8 +28,8 @@ services:
       nginx.ingress.kubernetes.io/rewrite-target: /
     path: /queries
 
+testsEnabled: true
 tests:
-  enabled: true
 - name: integration-tests
   image: quiz-integration-tests
   env:
@@ -37,8 +37,8 @@ tests:
     - dbconnection
   command: "sleep 30;dotnet test --no-build"
 
+end2endEnabled: true
 end2end:
-  enabled: true
   name: end2end-tests
   image: quiz-end2end-tests
 
