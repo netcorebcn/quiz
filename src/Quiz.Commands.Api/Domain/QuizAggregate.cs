@@ -67,9 +67,9 @@ namespace Quiz.Domain
             }
         }
 
-        public static object Empty 
+        public static QuizAggregateState Empty 
         { 
-            get => new 
+            get => new QuizAggregateState
             {
                 QuizId = Guid.Empty,
                 QuizState = QuizState.Created.ToString(),
@@ -77,10 +77,10 @@ namespace Quiz.Domain
             }; 
         }
 
-        public object GetState()
+        public QuizAggregateState GetState()
         {
-            return new {
-                QuizId,
+            return new QuizAggregateState {
+                QuizId = QuizId,
                 QuizState = _state.ToString(),
                 Questions = _state == QuizState.Started ? _model.Questions : null
             };

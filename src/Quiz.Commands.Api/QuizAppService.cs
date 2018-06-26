@@ -19,7 +19,7 @@ namespace Quiz.Api
             _bus = bus;
         }
 
-        public async Task<object> GetState()
+        public async Task<QuizAggregateState> GetState()
         {
             using (var session = _eventStore.OpenSession())
             {
@@ -33,7 +33,7 @@ namespace Quiz.Api
             return QuizAggregate.Empty;
         }
 
-        public async Task<object> GetState(Guid quizId)
+        public async Task<QuizAggregateState> GetState(Guid quizId)
         {
             using(var session = _eventStore.OpenSession())
             {
@@ -42,16 +42,16 @@ namespace Quiz.Api
             }
         }
 
-        public async Task<object> Start(QuizModel quizModel) => 
+        public async Task<QuizAggregateState> Start(QuizModel quizModel) => 
             await ExecuteTransaction(Guid.NewGuid(), aggregate => aggregate.Start(quizModel));
 
-        public async Task<object> Answer(QuizAnswersCommand command) => 
+        public async Task<QuizAggregateState> Answer(QuizAnswersCommand command) => 
             await ExecuteTransaction(command.QuizId, aggregate => aggregate.Answer(command));
 
-        public async Task<object> Close(Guid quizId) => 
+        public async Task<QuizAggregateState> Close(Guid quizId) => 
             await ExecuteTransaction(quizId, aggregate => aggregate.Close());
 
-        private async Task<object> ExecuteTransaction(Guid quizId, Action<QuizAggregate> command)
+        private async Task<QuizAggregateState> ExecuteTransaction(Guid quizId, Action<QuizAggregate> command)
         {
             using(var session = _eventStore.OpenSession())
             {

@@ -31,7 +31,7 @@ namespace Quiz.Results.Api
             _eventStore = eventStore;
         }
 
-        public object Get() => aggregate;
+        public QuizResultsAggregate Get() => aggregate;
 
         public void Start()
         {

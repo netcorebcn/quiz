@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="EasyWebSockets" Version="0.1.0" />
     <PackageReference Include="Marten" Version="2.8.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
@@ -13,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Quiz.Commands.Api\Quiz.Commands.Api.csproj" />
+    <ProjectReference Include="..\..\src\Quiz.Queries.Api\Quiz.Queries.Api.csproj" />
     <Content Include="quiz.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInPackage>true</IncludeInPackage>

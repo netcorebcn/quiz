@@ -45,4 +45,5 @@ services:
       args:
         tests: ${QUIZ_INTEGRATION_TESTS}
         commands: ${QUIZ_COMMANDS}
+        queries: ${QUIZ_QUERIES}
         domain: ${QUIZ_DOMAIN}
