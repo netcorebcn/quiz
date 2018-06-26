@@ -29,32 +29,20 @@ namespace Quiz.Api.Tests
         [Fact]
         public async Task QuizAppService_Test_Start()
         {
+            await CleanUp();
+
             var appService = new QuizAppService(_documentStore, _bus);
             var result = await appService.Start(CreateQuiz());
             Assert.NotNull(result);
             Assert.Equal(QuizState.Started.ToString(), result.QuizState);
             Assert.Equal(2, result.Questions.Count);
-
-            var resultState = await appService.Close(result.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
-        }
-
-        private async Task CleanUp()
-        {
-            var commandService = new QuizAppService(_documentStore, _bus);
-            var state = await commandService.Start(CreateQuiz());
-
-            var queryService = new QuizResultsAppService(_documentStore, _bus, null);
-            queryService.Start();
-            var result = queryService.Get();
-            await commandService.Close(result.QuizId);
         }
 
         [Fact]
         public async Task QuizAppService_Test_CorrectAnswers()
         {
             await CleanUp();
+
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
@@ -76,17 +64,13 @@ namespace Quiz.Api.Tests
             Assert.NotNull(result);
             Assert.Equal(100.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(0.0M, result.TotalIncorrectAnswersPercent);
-            Assert.Equal(2, result.Questions.Count);
-
-            var resultState = await appService.Close(state.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
         }
 
         [Fact]
         public async Task QuizAppService_Test_WrongAnswers()
         {
             await CleanUp();
+
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
@@ -109,10 +93,17 @@ namespace Quiz.Api.Tests
             Assert.Equal(50.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(50.0M, result.TotalIncorrectAnswersPercent);
             Assert.Equal(2, result.Questions.Count);
+        }
 
-            var resultState = await appService.Close(state.QuizId);
-            Assert.NotNull(resultState);
-            Assert.Equal(QuizState.Closed.ToString(), resultState.QuizState);
+        private async Task CleanUp()
+        {
+            var commandService = new QuizAppService(_documentStore, _bus);
+            var state = await commandService.Start(CreateQuiz());
+
+            var queryService = new QuizResultsAppService(_documentStore, _bus, null);
+            queryService.Start();
+            var result = queryService.Get();
+            await commandService.Close(result.QuizId);
         }
 
         private QuizModel CreateQuiz() =>
