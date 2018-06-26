@@ -29,12 +29,18 @@ services:
     path: /queries
 
 tests:
+  enabled: true
 - name: integration-tests
   image: quiz-integration-tests
   env:
     - messagebroker
     - dbconnection
   command: "sleep 30;dotnet test --no-build"
+
+end2end:
+  enabled: true
+  name: end2end-tests
+  image: quiz-end2end-tests
 
 rabbitmq:
     ingress:
