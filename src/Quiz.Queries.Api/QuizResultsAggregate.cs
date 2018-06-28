@@ -89,11 +89,10 @@ namespace Quiz.Domain
             }
             else
             {
-                _correctAnswers -=1;
                 _incorrectAnswers += 1;
             }
 
-            CorrectAnswersPercent = _correctAnswers/ (_correctAnswers + _incorrectAnswers) * 100;
+            CorrectAnswersPercent = (_correctAnswers - _incorrectAnswers) / (_correctAnswers + _incorrectAnswers) * 100;
             IncorrectAnswersPercent = Math.Abs(CorrectAnswersPercent - 100);
         }
     }
