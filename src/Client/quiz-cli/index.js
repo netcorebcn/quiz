@@ -1,10 +1,10 @@
 const fetch = require('node-fetch');
 
-const url = `http://${process.env.QUIZ_URL || 'localhost'}/quiz/`;
+const url = `http://${process.env.QUIZ_URL || 'localhost'}/commands/quiz`;
 const iterations = process.env.ITERATIONS || 100;
 const interval = process.env.INTERVAL || 500;
 
-const getQuiz = () => fetch(url).then(response => {
+const getQuiz = () => fetch(`${url}`).then(response => {
   if (response.status === 204) {
     return null;
   }
@@ -13,7 +13,7 @@ const getQuiz = () => fetch(url).then(response => {
   }
 });
 
-const postQuizAnswers = (quizId, answers) => fetch(`${url}${quizId}`, {
+const postQuizAnswers = (quizId, answers) => fetch(`${url}/${quizId}`, {
   method: 'PUT',
   headers: {
     Accept: 'application/json',
