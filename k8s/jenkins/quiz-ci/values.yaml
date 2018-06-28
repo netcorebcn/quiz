@@ -16,6 +16,7 @@ jenkins:
     ImagePullPolicy: "Always"
     Component: "jenkins-master"
 
+    JenkinsOpts: "-Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85"
     UseSecurity: true
     AdminUser: admin
     Cpu: "200m"
