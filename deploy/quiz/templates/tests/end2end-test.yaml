@@ -5,7 +5,7 @@
 {{- $releaseService := .Release.Service -}}
 {{- $imageRegistry := .Values.imageRegistry -}}
 {{- $imageTag := .Values.imageTag -}}
-{{- if .Values.end2endEnabled }}
+{{- if .Values.end2end.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
