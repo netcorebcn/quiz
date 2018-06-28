@@ -5,12 +5,11 @@
 {{- $releaseService := .Release.Service -}}
 {{- $imageRegistry := .Values.imageRegistry -}}
 {{- $imageTag := .Values.imageTag -}}
-{{- if .Values.integration.enabled }}
-{{- range .Values.integration.tests }}
+{{- if .Values.end2end.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ printf "%s-%s" $fullName .name }}
+  name: {{ printf "%s-%s" $fullName .Values.end2end.name }}
   labels:
     app: {{ $name }}
     chart: {{ $chart }}
@@ -20,20 +19,10 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-    - name: {{ .name }}
-      image: "{{ printf "%s/%s:%s" $imageRegistry .image $imageTag }}"
-        {{- if .env }}
+    - name: {{ .Values.end2end.name }}
+      image: "{{ printf "%s/%s:%s" $imageRegistry .Values.end2end.image $imageTag }}"
       env:
-      {{- range .env }}
-      - name: {{ . }} 
-        valueFrom:
-          secretKeyRef:
-            name: {{ $fullName }}
-            key: {{ . }} 
-    {{- end }}
-  {{- end }}
-      command: ["sh", "-c", "{{ .command }}"] 
+      - name: QUIZ_URL
+        value: {{ .Values.ingressHost | quote }} 
   restartPolicy: Never
----
-{{- end }}
 {{- end }}

@@ -3,46 +3,53 @@ imageTag: latest
 ingressHost: quiz.internal
 
 services:
-- name: ui
-  image: quiz-ui
-  ingress:
-    annotations: {}
+  - name: ui
+    image: quiz-ui
+    ingress:
+      annotations: {}
 
-- name: commands
-  image: quiz-commands
-  env:
-    - messagebroker
-    - dbconnection
-  ingress:
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-    path: /commands
+  - name: commands
+    image: quiz-commands
+    env:
+      - messagebroker
+      - dbconnection
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      path: /commands
 
-- name: queries
-  image: quiz-queries
-  env:
-    - messagebroker
-    - dbconnection
-  ingress:
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-    path: /queries
+  - name: queries
+    image: quiz-queries
+    env:
+      - messagebroker
+      - dbconnection
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      path: /queries 
+   
+integration:
+  enabled: true
+  tests:
+  - name: integration-tests
+    image: quiz-integration-tests
+    env:
+      - messagebroker
+      - dbconnection
+    command: "sleep 30;dotnet test --no-build"
 
-tests:
-- name: integration-tests
-  image: quiz-integration-tests
-  env:
-    - messagebroker
-    - dbconnection
-  command: "sleep 30;dotnet test --no-build"
+end2end:
+  enabled: true
+  name: end2end-tests
+  image: quiz-end2end-tests
 
 rabbitmq:
-    ingress:
-        enabled: true
-    rabbitmq:
-        username: guest
-        password: changeit
+  ingress:
+    enabled: true
+  rabbitmq:
+    username: guest
+    password: changeit
 
 postgresql:
-    postgresUser: postgres
-    postgresPassword: changeit
+  postgresUser: postgres
+  postgresPassword: changeit

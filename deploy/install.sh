@@ -13,6 +13,8 @@ helm upgrade --install \
     --set imageTag=${TAG} \
     --set ingressHost=$environmentDomain \
     --set rabbitmq.ingress.hostName='rabbit.'$environmentDomain \
+    --set end2end.enabled=true \
+    --set integration.enabled=false \
     --debug \
     --wait
     

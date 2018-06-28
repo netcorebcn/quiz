@@ -47,3 +47,11 @@ services:
         commands: ${QUIZ_COMMANDS}
         queries: ${QUIZ_QUERIES}
         domain: ${QUIZ_DOMAIN}
+
+  end2end-tests:
+    image: ${REGISTRY}/quiz-end2end-tests:${TAG}
+    build:
+      context: .
+      dockerfile: ${QUIZ_CLI}/Dockerfile
+      args:
+        api: ${QUIZ_CLI}
