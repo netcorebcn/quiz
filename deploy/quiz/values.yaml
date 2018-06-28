@@ -36,7 +36,7 @@ integration:
     env:
       - messagebroker
       - dbconnection
-    command: "sleep 30;dotnet test --no-build"
+    command: "sleep 20;dotnet test --no-build"
 
 end2end:
   enabled: true
