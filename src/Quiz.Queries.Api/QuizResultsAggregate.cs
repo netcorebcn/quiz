@@ -89,6 +89,7 @@ namespace Quiz.Domain
             }
             else
             {
+                _correctAnswers -=1;
                 _incorrectAnswers += 1;
             }
 
