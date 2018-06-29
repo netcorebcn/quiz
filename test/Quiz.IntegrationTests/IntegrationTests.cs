@@ -15,7 +15,7 @@ using Xunit;
 namespace Quiz.Api.Tests
 {
     [Collection("IntegrationTests")]
-    public class IntegrationTests
+    public class IntegrationTests : IDisposable
     {
         private readonly IBus _bus;
         private readonly IDocumentStore _documentStore;
@@ -24,6 +24,7 @@ namespace Quiz.Api.Tests
         {
             _bus = busFixture.Bus;
             _documentStore = documentStoreFixture.DocumentStore;
+            CleanUp().Wait();
         } 
 
         [Fact]
@@ -34,8 +35,6 @@ namespace Quiz.Api.Tests
             Assert.NotNull(result);
             Assert.Equal(QuizState.Started.ToString(), result.QuizState);
             Assert.Equal(2, result.Questions.Count);
-
-            await CleanUp();
         }
 
         [Fact]
@@ -62,8 +61,6 @@ namespace Quiz.Api.Tests
             Assert.NotNull(result);
             Assert.Equal(100.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(0.0M, result.TotalIncorrectAnswersPercent);
-
-            await CleanUp();
         }
 
         [Fact]
@@ -91,8 +88,6 @@ namespace Quiz.Api.Tests
             Assert.Equal(50.0M, result.TotalCorrectAnswersPercent);
             Assert.Equal(50.0M, result.TotalIncorrectAnswersPercent);
             Assert.Equal(2, result.Questions.Count);
-
-            await CleanUp();
         }
 
         private async Task CleanUp()
@@ -107,5 +102,7 @@ namespace Quiz.Api.Tests
 
         private QuizModel CreateQuiz() =>
             JsonConvert.DeserializeObject<QuizModel>(File.ReadAllText("quiz.json"));
+
+        public void Dispose() => CleanUp().Wait();
     }
 }
