@@ -43,6 +43,7 @@ namespace Quiz.Api.Tests
         {
             var appService = new QuizAppService(_documentStore, _bus);
             var state = await appService.Start(CreateQuiz());
+            
             await appService.Answer(new QuizAnswersCommand (state.QuizId, 
                             new List<QuizAnswer> {
                                 new QuizAnswer { 
