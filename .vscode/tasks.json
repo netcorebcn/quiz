@@ -29,7 +29,7 @@
         {
             "label": "publish",
             "type": "shell",
-            "command": "dotnet publish ./src/Quiz.Api -o bin/build -c Debug"
+            "command": "dotnet publish ./src/Quiz.Commands.Api -o bin/build -c Debug"
         },
     ]
 }

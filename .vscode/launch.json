@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "publish",
             "cwd": "/app",
-            "program": "/app/Quiz.Api.dll",
+            "program": "/app/Quiz.Commands.Api.dll",
             "sourceFileMap": {
-                "/app": "${workspaceRoot}/src/Quiz.Api"
+                "/app": "${workspaceRoot}/src/Quiz.Commands.Api"
             },
             "pipeTransport": {
                 "debuggerPath": "/vsdbg/vsdbg",
