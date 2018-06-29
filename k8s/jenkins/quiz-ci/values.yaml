@@ -16,7 +16,6 @@ jenkins:
     ImagePullPolicy: "Always"
     Component: "jenkins-master"
 
-    JenkinsOpts: "-Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85"
     UseSecurity: true
     AdminUser: admin
     Cpu: "200m"
@@ -30,9 +29,9 @@ jenkins:
     CustomConfigMap: true
     CredentialsXmlSecret: quiz-ci-credentials
     InstallPlugins:
-      - kubernetes:1.8.4
+      - kubernetes:1.9.2
       - workflow-aggregator:2.5
-      - workflow-job:2.21
+      - workflow-job:2.22
       - credentials-binding:1.16
       - git:3.9.1
       - github:1.29.2
