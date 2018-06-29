@@ -12,7 +12,7 @@ export QUIZ_ENVIRONMENT='prepro'
 echo 'Building for '${TAG}
 ./build.sh
 
-pushd ../deploy
-./test.sh
+pushd ./deploy
+./tests.sh
 ./install.sh
 popd
