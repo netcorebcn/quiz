@@ -15,6 +15,7 @@ cleanUp() {
 runTests() {
     deploy=$1
     kubectl delete pod $deploy-integration-tests -n $deploy > /dev/null 2>&1 || true 
+    kubectl delete pod $deploy-end2end-tests -n $deploy > /dev/null 2>&1 || true 
     sleep 30
     helm test $deploy
 }
