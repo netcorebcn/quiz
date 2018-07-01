@@ -58,7 +58,7 @@ namespace Quiz.Domain
         {
             @event.Answers.ForEach(answer => state._results[answer.QuestionId].Reduce(answer.OptionId));
             state.TotalCorrectAnswersPercent = state._results.Sum(r => r.Value.CorrectAnswersPercent) / state._results.Count;
-            state.TotalIncorrectAnswersPercent = Math.Abs(state.TotalCorrectAnswersPercent - 100);
+            state.TotalIncorrectAnswersPercent = Math.Abs(state.TotalCorrectAnswersPercent - 1000);
             return state;
         }
     }    
