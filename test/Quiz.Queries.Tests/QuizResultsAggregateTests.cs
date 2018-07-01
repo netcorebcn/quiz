@@ -57,8 +57,8 @@ namespace Quiz.Domain.Tests
             var aggregate = QuizResultsAggregate.Create(quizId, events);
 
             Assert.Equal(quizModel.Questions.Count, aggregate.Questions.Count);
-            Assert.Equal(1000, aggregate.Questions.First(q => q.Id == firstQuestion.Id).CorrectAnswersPercent);
-            Assert.Equal(1000, aggregate.Questions.First(q => q.Id == lastQuestion.Id).IncorrectAnswersPercent);
+            Assert.Equal(100, aggregate.Questions.First(q => q.Id == firstQuestion.Id).CorrectAnswersPercent);
+            Assert.Equal(100, aggregate.Questions.First(q => q.Id == lastQuestion.Id).IncorrectAnswersPercent);
 
             Assert.True(aggregate.Questions.Where(q => q.Id != firstQuestion.Id && q.Id != lastQuestion.Id)
                     .All(q => q.CorrectAnswersPercent == 0 && q.IncorrectAnswersPercent == 0));
