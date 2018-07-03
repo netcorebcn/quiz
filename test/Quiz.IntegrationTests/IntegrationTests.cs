@@ -86,8 +86,8 @@ namespace Quiz.Api.Tests
             var result = queryService.Get();
 
             Assert.NotNull(result);
-            Assert.Equal(50.0M, result.TotalCorrectAnswersPercent);
-            Assert.Equal(50.0M, result.TotalIncorrectAnswersPercent);
+            Assert.Equal(500.0M, result.TotalCorrectAnswersPercent);
+            Assert.Equal(500.0M, result.TotalIncorrectAnswersPercent);
             Assert.Equal(2, result.Questions.Count);
         }
 
