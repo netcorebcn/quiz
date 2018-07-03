@@ -28,7 +28,7 @@ namespace Quiz.Domain
         private QuizResultsAggregate(Guid quizId) => QuizId = quizId;
 
         public static QuizResultsAggregate Create(Guid quizId, params object[] events) =>
-            events.Aggregate(new QuizResultsAggregate(quizId), Reduce);
+                events.Aggregate(new QuizResultsAggregate(quizId), Reduce);
         
         public static QuizResultsAggregate Reduce(QuizResultsAggregate state, object @event)
         {
@@ -58,7 +58,7 @@ namespace Quiz.Domain
         {
             @event.Answers.ForEach(answer => state._results[answer.QuestionId].Reduce(answer.OptionId));
             state.TotalCorrectAnswersPercent = state._results.Sum(r => r.Value.CorrectAnswersPercent) / state._results.Count;
-            state.TotalIncorrectAnswersPercent = Math.Abs(state.TotalCorrectAnswersPercent - 100);
+            state.TotalIncorrectAnswersPercent = Math.Abs(state.TotalCorrectAnswersPercent - 1000);
             return state;
         }
     }    
@@ -92,8 +92,8 @@ namespace Quiz.Domain
                 _incorrectAnswers += 1;
             }
 
-            CorrectAnswersPercent = _correctAnswers/ (_correctAnswers + _incorrectAnswers) * 100;
-            IncorrectAnswersPercent = Math.Abs(CorrectAnswersPercent - 100);
+            CorrectAnswersPercent = _correctAnswers/ (_correctAnswers + _incorrectAnswers) * 1000;
+            IncorrectAnswersPercent = Math.Abs(CorrectAnswersPercent - 1000);
         }
     }
 }
