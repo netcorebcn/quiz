@@ -61,6 +61,8 @@ Simple EventSourcing example using .NET Core, React, Docker, Jenkins and K8s.
   You can use full example setup with ngrok and dnsmasq integration: ```./k8s/hack/setup.sh```, it requires to store the enviroment variables in a secrets file.
 
 ## Notes
+Some slides on the process here: <https://www.slideshare.net/PauLpez3/built-in-cicd-with-kubernetes-jenkins-and-helm>
+
 We aren't starting from the scratch. We are using ideas and code from other awesome repos.
 
 * Running Jenkins in Docker
