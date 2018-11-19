@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1.301-sdk-alpine AS builder 
+FROM microsoft/dotnet:2.1-sdk-alpine AS builder 
 ARG tests
 ARG commands
 ARG queries

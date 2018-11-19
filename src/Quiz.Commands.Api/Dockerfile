@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1.301-sdk-alpine AS builder
+FROM microsoft/dotnet:2.1-sdk-alpine AS builder
 ARG api
 ARG domain
 ARG unitTests
@@ -23,7 +23,7 @@ RUN dotnet test ${unitTests}
 RUN dotnet publish ${api} --output /publish --configuration Release
 
 # build runtime image from published release
-FROM microsoft/dotnet:2.1.1-aspnetcore-runtime-alpine
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
 WORKDIR /publish
 COPY --from=builder /publish .
 ENTRYPOINT ["dotnet", "Quiz.Commands.Api.dll"]
